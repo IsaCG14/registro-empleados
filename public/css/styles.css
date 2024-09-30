@@ -1,0 +1,30 @@
+nav {
+    top: 0;
+}
+
+#grafica {
+    max-width: 60vw;
+    max-height: 60vh;
+}
+
+.list {
+    width: 90vw !important;
+}
+
+.modal-header-background {
+    background: #154acf;
+}
+
+.modal h3 {
+    color: white;
+}
+
+.contenedor-grid {
+    display: grid;
+    grid-template-rows: 5% 95%;
+}
+
+.container {
+    margin-top: 5em;
+    margin-bottom: 3em;
+}
