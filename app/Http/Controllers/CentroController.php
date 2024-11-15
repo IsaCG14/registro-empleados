@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Centro;
 use Illuminate\Http\Request;
 
 class CentroController extends Controller
@@ -11,7 +12,8 @@ class CentroController extends Controller
      */
     public function index()
     {
-        //
+        $centros = Centro::all();
+        return $centros;
     }
 
     /**

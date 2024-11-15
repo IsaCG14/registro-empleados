@@ -1,6 +1,7 @@
 $(document).ready(function () {
     //Busqueda en select
     $(".select-oficina").select2();
+    $(".select-centro").select2();
 
     //Ocultar y mostrar opcion de hijos
     if ($("#hijos_si").prop("checked")) {
@@ -72,8 +73,8 @@ $(document).ready(function () {
 
     //LLenar tabla de hijos con formulario
     $("#agregar-hijo").on("click", function () {
-        var nombre = $("#nombre_hijo").val();
-        var edad = $("#fecha_nacimiento_hijo").val();
+        var nombre = $("input[name='nombre_hijo']").val();
+        var edad = $("input[name='fecha_nacimiento_hijo']").val();
         var sexo = $("input[name='sexo_hijo']:checked").val();
         var estudiante = $("input[name='estudiante_hijo']").is(":checked")
             ? 1

@@ -13,48 +13,48 @@ $(document).ready(function () {
             success: function (data) {
                 //Calcular edad
                 fecha_actual = new Date();
-                fecha_nac = new Date(data.fecha_nacimiento);
+                fecha_nac = new Date(data.empleado.fecha_nacimiento);
                 var edad = fecha_actual - fecha_nac;
                 var anios = edad / (1000 * 60 * 60 * 24 * 365.25);
                 console.log(anios);
-                var estudiante = data.estudiante == 0 ? "No" : "Si";
+                var estudiante = data.empleado.estudiante == 0 ? "No" : "Si";
 
                 $(".informacion-personal").html(
                     "<p><b>Nombre:</b> " +
-                        data.nombre +
+                        data.empleado.nombre +
                         "</p>" +
                         "<p><b>Cédula:</b> " +
-                        data.cedula +
+                        data.empleado.cedula +
                         "</p>" +
                         "<p><b>Fecha de nacimiento:</b> " +
-                        data.fecha_nacimiento +
+                        data.empleado.fecha_nacimiento +
                         " (" +
                         Math.floor(anios) +
                         " años)" +
                         "</p>" +
                         "<p><b>Sexo:</b> " +
-                        data.sexo +
+                        data.empleado.sexo +
                         "</p>" +
                         "<p><b>Correo:</b> " +
-                        data.correo +
+                        data.empleado.correo +
                         "</p>" +
                         "<p><b>Teléfono:</b> " +
-                        data.telefono +
+                        data.empleado.telefono +
                         "</p>" +
                         "<p><b>Dirección:</b> " +
-                        data.direccion +
+                        data.empleado.direccion +
                         "</p>" +
                         "<p><b>Peso:</b> " +
-                        data.peso +
+                        data.empleado.peso +
                         "</p>" +
                         "<p><b>Talla de camisa:</b> " +
-                        data.talla_camisa +
+                        data.empleado.talla_camisa +
                         "</p>" +
                         "<p><b>Talla de pantalón:</b> " +
-                        data.talla_pantalon +
+                        data.empleado.talla_pantalon +
                         "</p>" +
                         "<p><b>Talla de zapato:</b> " +
-                        data.talla_zapato +
+                        data.empleado.talla_zapato +
                         "</p>" +
                         "<p><b>Estudiante:</b> " +
                         estudiante +
@@ -62,14 +62,25 @@ $(document).ready(function () {
                 );
 
                 var patologia =
-                    data.patologia != null ? data.patologia : "Ninguna";
-                var tipo = data.tipo == 0 ? "Contratado" : "Trabajador fijo";
+                    data.empleado.patologia != null
+                        ? data.empleado.patologia
+                        : "Ninguna";
+
+                var tipo = "";
+                if (data.empleado.tipo == 0) {
+                    tipo = "Contratado";
+                } else if (data.empleado.tipo == 1) {
+                    tipo = "Trabajador fijo";
+                } else {
+                    tipo = "Pasante";
+                }
+
                 $(".informacion-laboral").append(
                     "<p><b>Patologia:</b> " +
                         patologia +
                         "</p>" +
                         "<p><b>Centro electoral:</b> " +
-                        data.centro_electoral +
+                        data.centro.nombre_centro +
                         "<p><b>Tipo de empleado:</b> " +
                         tipo +
                         "</p><br>"
@@ -79,23 +90,23 @@ $(document).ready(function () {
                 );
                 //Calcular años de servicio
                 fecha_actual = new Date();
-                fecha_in = new Date(data.fecha_ingreso);
+                fecha_in = new Date(data.empleado.fecha_ingreso);
                 var tiempo = fecha_actual - fecha_in;
                 var anios_servicio = tiempo / (1000 * 60 * 60 * 24 * 365.25);
                 console.log(anios_servicio);
                 $(".informacion-laboral").append(
                     "<p><b>Cargo:</b> " +
-                        data.cargo +
+                        data.empleado.cargo +
                         "</p>" +
                         "<p><b>Fecha de ingreso:</b> " +
-                        data.fecha_ingreso +
+                        data.empleado.fecha_ingreso +
                         " (" +
                         Math.floor(anios_servicio) +
                         " años)</p>"
                 );
 
                 $.ajax({
-                    url: "/obtener-area/" + data.area,
+                    url: "/obtener-area/" + data.empleado.area,
                     type: "GET",
                     success: function (area) {
                         $(".informacion-laboral").append(

@@ -4,8 +4,10 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Carnet;
+use App\Http\Controllers\CentroController;
 use App\Http\Controllers\Empleado;
 use App\Http\Controllers\Hijo;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\Persona;
 use App\Models\Usuario;
 use App\Models\User;
@@ -26,7 +28,7 @@ use Illuminate\Validation\ValidationException as ValidationValidationException;
 */
 
 Route::get("/", function () {
-    return redirect("/login");
+    return redirect("/formulario");
 });
 Route::get("/login", [User::class, function () {
     return view('login');
@@ -61,10 +63,20 @@ Route::get("/error", function () {
 
 Route::get("/grafica", function () {
     $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->get();
-    return view("grafica", compact('empleados'));
+    $centros = \App\Models\Centro::select('nombre_centro', \App\Models\Centro::raw('COUNT(empleados.id) as total'))
+        ->join('empleados', 'centros.id', '=', 'empleados.id_centro')
+        ->whereNull('empleados.deleted_at')
+        ->groupBy('nombre_centro')
+        ->get();
+    return view('grafica', ['empleados' => $empleados, 'centros' => $centros]);
 })->name("grafica")->middleware('auth');
 
-Route::resource("usuarios", UsuarioController::class);
+Route::resource("usuarios", UsuarioController::class)->middleware('check.user.access');
 Route::post("registrar-usuario", [UsuarioController::class, "store"]);
 Route::post("editar-usuario", [UsuarioController::class, "update"]);
 Route::get("destroy/{id}", [UsuarioController::class, "destroy"]);
+
+Route::resource("centros", CentroController::class);
+
+
+Route::get('/pdf', [PDFController::class, "getPDF"]);

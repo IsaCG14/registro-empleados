@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('personas', function (Blueprint $table) {
-            $table->boolean("estudiante")->default(0);
+        Schema::table('empleados', function (Blueprint $table) {
+            $table->dropColumn("centro_electoral");
+            $table->unsignedInteger("id_centro");
+            $table->foreign("id_centro")->references("id")->on("centros");
         });
     }
 
@@ -21,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('persona', function (Blueprint $table) {
+        Schema::table('empleados', function (Blueprint $table) {
             //
         });
     }

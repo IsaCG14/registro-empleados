@@ -20,6 +20,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            session(['usuario' => $request['user']]);
             return redirect()->intended('lista-empleados');
         } else {
             throw ValidationValidationException::withMessages(['user' => 'Usuario o contraseña inválidos']);
@@ -31,6 +32,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect('/login');
     }
 }

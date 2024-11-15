@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmpleadoRequest;
 use Illuminate\Http\Request;
 
 class Empleado extends Controller
@@ -21,7 +22,8 @@ class Empleado extends Controller
     public function create()
     {
         $areas = \App\Models\Area::all();
-        return view("form", compact('areas'));
+        $centros = \App\Models\Centro::all();
+        return view("form", ['areas' => $areas, 'centros' => $centros]);
     }
 
     /**
@@ -40,11 +42,34 @@ class Empleado extends Controller
         $id_persona = \App\Models\Persona::select('id')->latest()->first();
         $nro_hijos = ($request['nro_hijos'] == null) ? 0 : $request['nro_hijos'];
 
+        //Verificar si se va a registrar un nuevo centro
+        $centro = 0;
+
+        if ($request->has('nombre_centro')) {
+            //Validar que no exista 
+            $centro_validate = $request->validate([
+                'nombre_centro' => "required|unique:centros"
+            ]);
+            //Registrar nuevo centro
+            \App\Models\Centro::create([
+                'nombre_centro' => $centro_validate['nombre_centro']
+            ]);
+            $centro = \App\Models\Centro::select('id')->latest()->first()->id;
+        } else {
+            $centro = $request['centro_electoral'];
+        }
+
+        //Validar datos
+        $datosValidados = $request->validate([
+            'cedula' => 'required|unique:empleados',
+            'correo' => 'required|unique:empleados',
+        ]);
+
         //Guardar informacion de empleados
         \App\Models\Empleado::create([
-            'cedula' => $request['cedula'],
+            'cedula' => $datosValidados['cedula'],
             'direccion' => $request['direccion'],
-            'correo' => $request['correo'],
+            'correo' => $datosValidados['correo'],
             'telefono' => $request['telefono'],
             'cargo' => $request['cargo'],
             'fecha_ingreso' => $request['fecha_ingreso'],
@@ -54,10 +79,10 @@ class Empleado extends Controller
             'talla_pantalon' => $request['talla_pantalon'],
             'talla_zapato' => $request['talla_zapato'],
             'patologia' => $request['patologia'],
-            'centro_electoral' => $request['centro_electoral'],
             'area' => $request['area'],
             'tipo' => $request['tipo'],
-            'id_persona' => $id_persona->id
+            'id_persona' => $id_persona->id,
+            'id_centro' => $centro
         ]);
 
         //Obtener id con el que se registro
@@ -77,10 +102,10 @@ class Empleado extends Controller
             //Guardar informacion de hijo
             $hijos = array_map(
                 null,
-                $request->input('nombres'),
-                $request->input('fechas_nac'),
-                $request->input('sexos'),
-                $request->input('estudiante', 0)
+                $request->input('nombres', []),
+                $request->input('fechas_nac', []),
+                $request->input('sexos', []),
+                $request->input('estudiantes', [])
             );
 
             foreach ($hijos as $hijo) {
@@ -109,7 +134,8 @@ class Empleado extends Controller
     public function show(string $id)
     {
         $empleado = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'personas.*')->where('empleados.id', $id)->first();
-        return response()->json($empleado);
+        $centro = \App\Models\Empleado::join('centros', 'empleados.id_centro', '=', 'centros.id')->select('centros.nombre_centro')->where('empleados.id', $id)->first();
+        return response()->json(["empleado" => $empleado, "centro" => $centro]);
     }
 
     /**
@@ -117,11 +143,12 @@ class Empleado extends Controller
      */
     public function edit(string $id)
     {
+        $centros = \App\Models\Centro::all();
         $carnet = \App\Models\Carnet::all()->where('id_empleado', $id)->first();
         $empleado = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->where('empleados.id', $id)->first();
         $areas = \App\Models\Area::all();
         $hijos = \App\Models\Hijo::join('personas', 'hijos.id_persona', "=", 'personas.id')->select('personas.*', 'hijos.*')->where("hijos.id_empleado", $id)->get();
-        return view('editar', ['empleado' => $empleado, 'areas' => $areas, 'carnet' => $carnet, 'hijos' => $hijos]);
+        return view('editar', ['empleado' => $empleado, 'areas' => $areas, 'carnet' => $carnet, 'hijos' => $hijos, 'centros' => $centros]);
     }
 
     /**
@@ -134,16 +161,38 @@ class Empleado extends Controller
         $persona->nombre = $request['nombre'];
         $persona->fecha_nacimiento = $request['fecha_nacimiento'];
         $persona->sexo = $request['sexo'];
-        $persona->estudiante = $request['estudiante'];
+        $persona->estudiante = $request->input('estudiante', 0);
         $persona->save();
 
         $nro_hijos = ($request['nro_hijos'] == null) ? 0 : $request['nro_hijos'];
 
+        //Verificar si se va a registrar un nuevo centro
+
+        if ($request->has('nombre_centro')) {
+            //Validar que no exista centro
+            $centro_validate = $request->validate([
+                'nombre_centro' => "required|unique:centros"
+            ]);
+            //Registrar nuevo centro
+            \App\Models\Centro::create([
+                'nombre_centro' => $centro_validate['nombre_centro']
+            ]);
+            $centro = \App\Models\Centro::select('id')->latest()->first()->id;
+        } else {
+            $centro = $request['centro_electoral'];
+        }
+
+        //Validar datos
+        $datosValidados = $request->validate([
+            'cedula' => 'required|unique:empleados,cedula,' . $id_empleado,
+            'correo' => 'required|unique:empleados,correo,' . $id_empleado,
+        ]);
+
         //Guardar informacion de empleados
         $empleado = \App\Models\Empleado::find($id_empleado);
-        $empleado->cedula = $request['cedula'];
+        $empleado->cedula = $datosValidados['cedula'];
         $empleado->direccion = $request['direccion'];
-        $empleado->correo = $request['correo'];
+        $empleado->correo = $datosValidados['correo'];
         $empleado->telefono = $request['telefono'];
         $empleado->cargo = $request['cargo'];
         $empleado->fecha_ingreso = $request['fecha_ingreso'];
@@ -153,7 +202,7 @@ class Empleado extends Controller
         $empleado->talla_pantalon = $request['talla_pantalon'];
         $empleado->talla_zapato = $request['talla_zapato'];
         $empleado->patologia = $request['patologia'];
-        $empleado->centro_electoral = $request['centro_electoral'];
+        $empleado->id_centro = $centro;
         $empleado->area = $request['area'];
         $empleado->tipo = $request['tipo'];
         $empleado->save();

@@ -4,8 +4,8 @@ $(document).ready(function () {
     $("input[name='nro_hijos']").attr("max", cantidad_hijos);
 
     $(".registrar-hijo").on("click", function () {
-        var name = $("#nombre_hijo").val();
-        var age = $("#fecha_nacimiento_hijo").val();
+        var name = $("input[name='nombre_hijo']").val();
+        var age = $("input[name='fecha_nacimiento_hijo']").val();
         var sex = $("input[name='sexo_hijo']:checked").val();
         var estudiante = $("input[name='estudiante_hijo']").is(":checked")
             ? 1

@@ -22,11 +22,11 @@ class EmpleadoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cedula'=>'required',
-            'direccion'=>'required',
-            'correo'=>'required',
-            'telefono'=>'required',
-            'cargo'=>'required',
+            'cedula' => 'required | unique:empleados',
+            'direccion' => 'required',
+            'correo' => 'required | unique:empleados',
+            'telefono' => 'required',
+            'cargo' => 'required',
         ];
     }
 }

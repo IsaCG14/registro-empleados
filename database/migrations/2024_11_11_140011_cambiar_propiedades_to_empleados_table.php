@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('personas', function (Blueprint $table) {
-            $table->boolean("estudiante")->default(0);
+        Schema::table('empleados', function (Blueprint $table) {
+            $table->integer('tipo')->default(0)->change();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('persona', function (Blueprint $table) {
+        Schema::table('empleados', function (Blueprint $table) {
             //
         });
     }

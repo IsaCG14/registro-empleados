@@ -2,9 +2,9 @@ nav {
     top: 0;
 }
 
-#grafica {
-    max-width: 60vw;
-    max-height: 60vh;
+canvas {
+    max-width: 478px;
+    max-height: 230px;
 }
 
 .list {

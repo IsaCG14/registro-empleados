@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="shortcut icon" href="img/icono.png"/>
 </head>
 
 <body>
@@ -25,12 +26,12 @@
                     <form action="" method="GET" id="form-hijos">
                         <div class="mb-3">
                             <label for="recipient-name" class="col-form-label">Nombre completo:</label>
-                            <input type="text" class="form-control" pattern="^[a-zA-ZÑñÁáÉéÍíÓóÚú\s]+$" id="nombre_hijo" required>
+                            <input type="text" class="form-control" pattern="^[a-zA-ZÑñÁáÉéÍíÓóÚú\s]+$" id="nombre_hijo" name="nombre_hijo" required>
                             <span id="error_nombre"></span>
                         </div>
                         <div class="mb-3">
                             <label for="recipient-name" class="col-form-label">Fecha de nacimiento:</label>
-                            <input type="date" class="form-control" id="fecha_nacimiento_hijo" required>
+                            <input type="date" class="form-control" name="fecha_nacimiento_hijo" id="fecha_nacimiento_hijo" required>
                             <span id="error_fecha"></span>
                         </div>
                         <div class="col">
@@ -63,6 +64,22 @@
             </div>
         </div>
     </div>
+    <nav class="navbar fixed-top bg-body-tertiary" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="img/icono.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+            CORPOCENTRO
+          </a>
+          <a href="/login" class="btn btn-outline-light">Iniciar sesión</a>
+        </div>
+      </nav>
+      @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <div class="alert alert-danger my-5" role="alert">
+                {{$error}}
+            </div>  
+        @endforeach 
+        @endif
     <div class="container">
         <div class="contenedor">
             <img src="img/header.png" class="mb-4" width="90%" alt="">
@@ -121,7 +138,7 @@
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Correo:</label>
-                        <input type="email" class="form-control" name="correo" required>
+                        <input type="text" pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú0-9._\-]+@[a-zA-ZÑñÁáÉéÍíÓóÚú0-9.\-]+\.[a-zA-Z]{2,}$" class="form-control" name="correo" required>
                         <div class="invalid-feedback">
                             Escribe tu dirección de correo electrónico.
                         </div>
@@ -289,11 +306,19 @@
                         </select>
                     </div>
                     <div class="col">
-                        <label for="exampleFormControlTextarea1" class="form-label">Cargo:</label>
-                        <input type="text" class="form-control" name="cargo" rows="3" required>
-                        <div class="invalid-feedback">
-                            Especifique su cargo.
-                        </div>
+                        <label class="form-label">Centro de votación:</label>
+                        <select class="select-centro form-select mb-3" name="centro_electoral">
+                            @foreach ($centros as $centro)
+                                <option value="{{$centro->id}}">{!!$centro->nombre_centro!!}</option>
+                            @endforeach
+                        </select>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="new_centro">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              Otro centro
+                            </label>
+                          </div>
+                          <div id="otro_centro"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">
@@ -305,10 +330,10 @@
                         </div>
                     </div>
                     <div class="col">
-                        <label for="exampleFormControlTextarea1" class="form-label">Centro electoral:</label>
-                        <input type="text" class="form-control" name="centro_electoral" rows="3" required>
+                        <label for="exampleFormControlTextarea1" class="form-label">Cargo:</label>
+                        <input type="text" class="form-control" name="cargo" rows="3" required>
                         <div class="invalid-feedback">
-                            Especifique su centro de votación.
+                            Especifique su cargo.
                         </div>
                     </div>
                     <div class="col">
@@ -319,15 +344,21 @@
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" value="1" type="radio" name="tipo" id="flexRadioDefault1">
+                            <input class="form-check-input" value="1" type="radio" name="tipo" id="flexRadioDefault1" checked>
                             <label class="form-check-label" for="flexRadioDefault1">
                               Trabajador fijo
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" value="0" type="radio" name="tipo" id="flexRadioDefault2" checked>
+                            <input class="form-check-input" value="0" type="radio" name="tipo" id="flexRadioDefault2">
                             <label class="form-check-label" for="flexRadioDefault2">
                               Contratado
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" value="2" type="radio" name="tipo" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Pasante
                             </label>
                           </div>
                     </div>
@@ -346,6 +377,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/validation.js') }}"></script>
+    <script src="{{ asset('js/form.js') }}"></script>
 </body>
 
 </html>
