@@ -47,6 +47,19 @@ $(document).ready(function () {
                 $("#form-hijos").trigger("reset");
                 $("#info-hijos").modal("hide");
 
+                //Seguir registrando hijos
+                document
+                    .querySelector("#info-hijos")
+                    .addEventListener("hidden.bs.modal", function () {
+                        //Aparecer modal si aun faltan hijos por registrar
+                        var cantidad = $("input[name='nro_hijos']").val();
+                        var cantidadTabla = $(".table tbody tr").length;
+
+                        if (cantidadTabla < cantidad) {
+                            $("#info-hijos").modal("show");
+                        }
+                    });
+
                 cantidad_hijos = $(".table tbody tr").length;
                 $("input[name='nro_hijos']").attr("min", cantidad_hijos);
                 $("input[name='nro_hijos']").attr("max", cantidad_hijos);

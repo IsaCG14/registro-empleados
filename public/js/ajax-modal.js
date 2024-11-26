@@ -16,7 +16,7 @@ $(document).ready(function () {
                 fecha_nac = new Date(data.empleado.fecha_nacimiento);
                 var edad = fecha_actual - fecha_nac;
                 var anios = edad / (1000 * 60 * 60 * 24 * 365.25);
-                console.log(anios);
+                //console.log(anios);
                 var estudiante = data.empleado.estudiante == 0 ? "No" : "Si";
 
                 $(".informacion-personal").html(
@@ -71,8 +71,10 @@ $(document).ready(function () {
                     tipo = "Contratado";
                 } else if (data.empleado.tipo == 1) {
                     tipo = "Trabajador fijo";
-                } else {
+                } else if (data.empleado.tipo == 2) {
                     tipo = "Pasante";
+                } else {
+                    tipo = "Jubilado";
                 }
 
                 $(".informacion-laboral").append(
@@ -90,10 +92,12 @@ $(document).ready(function () {
                 );
                 //Calcular años de servicio
                 fecha_actual = new Date();
+                //const partes = data.empleado.fecha_ingreso.split("/");
+                //fecha_in = new Date(partes[2], partes[1] - 1, partes[0]);
                 fecha_in = new Date(data.empleado.fecha_ingreso);
                 var tiempo = fecha_actual - fecha_in;
                 var anios_servicio = tiempo / (1000 * 60 * 60 * 24 * 365.25);
-                console.log(anios_servicio);
+                //console.log(anios_servicio);
                 $(".informacion-laboral").append(
                     "<p><b>Cargo:</b> " +
                         data.empleado.cargo +

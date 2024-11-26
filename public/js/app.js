@@ -145,6 +145,19 @@ $(document).ready(function () {
                 $("#form-hijos").trigger("reset");
                 $("#info-hijos").modal("hide");
 
+                //Seguir registrando hijos
+                document
+                    .querySelector("#info-hijos")
+                    .addEventListener("hidden.bs.modal", function () {
+                        //Aparecer modal si aun faltan hijos por registrar
+                        var cantidad = $("input[name='nro_hijos']").val();
+                        var cantidadTabla = $(".table tbody tr").length;
+
+                        if (cantidadTabla < cantidad) {
+                            $("#info-hijos").modal("show");
+                        }
+                    });
+
                 cantidad_hijos = $("input[name='nombres[]']").length;
 
                 //alert(cantidad_hijos)

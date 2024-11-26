@@ -86,17 +86,18 @@
             <h3 class="mb-5">Registro de empleados</h3>
             <form class="needs-validation" action="/guardar-empleado" method="POST" novalidate>
                 @csrf
+                <hr class="my-4 border border-secondary border-2 opacity-25">
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Cédula:</label>
-                        <input type="text" class="form-control" maxlength="9" pattern="[0-9]+" name="cedula" required>
+                        <input type="text" class="form-control" value="{{ old('cedula') }}" maxlength="9" pattern="[0-9]+" name="cedula" required>
                         <div class="invalid-feedback">
                             Escribe tu número de cédula.
                         </div>
                     </div>
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Nombre completo:</label>
-                        <input type="text" class="form-control" pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú ]+" name="nombre" required>
+                        <input type="text" class="form-control" pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú ]+" value="{{ old('nombre') }}" name="nombre" required>
                         <div class="invalid-feedback">
                             Escribe tu nombre completo.
                         </div>
@@ -105,14 +106,14 @@
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlTextarea1" class="form-label">Dirección de domicilio:</label>
-                        <input type="text" class="form-control" name="direccion" rows="3" required>
+                        <input type="text" class="form-control" value="{{ old('direccion') }}" name="direccion" rows="3" required>
                         <div class="invalid-feedback">
                             Escribe tu dirección de domicilio.
                         </div>
                     </div>
                     <div class="col">
                         <label for="exampleFormControlTextarea1" class="form-label">Fecha de nacimiento:</label>
-                        <input type="date" class="form-control" name="fecha_nacimiento" rows="3" required>
+                        <input type="date" class="form-control" value="{{ old('fecha_nacimiento') }}" name="fecha_nacimiento" rows="3" required>
                         <div class="invalid-feedback">
                             Escribe tu fecha de nacimiento.
                         </div>
@@ -138,19 +139,20 @@
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Correo:</label>
-                        <input type="text" pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú0-9._\-]+@[a-zA-ZÑñÁáÉéÍíÓóÚú0-9.\-]+\.[a-zA-Z]{2,}$" class="form-control" name="correo" required>
+                        <input type="text" pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú0-9._\-]+@[a-zA-ZÑñÁáÉéÍíÓóÚú0-9.\-]+\.[a-zA-Z]{2,}$" class="form-control" value="{{ old('correo') }}" name="correo" required>
                         <div class="invalid-feedback">
                             Escribe tu dirección de correo electrónico.
                         </div>
                     </div>
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Teléfono:</label>
-                        <input type="text" pattern="[0-9]{11}" minlength="11" maxlength="11"  class="form-control" name="telefono" required>
+                        <input type="text" pattern="[0-9]{11}" minlength="11" maxlength="11"  class="form-control" value="{{ old('telefono') }}" name="telefono" required>
                         <div class="invalid-feedback">
                             Escribe tu número de teléfono.
                         </div>
                     </div>
                 </div>
+                <hr class="my-4 border border-secondary border-2 opacity-25">
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">¿Tiene hijos?</label>
@@ -169,15 +171,14 @@
                 <div class="container_hijos">
                     <div class="mb-3 row">
                         <div class="col">
-                            <input type="number" pattern="[0-9]+" class="form-control" value="0" name="nro_hijos" placeholder="Nro. de hijos"
+                            <input type="number" pattern="[0-9]+" class="form-control" value="0" name="nro_hijos" value="{{ old('nro_hijos') }}" placeholder="Nro. de hijos"
                                 required>
                                 <div class="invalid-feedback">
                                     La cantidad de hijos debe coincidir con los hijos registrados.
                                 </div>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#info-hijos">Añadir información</button>
+                            <button type="button" class="btn btn-primary" id="añadirHijo">Añadir información</button>
                         </div>
                     </div>
                     <div class="mb-3 row">
@@ -198,10 +199,11 @@
                 </div>
                 <div class="valores-hijos">
                 </div>
+                <hr class="my-4 border border-secondary border-2 opacity-25">
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Peso en kg:</label>
-                        <input type="text"  pattern="[0-9]+" class="form-control" name="peso" required>
+                        <input type="text" value="{{ old('peso') }}" pattern="[0-9]+" class="form-control" name="peso" required>
                         <div class="invalid-feedback">
                             Escribe tu peso. Solo números.
                         </div>
@@ -225,19 +227,20 @@
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Talla pantalón:</label>
-                        <input type="text" pattern="[0-9]+" class="form-control" name="talla_pantalon" required>
+                        <input type="text" pattern="[0-9]+" class="form-control" value="{{ old('talla_pantalon') }}" name="talla_pantalon" required>
                         <div class="invalid-feedback">
                             Escribe tu talla de pantalón.
                         </div>
                     </div>
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">Talla de zapato:</label>
-                        <input type="text" pattern="[0-9]+" class="form-control" name="talla_zapato" required>
+                        <input type="text" pattern="[0-9]+" class="form-control" value="{{ old('talla_zapato') }}" name="talla_zapato" required>
                         <div class="invalid-feedback">
                             Escribe tu talla de zapatos.
                         </div>
                     </div>
                 </div>
+                <hr class="my-4 border border-secondary border-2 opacity-25">
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">¿Tiene carnet de la patria?</label>
@@ -257,20 +260,21 @@
                     <div class="mb-3 row">
                         <div class="col">
                             <label for="exampleFormControlInput1" class="form-label">Código:</label>
-                            <input type="text" pattern="[0-9]{10}" class="form-control" name="codigo" minlength="10" maxlength="10" required>
+                            <input type="text" pattern="[0-9]{10}" class="form-control" value="{{ old('codigo') }}" name="codigo" minlength="10" maxlength="10" required>
                             <div class="invalid-feedback">
                                 Escribe un código válido.
                             </div>
                         </div>
                         <div class="col">
                             <label for="exampleFormControlInput1" class="form-label">Serial:</label>
-                            <input type="text" pattern="[0-9]{10}" minlength="10" maxlength="10" class="form-control" name="serial" required>
+                            <input type="text" pattern="[0-9]{10}" minlength="10" maxlength="10" class="form-control" value="{{ old('serial') }}" name="serial" required>
                             <div class="invalid-feedback">
                                 Escribe un serial válido.
                             </div>
                         </div>
                     </div>
                 </div>
+                <hr class="my-4 border border-secondary border-2 opacity-25">
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlInput1" class="form-label">¿Tiene alguna patologia
@@ -290,12 +294,13 @@
                 <div class="patologia_container">
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Especifique:</label>
-                        <input type="text" class="form-control" rows="3" name="patologia" required>
+                        <input type="text" class="form-control" rows="3" value="{{ old('patologia') }}" name="patologia" required>
                         <div class="invalid-feedback">
                             Especifique la patologia que tiene.
                         </div>
                     </div>
                 </div>
+                <hr class="my-4 border border-secondary border-2 opacity-25">
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlTextarea1" class="form-label">Oficina donde labora:</label>
@@ -324,14 +329,14 @@
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="exampleFormControlTextarea1" class="form-label">Fecha de ingreso:</label>
-                        <input type="date" class="form-control" name="fecha_ingreso" rows="3" required>
+                        <input type="date" class="form-control" value="{{ old('fecha_ingreso') }}" name="fecha_ingreso" rows="3" required>
                         <div class="invalid-feedback">
                             Ingrese la fecha en que empezó a trabajar.
                         </div>
                     </div>
                     <div class="col">
                         <label for="exampleFormControlTextarea1" class="form-label">Cargo:</label>
-                        <input type="text" class="form-control" name="cargo" rows="3" required>
+                        <input type="text" class="form-control" value="{{ old('cargo') }}" name="cargo" rows="3" required>
                         <div class="invalid-feedback">
                             Especifique su cargo.
                         </div>
@@ -361,7 +366,14 @@
                               Pasante
                             </label>
                           </div>
+                          <div class="form-check">
+                            <input class="form-check-input" value="3" type="radio" name="tipo" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Jubilado
+                            </label>
+                          </div>
                     </div>
+                    <hr class="my-4 border border-secondary border-2 opacity-25">
                 </div>
                 <input type="submit" class="btn btn-primary" value="Enviar">
                 <input type="reset" class="btn btn-secondary" value="Limpiar">
@@ -378,6 +390,8 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/validation.js') }}"></script>
     <script src="{{ asset('js/form.js') }}"></script>
+    <script src="{{ asset("js/sweetalert2@11.js") }}"></script>
+    <script src="{{ asset('js/banner.js') }}"></script>
 </body>
 
 </html>

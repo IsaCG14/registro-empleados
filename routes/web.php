@@ -71,6 +71,11 @@ Route::get("/grafica", function () {
     return view('grafica', ['empleados' => $empleados, 'centros' => $centros]);
 })->name("grafica")->middleware('auth');
 
+Route::get("/reportes", function () {
+    $centros = \App\Models\Centro::all();
+    return view("reportes", compact('centros'));
+})->name("reportes")->middleware('auth');
+
 Route::resource("usuarios", UsuarioController::class)->middleware('check.user.access');
 Route::post("registrar-usuario", [UsuarioController::class, "store"]);
 Route::post("editar-usuario", [UsuarioController::class, "update"]);
@@ -78,5 +83,10 @@ Route::get("destroy/{id}", [UsuarioController::class, "destroy"]);
 
 Route::resource("centros", CentroController::class);
 
-
+/*
+1: por area
+2: por sexo
+3: por tipo de empleado
+4: a partir de fecha de ingreso
+*/
 Route::get('/pdf', [PDFController::class, "getPDF"]);

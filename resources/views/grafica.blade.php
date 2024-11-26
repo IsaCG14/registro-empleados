@@ -5,16 +5,16 @@
         <h3>Estadísticas</h3>
         <!--<a href="/pdf" target="_blank" class="btn btn-primary my-4">Generar PDF</a>-->
         <button id="generarPdfGeneral" class="btn btn-primary my-4">Generar PDF</button>
-        <!--<div class="dropdown">
+        <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Ver gráfica de 
+              Estilo de gráfica
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/grafica?tipo=1">Géneros</a></li>
-              <li><a class="dropdown-item" href="/grafica?tipo=2">Centros de votación</a></li>
-              <li><a class="dropdown-item" href="/grafica?tipo=3">Años de servicio</a></li>
+              <li><a class="dropdown-item" href="/grafica?tipo=pie">Gráfica de Pastel</a></li>
+              <li><a class="dropdown-item" href="/grafica?tipo=doughnut">Gráfica de Rosca</a></li>
+              <li><a class="dropdown-item" href="/grafica?tipo=bar">Gráfica de Barras</a></li>
             </ul>
-          </div>-->
+          </div>
           <div class="row m-2" id="grafic-container">
             <div class="col-lg-5 m-4">
               <h5>Gráfica por sexo</h5>
@@ -46,41 +46,53 @@
               <canvas id="grafica-estudiante"></canvas>
               <button class="btn btn-dark generarPdf">Descargar PDF</button>
             </div>
+            <div class="col-lg-5 m-4">
+              <h5>Gráfica de empleados con hijos</h5>
+              <canvas id="grafica-hijos"></canvas>
+              <button class="btn btn-dark generarPdf">Descargar PDF</button>
+            </div>
           </div>
     </div>
   </div>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js" integrity="sha512-t2JWqzirxOmR9MZKu+BMz0TNHe55G5BZ/tfTmXMlxpUY8tsTo3QMD27QGoYKZKFAraIPDhFv56HLdN11ctmiTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-  <script src="https://unpkg.com/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.js"></script>
+  <script src="{{asset('librerias/jquery-3.7.1.min.js.js')}}"></script>
+  <script src="{{asset("librerias/chart.js.js")}}"></script>
+  <script src="{{asset('librerias/pdf.min.js.js')}}"></script>
+  <script src="{{asset('librerias/jspdf.min.js.js')}}"></script>
+  <script src="{{asset('librerias/jspdf.plugin.autotable.js.js')}}"></script>
   <script>
     const empls = @json($empleados);
     
     //Obtener tipo de grafica
-    /*const url = new URLSearchParams(window.location.search)
-    var tipo = url.get("tipo")*/
+    const url = new URLSearchParams(window.location.search)
+
+    var tipo = (url.get("tipo") == null) ? 'pie' : url.get("tipo");
 
     //Grafica por sexo
     var num_f = 0
     var num_m = 0
     var num_o = 0
+    //Grafica por tipo
     var num_estudiante = 0
     var no_estudiante = 0
     var num_contratado = 0
     var num_fijo = 0
     var num_pasante = 0
+    var num_jubilado = 0
+    //Grafica por edades
     var rango1 = 0 
     var rango2 = 0
     var rango3 = 0 
     var rango4 = 0 
     var rango5 = 0
+    //Grafica por años de servicio
     var anio1 = 0 
     var anio2 = 0
     var anio3 = 0 
     var anio4 = 0 
     var anio5 = 0
+    //Grafica de hijos
+    var con_hijos = 0
+    var sin_hijos = 0
 
     $.each(empls, function(key, value){
       //valorar genero
@@ -99,8 +111,11 @@
             num_contratado++
         } else if (value.tipo == 2){
             num_pasante++
+        } else if (value.tipo == 3){
+            num_jubilado++
         }
 
+        //Si es estudiante o no
         if (value.estudiante == 1){
             num_estudiante++
         } else {
@@ -147,6 +162,13 @@
         } else {
           anio5++
         }
+
+        //Si es estudiante o no
+        if (value.nro_hijos != 0){
+            con_hijos++
+        } else {
+          sin_hijos++
+        }
     })
 
     const plugin = {
@@ -163,7 +185,7 @@
 
     const grafica_sexo = document.getElementById('grafica-sexo');
     new Chart(grafica_sexo, {
-      type: 'doughnut',
+      type: tipo,
       data: {
         labels: ['Masculino: '+String(num_m), 'Femenino: '+String(num_f), 'Otro: '+String(num_o)],
         datasets: [{
@@ -183,7 +205,7 @@
 
     //Grafica por edades 
     new Chart(grafica_edad, {
-      type: 'bar',
+      type: tipo,
       data: {
       labels: ["18 a 24 ("+rango1+")", "25 a 30 ("+rango2+")", "31 a 45 ("+rango3+")", "46 a 55 ("+rango4+")", "56+ ("+rango5+")"],
       datasets: [{
@@ -221,7 +243,7 @@
     })
   
     new Chart(grafica_centro, {
-      type: 'pie',
+      type: tipo,
       data: {
         labels: centros_label,
         datasets: [{
@@ -236,17 +258,18 @@
     const grafica_tipo = document.getElementById('grafica-tipo');
   
     new Chart(grafica_tipo, {
-      type: 'doughnut',
+      type: tipo,
       data: {
-        labels: ['Trabajador fijo: '+String(num_fijo), 'Contratado: '+String(num_contratado), 'Pasante: '+String(num_pasante)],
+        labels: ['Trabajador fijo: '+String(num_fijo), 'Contratado: '+String(num_contratado), 'Pasante: '+String(num_pasante), 'Jubilado: '+String(num_jubilado)],
         datasets: [{
           label: '# empleados',
           backgroundColor: [
             '#0d6efd',
             '#6f42c1',
-            '#20c997'
+            '#20c997',
+            'rgba(75, 192, 192, 0.2)'
           ],
-          data: [num_fijo, num_contratado, num_pasante],
+          data: [num_fijo, num_contratado, num_pasante, num_jubilado],
         }]
       },
       plugins: [plugin],
@@ -255,7 +278,7 @@
     //Grafica por años de servicio
     const grafica_servicio = document.getElementById('grafica-servicio');
     new Chart(grafica_servicio, {
-      type: 'bar',
+      type: tipo,
       data: {
       labels: ["0 - 5 ("+anio1+")", "6 - 10 ("+anio2+")", "11 - 15 ("+anio3+")", "16 - 20 ("+anio4+")", "21+ ("+anio5+")"],
       datasets: [{
@@ -271,7 +294,7 @@
     const grafica_estudiante = document.getElementById('grafica-estudiante');
   
     new Chart(grafica_estudiante, {
-      type: 'pie',
+      type: tipo,
       data: {
         labels: ['Estudiante: '+String(num_estudiante), 'No estudiante: '+String(no_estudiante)],
         datasets: [{
@@ -280,6 +303,21 @@
             '#0d6efd',
             '#dc3545'
           ],
+          data: [num_estudiante, no_estudiante]
+        }]
+      },
+      plugins: [plugin],
+    });
+
+    //Grafica para estudiantes
+    const grafica_hijos = document.getElementById('grafica-hijos');
+  
+    new Chart(grafica_hijos, {
+      type: tipo,
+      data: {
+        labels: ['Empleados con hijos: '+String(num_estudiante), 'Empleados sin hijos: '+String(no_estudiante)],
+        datasets: [{
+          label: '# empleados',
           data: [num_estudiante, no_estudiante]
         }]
       },

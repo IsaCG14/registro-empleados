@@ -33,15 +33,18 @@
   </div>
   <div class="contenedor-grid">
     <div class="container">
-        <h3>Lista de empleados</h3>
+        <h3 class="my-3">Lista de empleados</h3>    
         <table class="table table-striped list">
             <thead>
                 <tr>
                     <th scope="col">Cédula</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Correo</th>
+                    <!--<th scope="col" class="d-none">Nro. Hijos</th>-->
                     <th scope="col">Teléfono</th>
+                    <!--<th scope="col" class="d-none">Dirección</th>-->
                     <th scope="col">Cargo</th>
+                    <th scope="col">Fecha de ingreso</th>
                     <th></th>
                 </tr>
             </thead>
@@ -51,12 +54,17 @@
                         <th scope="row">{!!$empleado->cedula!!}</th>
                         <td>{!!$empleado->nombre!!}</td>
                         <td>{!!$empleado->correo!!}</td>
+                        <!--<td class="d-none">{!!$empleado->nro_hijos!!}</td>-->
                         <td>{!!$empleado->telefono!!}</td>
+                        <!--<td class="d-none">{!!$empleado->direccion!!}</td>-->
                         <td>{!!$empleado->cargo!!}</td>
+                        <td>{!!$empleado->fecha_ingreso!!}</td>
                         <td>
                             <button class="btn btn-sm btn-info ver-empleado" id="{!!$empleado->id_empleado!!}" data-bs-toggle="modal" data-bs-target="#visualizar"><img src="/img/eye.png" width="20" alt="ver"></button>
+                            @if (session("rol") == true)
                             <a href="/editar-empleado/{{$empleado->id_empleado}}" class="btn btn-sm btn-primary"><img src="/img/pencil.png" width="20" alt="editar"></a>
                             <a href="/eliminar-empleado/{{$empleado->id_empleado}}" class="btn btn-sm btn-danger eliminar-empleado"><img src="/img/trash.png" width="20" alt="eliminar"></a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

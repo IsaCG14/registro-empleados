@@ -16,11 +16,12 @@ class LoginController extends Controller
         $credentials = $request->only('user', 'password');
 
         $remember = $request->filled('remember');
-        $user = User::where("user", $request->user)->first();
+        $user = User::select('rol')->where("user", $request->user)->first();
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             session(['usuario' => $request['user']]);
+            session(['rol' => $user->rol]);
             return redirect()->intended('lista-empleados');
         } else {
             throw ValidationValidationException::withMessages(['user' => 'Usuario o contraseña inválidos']);

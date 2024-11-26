@@ -354,6 +354,12 @@
                               Pasante
                             </label>
                           </div>
+                          <div class="form-check">
+                            <input @if ($empleado->tipo == 3) checked @endif class="form-check-input" value="3" type="radio" name="tipo" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Jubilado
+                            </label>
+                          </div>
                     </div>
                 </div>
                 <input type="hidden" value="{{$empleado->id_persona}}" name="id_persona">

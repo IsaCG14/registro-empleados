@@ -63,6 +63,8 @@ class Empleado extends Controller
         $datosValidados = $request->validate([
             'cedula' => 'required|unique:empleados',
             'correo' => 'required|unique:empleados',
+        ], [
+            'cedula.unique' => 'El empleado ya se encuentra registrado.',
         ]);
 
         //Guardar informacion de empleados

@@ -28,3 +28,9 @@ canvas {
     margin-top: 5em;
     margin-bottom: 3em;
 }
+
+@media (max-width: 600px) {
+    .oculto {
+        display: none;
+    }
+}

@@ -7,3 +7,17 @@ $("#new_centro").on("change", function () {
         $("#centro_nuevo").remove();
     }
 });
+
+//Funcion modal
+$("#añadirHijo").on("click", function () {
+    var cantidad = $("input[name='nro_hijos']").val();
+    var cantidadTabla = $(".table tbody tr").length;
+
+    if (cantidadTabla < cantidad) {
+        $("#info-hijos").modal("show");
+    }
+});
+
+$("#agregar-hijo").on("click", function () {
+    //
+});
