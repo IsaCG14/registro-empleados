@@ -119,7 +119,7 @@ class Empleado extends Controller
                     'estudiante' => $estudiante
                 ]);
 
-                $id_hijo = \App\Models\Persona::select('id')->latest()->first();
+                $id_hijo = \App\Models\Persona::select('id')->where('nombre', $nombre)->first();
                 \App\Models\Hijo::create([
                     'id_persona' => $id_hijo->id,
                     'id_empleado' => $id_empleado->id

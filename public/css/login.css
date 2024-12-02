@@ -38,3 +38,9 @@ input[type="password"]:focus {
     border: 2px solid rgb(20, 138, 255);
     box-shadow: none;
 }
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 25em;
+    }
+}
