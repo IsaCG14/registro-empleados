@@ -5,7 +5,7 @@
 }
 
 body {
-    background-image: url("/img/fondo.png");
+    background-image: url("/img/fondo.jpg");
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -22,25 +22,39 @@ input[type="radio"] {
     border-width: 4px;
 }
 
+input:focus {
+    outline: none;
+}
+
 #gif {
     animation: playOnce 1s steps(1) forwards;
 }
 
 .container {
-    width: 100vw;
     display: flex;
     justify-content: center;
 }
 
+.contenedor-hide {
+    opacity: 0;
+    transform: translateX(-150%);
+}
+
 .contenedor {
+    position: absolute;
     display: flex;
     flex-direction: column; /* O row, según tu diseño */
+    justify-content: space-between;
     background-color: white;
     border-radius: 25px;
-    padding: 1em 5em;
+    padding: 3em 5em;
     width: 80vw;
-    margin: 6em 2em;
-    /*height: 110em;*/
+    margin: 6em 1em;
+    min-height: 70vh;
+    box-shadow: 6px 6px 6px 5px rgba(0, 0, 0, 0.1);
+    top: 2em;
+    left: 6em;
+    transition: opacity 0.3s ease-in;
 }
 
 .contenedor-success {
@@ -53,6 +67,7 @@ input[type="radio"] {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    box-shadow: 6px 6px 6px 5px rgba(0, 0, 0, 0.1);
 }
 
 @media only screen and (max-width: 768px) {

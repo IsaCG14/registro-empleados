@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var cantidad_hijos = $(".table tbody tr").length;
+    //Validar que la cantidad coincida con lo que esta en la tabla
     $("input[name='nro_hijos']").attr("min", cantidad_hijos);
     $("input[name='nro_hijos']").attr("max", cantidad_hijos);
 

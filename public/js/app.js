@@ -3,6 +3,8 @@ $(document).ready(function () {
     $(".select-oficina").select2();
     $(".select-centro").select2();
 
+    $("input[name='nro_hijos']").attr("min", 1);
+
     //Ocultar y mostrar opcion de hijos
     if ($("#hijos_si").prop("checked")) {
         $(".container_hijos").css("display", "block");
@@ -167,6 +169,10 @@ $(document).ready(function () {
                 $(".eliminar-hijo").on("click", function eliminar() {
                     var clase = $(this).closest("tr").attr("class");
                     $("." + clase).remove();
+
+                    cantidad_hijos = $("input[name='nombres[]']").length;
+                    $("input[name='nro_hijos']").attr("min", cantidad_hijos);
+                    $("input[name='nro_hijos']").attr("max", cantidad_hijos);
                 });
             } else {
                 //Validar que tenga solo letras y espacios
