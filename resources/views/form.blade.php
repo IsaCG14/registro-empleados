@@ -87,6 +87,10 @@
     <div class="container">
         <form class="needs-validation" action="/guardar-empleado" method="POST" novalidate>
             <div class="contenedor">
+                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
+                    aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 10%"></div>
+                </div>-->
                 <!--<img src="img/header.png" class="mb-4" id="logo-corpo" width="90%" alt="">-->
                 <h4 class="mb-5">Datos personales</h4>
                 @csrf
@@ -162,6 +166,10 @@
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
+                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
+                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 25%"></div>
+                </div>-->
                 <h4 class="mb-5">Datos de hijos</h4>
                 <div class="col-lg-6">
                     <label for="exampleFormControlInput1" class="form-label">¿Tiene hijos?</label>
@@ -217,6 +225,10 @@
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
+                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
+                    aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 50%"></div>
+                </div>-->
                 <h4 class="mb-5">Datos antropológicos</h4>
                 <div class="mb-3 row">
                     <div class="col-lg-6">
@@ -268,6 +280,10 @@
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
+                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
+                    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%"></div>
+                </div>-->
                 <h4 class="mb-5">Datos de carnet</h4>
                 <div>
                     <div class="mb-3 row">
@@ -345,6 +361,10 @@
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
+                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
+                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                </div>-->
                 <h4 class="mb-5">Datos laborales y electorales</h4>
                 <div class="mb-3 row">
                     <div class="col-lg-6">

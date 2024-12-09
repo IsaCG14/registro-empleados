@@ -10,14 +10,9 @@ class PdfController extends Controller
 {
     public function getPdf(Request $request)
     {
-        //Reporte de todos los empleados
-        if (empty($request->all())) {
-            $title = " registrados";
-            $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->get();
-        }
         switch ($request['tipo']) {
             case 1:
-                //Reporte por area
+                //Reporte por centro
                 $centro = \App\Models\Centro::select('nombre_centro')->where("id", $request['centro'])->first();
                 $title = ' que votan en ' . $centro->nombre_centro;
                 $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->where('id_centro', $request['centro'])->get();
@@ -25,15 +20,15 @@ class PdfController extends Controller
             case 2:
                 //Reporte por sexo
                 $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->where('sexo', $request['sexo'])->get();
-                $title = ' de sexo ' . $request['sexo'];
+                $title = ' de sexo ' . $request['valor'];
                 break;
             case 3:
                 //Reporte por contrato
-                if ($request['tipo_empleado'] == 0) {
+                if ($request['valor'] == 0) {
                     $title = " Contratados";
-                } else if ($request['tipo_empleado'] == 1) {
+                } else if ($request['valor'] == 1) {
                     $title = " Trabajando fijo";
-                } else if ($request['tipo_empleado'] == 2) {
+                } else if ($request['valor'] == 2) {
                     $title = " Pasantes";
                 } else {
                     $title = " Jubilados";
@@ -45,9 +40,18 @@ class PdfController extends Controller
                 $fecha = new DateTime($request['fecha_ingreso']);
                 $title = ' que ingresaron hasta ' . $fecha->format("d/m/Y");
                 $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->where('fecha_ingreso', '<=', $request['fecha_ingreso'])->get();
+                break;
+            default:
+                //Reporte general
+                $title = " registrados";
+                $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->get();
+                break;
         }
 
-        $pdf = PDF::loadView('PDF_Estadisticas', ['empleados' => $empleados, 'title' => $title]);
+        //Establecer columnas
+        $atributos = $request->input('atributos', []);
+
+        $pdf = PDF::loadView('PDF_Estadisticas', ['empleados' => $empleados, 'title' => $title, 'atributos' => $request['atributos']]);
         return $pdf->stream('empleados.pdf');
     }
 }
