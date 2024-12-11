@@ -15,6 +15,9 @@ $(".next-button").on("click", function (event) {
     //Aparecer siguiente contenedor
     const contenedorSiguiente = contenedores[indice + 1];
     contenedorSiguiente.classList.toggle("contenedor-hide");
+
+    //Colorear puntero
+    $(".paso-" + (indice + 2) + " i").addClass("imhere");
 });
 
 //Funcion de retroceder
@@ -31,6 +34,9 @@ $(".back-button").on("click", function (event) {
     //Aparecer contenedor anterior
     const contenedorSiguiente = contenedores[indice - 1];
     contenedorSiguiente.classList.toggle("contenedor-hide");
+
+    //Colorear puntero
+    $(".paso-" + (indice + 1) + " i").removeClass("imhere");
 });
 
 //Redirigir al slide con el primer campo erroneo
@@ -46,6 +52,23 @@ $(".needs-validation").on("submit", function () {
                 //Aparecer contenedor donde empiezan los errores
                 const contenedor = campo.closest(".contenedor");
                 contenedor.classList.toggle("contenedor-hide");
+
+                //Colorear puntero
+                // Obtener el índice del contenedor donde empieza el error
+                const indice = contenedores.indexOf(contenedor);
+                console.log(indice);
+
+                //Quitar color a todos los ultimos punteros
+                $(".progreso div i").each(function () {
+                    $(this).removeClass("imhere");
+                });
+
+                //Colorear en donde se está y antes
+                var i = 0;
+                while (i <= indice) {
+                    $(".paso-" + (i + 1) + " i").addClass("imhere");
+                    i++;
+                }
 
                 //Ocultar ultimo contenedor
                 const lastContenedor = contenedores[4];

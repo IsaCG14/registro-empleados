@@ -9,6 +9,7 @@
     <link href="{{ asset('librerias/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="{{ asset('librerias/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('librerias/bootstrap-icons.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="shortcut icon" href="img/icono.png" />
 </head>
@@ -73,7 +74,7 @@
                     class="d-inline-block align-text-top">
                 CORPOCENTRO
             </a>
-            <h3 class="text-white bg-dark">Registro de empleados</h3>
+            <h3 class="text-white">Registro de empleados</h3>
             <a href="/login" class="btn btn-outline-light">Iniciar sesión</a>
         </div>
     </nav>
@@ -85,6 +86,27 @@
         @endforeach
     @endif
     <div class="container">
+        <div class="progreso my-5">
+            <div class="paso-1">
+                <i class="bi bi-1-square-fill imhere"></i>
+                <p>-----</p>
+            </div>
+            <div class="paso-2">
+                <i class="bi bi-2-square-fill"></i>
+                <p>-----</p>
+            </div>
+            <div class="paso-3">
+                <i class="bi bi-3-square-fill"></i>
+                <p>-----</p>
+            </div>
+            <div class="paso-4">
+                <i class="bi bi-4-square-fill"></i>
+                <p>-----</p>
+            </div>
+            <div class="paso-5">
+                <i class="bi bi-5-square-fill"></i>
+            </div>
+        </div>
         <form class="needs-validation" action="/guardar-empleado" method="POST" novalidate>
             <div class="contenedor">
                 <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"

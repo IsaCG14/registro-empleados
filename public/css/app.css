@@ -12,6 +12,9 @@ body {
     background-size: cover;
     text-align: center;
     align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 form {
@@ -49,7 +52,7 @@ input:focus {
     border-radius: 25px;
     padding: 3em 5em;
     width: 80vw;
-    margin: 6em 1em;
+    margin: 7em 1em;
     min-height: 70vh;
     box-shadow: 6px 6px 6px 5px rgba(0, 0, 0, 0.1);
     top: 2em;
@@ -68,6 +71,30 @@ input:focus {
     align-items: center;
     flex-direction: column;
     box-shadow: 6px 6px 6px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progreso {
+    position: absolute;
+    top: 1em;
+    z-index: 9999;
+    background-color: none;
+    font-size: 2rem;
+    color: rgb(135, 135, 135);
+    display: flex;
+}
+
+.imhere {
+    color: cornflowerblue;
+    /*text-shadow: 0 0 11px cornflowerblue;*/
+}
+
+div[class^="paso"] {
+    display: flex;
+    justify-content: center;
+}
+
+div[class^="paso"] p {
+    letter-spacing: -3px;
 }
 
 @media only screen and (max-width: 768px) {
