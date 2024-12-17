@@ -16,7 +16,7 @@
 
 <body>
     <div class="modal fade" id="info-hijos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Información de hijo</h1>
@@ -89,19 +89,19 @@
         <div class="progreso my-5">
             <div class="paso-1">
                 <i class="bi bi-1-square-fill imhere"></i>
-                <p>-----</p>
+                <p>-------</p>
             </div>
             <div class="paso-2">
                 <i class="bi bi-2-square-fill"></i>
-                <p>-----</p>
+                <p>-------</p>
             </div>
             <div class="paso-3">
                 <i class="bi bi-3-square-fill"></i>
-                <p>-----</p>
+                <p>-------</p>
             </div>
             <div class="paso-4">
                 <i class="bi bi-4-square-fill"></i>
-                <p>-----</p>
+                <p>-------</p>
             </div>
             <div class="paso-5">
                 <i class="bi bi-5-square-fill"></i>
@@ -109,16 +109,11 @@
         </div>
         <form class="needs-validation" action="/guardar-empleado" method="POST" novalidate>
             <div class="contenedor">
-                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
-                    aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 10%"></div>
-                </div>-->
-                <!--<img src="img/header.png" class="mb-4" id="logo-corpo" width="90%" alt="">-->
                 <h4 class="mb-5">Datos personales</h4>
                 @csrf
                 <div class="mb-3 row">
                     <div class="col-lg-6 mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Cédula:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Cédula<span>*</span>:</label>
                         <input type="text" class="form-control" value="{{ old('cedula') }}" maxlength="9"
                             pattern="[0-9]+" name="cedula" required>
                         <div class="invalid-feedback">
@@ -126,7 +121,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Nombre completo:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Nombre
+                            completo<span>*</span>:</label>
                         <input type="text" class="form-control" pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú ]+"
                             value="{{ old('nombre') }}" name="nombre" required>
                         <div class="invalid-feedback">
@@ -134,7 +130,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Dirección de domicilio:</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Dirección de
+                            domicilio<span>*</span>:</label>
                         <input type="text" class="form-control" value="{{ old('direccion') }}" name="direccion"
                             rows="3" required>
                         <div class="invalid-feedback">
@@ -142,7 +139,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Fecha de nacimiento:</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Fecha de
+                            nacimiento<span>*</span>:</label>
                         <input type="date" class="form-control" value="{{ old('fecha_nacimiento') }}"
                             name="fecha_nacimiento" rows="3" required>
                         <div class="invalid-feedback">
@@ -150,24 +148,24 @@
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Correo:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Correo<span>*</span>:</label>
                         <input type="text"
                             pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú0-9._\-]+@[a-zA-ZÑñÁáÉéÍíÓóÚú0-9.\-]+\.[a-zA-Z]{2,}$"
                             class="form-control" value="{{ old('correo') }}" name="correo" required>
                         <div class="invalid-feedback">
-                            Escribe tu dirección de correo electrónico.
+                            Escribe una dirección de correo electrónico válido.
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Teléfono:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Teléfono<span>*</span>:</label>
                         <input type="text" pattern="[0-9]{11}" minlength="11" maxlength="11"
                             class="form-control" value="{{ old('telefono') }}" name="telefono" required>
                         <div class="invalid-feedback">
-                            Escribe tu número de teléfono.
+                            Escribe un número de teléfono válido.
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Sexo:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Sexo<span>*</span>:</label>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="sexo" checked value="Masculino">
                             <label class="form-check-label" for="inlineRadio1">Masculino</label>
@@ -182,16 +180,15 @@
                         </div>
                     </div>
                 </div>
+                <p><span>*</span> Campos obligatorios</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button type="button" class="btn btn-primary next-button">Siguiente <img src="/img/right.png"
+                    <button type="button" class="btn btn-primary next-button" style="pointer-events: auto;"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Debe llenar todos los campos para poder avanzar.">Siguiente <img src="/img/right.png"
                             alt="next" width="15"></button>
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
-                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
-                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 25%"></div>
-                </div>-->
                 <h4 class="mb-5">Datos de hijos</h4>
                 <div class="col-lg-6">
                     <label for="exampleFormControlInput1" class="form-label">¿Tiene hijos?</label>
@@ -209,9 +206,9 @@
                 <div class="container_hijos">
                     <div class="mb-3 row">
                         <div class="col-lg-6">
-                            <label for="nro_hijos" class="form-label">Cantidad de hijos:</label>
+                            <label for="nro_hijos" class="form-label">Cantidad de hijos<span>*</span>:</label>
                             <input type="number" pattern="[1-9]+" class="form-control mb-3" name="nro_hijos"
-                                value="{{ old('nro_hijos') }}" placeholder="Nro. de hijos" required>
+                                value="0" placeholder="Nro. de hijos" required>
                             <div class="invalid-feedback">
                                 La cantidad de hijos debe ser mayor a 0 y coincidir con los hijos registrados.
                             </div>
@@ -239,22 +236,21 @@
                 </div>
                 <div class="valores-hijos">
                 </div>
+                <p><span>*</span> Campos obligatorios</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end align-items-md-end">
                     <button type="button" class="btn btn-primary back-button"><img src="/img/left.png"
                             alt="next" width="15"> Anterior</button>
-                    <button type="button" class="btn btn-primary next-button">Siguiente <img src="/img/right.png"
+                    <button type="button" class="btn btn-primary next-button" style="pointer-events: auto;"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Debe llenar todos los campos para poder avanzar.">Siguiente <img src="/img/right.png"
                             alt="next" width="15"></button>
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
-                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
-                    aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 50%"></div>
-                </div>-->
                 <h4 class="mb-5">Datos antropológicos</h4>
                 <div class="mb-3 row">
                     <div class="col-lg-6">
-                        <label for="exampleFormControlInput1" class="form-label">Peso en kg:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Peso en kg<span>*</span>:</label>
                         <input type="text" value="{{ old('peso') }}" minlength="1" maxlength="3"
                             pattern="[0-9]+" class="form-control" name="peso" required>
                         <div class="invalid-feedback">
@@ -262,7 +258,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <label for="exampleFormControlInput1" class="form-label">Talla camisa:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Talla camisa<span>*</span>:</label>
                         <select class="form-select" id="floatingSelect" id="validationCustom08" name="talla_camisa"
                             required>
                             <option value="XS">XS</option>
@@ -278,7 +274,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <label for="exampleFormControlInput1" class="form-label">Talla pantalón:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Talla pantalón<span>*</span>:</label>
                         <input type="text" pattern="[0-9]+" minlength="1" maxlength="3" class="form-control"
                             value="{{ old('talla_pantalon') }}" name="talla_pantalon" required>
                         <div class="invalid-feedback">
@@ -286,7 +282,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <label for="exampleFormControlInput1" class="form-label">Talla de zapato:</label>
+                        <label for="exampleFormControlInput1" class="form-label">Talla de
+                            zapato<span>*</span>:</label>
                         <input type="text" pattern="[0-9]+" minlength="1" maxlength="2" class="form-control"
                             value="{{ old('talla_zapato') }}" name="talla_zapato" required>
                         <div class="invalid-feedback">
@@ -294,18 +291,17 @@
                         </div>
                     </div>
                 </div>
+                <p><span>*</span> Campos obligatorios</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="button" class="btn btn-primary back-button"><img src="/img/left.png"
                             alt="next" width="15"> Anterior</button>
-                    <button type="button" class="btn btn-primary next-button">Siguiente <img src="/img/right.png"
+                    <button type="button" class="btn btn-primary next-button" style="pointer-events: auto;"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Debe llenar todos los campos para poder avanzar.">Siguiente <img src="/img/right.png"
                             alt="next" width="15"></button>
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
-                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
-                    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%"></div>
-                </div>-->
                 <h4 class="mb-5">Datos de carnet</h4>
                 <div>
                     <div class="mb-3 row">
@@ -327,7 +323,7 @@
                     <div class="container_carnet">
                         <div class="mb-3 row">
                             <div class="col-lg-6">
-                                <label for="exampleFormControlInput1" class="form-label">Código:</label>
+                                <label for="exampleFormControlInput1" class="form-label">Código<span>*</span>:</label>
                                 <input type="text" pattern="[0-9]{10}" class="form-control"
                                     value="{{ old('codigo') }}" name="codigo" minlength="10" maxlength="10"
                                     required>
@@ -336,7 +332,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <label for="exampleFormControlInput1" class="form-label">Serial:</label>
+                                <label for="exampleFormControlInput1" class="form-label">Serial<span>*</span>:</label>
                                 <input type="text" pattern="[0-9]{10}" minlength="10" maxlength="10"
                                     class="form-control" value="{{ old('serial') }}" name="serial" required>
                                 <div class="invalid-feedback">
@@ -364,9 +360,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="patologia_container">
+                    <div class="container_patologia">
                         <div class="mb-3">
-                            <label for="exampleFormControlTextarea1" class="form-label">Especifique:</label>
+                            <label for="exampleFormControlTextarea1"
+                                class="form-label">Especifique<span>*</span>:</label>
                             <input type="text" class="form-control" rows="3"
                                 value="{{ old('patologia') }}" name="patologia" required>
                             <div class="invalid-feedback">
@@ -375,22 +372,22 @@
                         </div>
                     </div>
                 </div>
+                <p><span>*</span> Campos obligatorios</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="button" class="btn btn-primary back-button"><img src="/img/left.png"
                             alt="next" width="15"> Anterior</button>
-                    <button type="button" class="btn btn-primary next-button">Siguiente <img src="/img/right.png"
+                    <button type="button" class="btn btn-primary next-button" style="pointer-events: auto;"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Debe llenar todos los campos para poder avanzar.">Siguiente <img src="/img/right.png"
                             alt="next" width="15"></button>
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
-                <!--<div class="progress mb-5" role="progressbar" aria-label="Default striped example"
-                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
-                </div>-->
                 <h4 class="mb-5">Datos laborales y electorales</h4>
                 <div class="mb-3 row">
                     <div class="col-lg-6">
-                        <label for="exampleFormControlTextarea1" class="form-label">Oficina donde labora:</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Oficina donde
+                            labora<span>*</span>:</label>
                         <select class="select-oficina form-select mb-3" name="area">
                             @foreach ($areas as $area)
                                 <option value="{{ $area->id }}">{!! $area->oficina !!}</option>
@@ -398,7 +395,7 @@
                         </select>
                     </div>
                     <div class="col-lg-6">
-                        <label class="form-label">Centro de votación:</label>
+                        <label class="form-label">Centro de votación<span>*</span>:</label>
                         <select class="select-centro form-select mb-3" name="centro_electoral">
                             @foreach ($centros as $centro)
                                 <option value="{{ $centro->id }}">{!! $centro->nombre_centro !!}</option>
@@ -415,7 +412,8 @@
                 </div>
                 <div class="mb-3 row">
                     <div class="col-lg-6">
-                        <label for="exampleFormControlTextarea1" class="form-label">Fecha de ingreso:</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Fecha de
+                            ingreso<span>*</span>:</label>
                         <input type="date" class="form-control" value="{{ old('fecha_ingreso') }}"
                             name="fecha_ingreso" rows="3" required>
                         <div class="invalid-feedback">
@@ -423,7 +421,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <label for="exampleFormControlTextarea1" class="form-label">Cargo:</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Cargo<span>*</span>:</label>
                         <input type="text" class="form-control" value="{{ old('cargo') }}" name="cargo"
                             rows="3" required>
                         <div class="invalid-feedback">
@@ -468,6 +466,7 @@
                         </div>
                     </div>
                 </div>
+                <p><span>*</span> Campos obligatorios</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="button" class="btn btn-primary back-button"><img src="/img/left.png"
                             alt="next" width="15"> Anterior</button>

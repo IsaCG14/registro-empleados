@@ -10,6 +10,11 @@ class PdfController extends Controller
 {
     public function getPdf(Request $request)
     {
+        //$centro = \App\Models\Empleado::join('centros', 'empleados.id_centro', '=', 'centros.id')->select('centros.*')->get();
+        $centros = \App\Models\Centro::all();
+        $carnets = \App\Models\Carnet::all();
+        $areas = \App\Models\Area::all();
+
         switch ($request['tipo']) {
             case 1:
                 //Reporte por centro
@@ -20,15 +25,15 @@ class PdfController extends Controller
             case 2:
                 //Reporte por sexo
                 $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->where('sexo', $request['sexo'])->get();
-                $title = ' de sexo ' . $request['valor'];
+                $title = ' de sexo ' . $request['sexo'];
                 break;
             case 3:
                 //Reporte por contrato
-                if ($request['valor'] == 0) {
+                if ($request['tipo_empleado'] == 0) {
                     $title = " Contratados";
-                } else if ($request['valor'] == 1) {
+                } else if ($request['tipo_empleado'] == 1) {
                     $title = " Trabajando fijo";
-                } else if ($request['valor'] == 2) {
+                } else if ($request['tipo_empleado'] == 2) {
                     $title = " Pasantes";
                 } else {
                     $title = " Jubilados";
@@ -51,7 +56,7 @@ class PdfController extends Controller
         //Establecer columnas
         $atributos = $request->input('atributos', []);
 
-        $pdf = PDF::loadView('PDF_Estadisticas', ['empleados' => $empleados, 'title' => $title, 'atributos' => $request['atributos']]);
+        $pdf = PDF::loadView('PDF_Estadisticas', ['empleados' => $empleados, 'title' => $title, 'atributos' => $request['atributos'], 'centros' => $centros, 'carnets' => $carnets, 'areas' => $areas]);
         return $pdf->stream('empleados.pdf');
     }
 }

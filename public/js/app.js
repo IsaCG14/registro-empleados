@@ -54,20 +54,20 @@ $(document).ready(function () {
 
     //Ocultar y mostrar opcion de patologia
     if ($("#patologia_si").prop("checked")) {
-        $(".patologia_container").css("display", "block");
+        $(".container_patologia").css("display", "block");
         $("input[name='patologia']").attr("required", "required");
     } else {
-        $(".patologia_container").css("display", "none");
+        $(".container_patologia").css("display", "none");
         $("input[name='patologia']").removeAttr("required");
         $("input[name='patologia']").val("");
     }
 
     $("input[name='patologia']").on("change", function () {
         if ($("#patologia_si").prop("checked")) {
-            $(".patologia_container").css("display", "block");
+            $(".container_patologia").css("display", "block");
             $("input[name='patologia']").attr("required", "required");
         } else {
-            $(".patologia_container").css("display", "none");
+            $(".container_patologia").css("display", "none");
             $("input[name='patologia']").removeAttr("required");
             $("input[name='patologia']").val("");
         }

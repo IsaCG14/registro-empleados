@@ -6,7 +6,7 @@
             <div class="selects-attribute my-4">
                 <div class="row">
                     <h6 class="my-3">Atributos que saldrán en el reporte (max. 8):</h6>
-                    <div class="col">
+                    <div class="col col-lg-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox"checked value="nombre">
                             <label class="form-check-label" for="inlineCheckbox1">Nombre</label>
@@ -24,7 +24,7 @@
                             <label class="form-check-label" for="inlineCheckbox2">Sexo</label>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-lg-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" value="correo">
                             <label class="form-check-label" for="inlineCheckbox1">Correo</label>
@@ -42,7 +42,7 @@
                             <label class="form-check-label" for="inlineCheckbox2">Peso</label>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-lg-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" value="talla_camisa">
                             <label class="form-check-label" for="inlineCheckbox1">Talla de camisa</label>
@@ -60,7 +60,7 @@
                             <label class="form-check-label" for="inlineCheckbox2">Estudiante</label>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-lg-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" value="patologia">
                             <label class="form-check-label" for="inlineCheckbox1">Patologia</label>
@@ -78,7 +78,7 @@
                             <label class="form-check-label" for="inlineCheckbox2">Cargo</label>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-lg-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" value="fecha_ingreso">
                             <label class="form-check-label" for="inlineCheckbox2">Fecha de ingreso</label>
@@ -94,12 +94,6 @@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" value="serial">
                             <label class="form-check-label" for="inlineCheckbox2">Serial de carnet de la patria</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="hijos">
-                            <label class="form-check-label" for="inlineCheckbox2">Información de hijos</label>
                         </div>
                     </div>
                 </div>

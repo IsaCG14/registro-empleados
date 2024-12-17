@@ -88,6 +88,10 @@ input:focus {
     /*text-shadow: 0 0 11px cornflowerblue;*/
 }
 
+.btn[disabled] {
+    pointer-events: none;
+}
+
 div[class^="paso"] {
     display: flex;
     justify-content: center;
@@ -95,6 +99,10 @@ div[class^="paso"] {
 
 div[class^="paso"] p {
     letter-spacing: -3px;
+}
+
+span {
+    color: red;
 }
 
 @media only screen and (max-width: 768px) {
