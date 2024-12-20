@@ -7,7 +7,9 @@ $(".next-button").on("click", function (event) {
 
     // Evitar avanzar si hay campos vacios en el contenedor
     const contenedor = boton.closest(".contenedor"); // Encuentra el contenedor más cercano
-    var campos = contenedor.querySelectorAll("input");
+    var campos = contenedor.querySelectorAll(
+        "input:not([type='radio']):not([type='checkbox'])"
+    );
     var container = contenedor.querySelector("div[class^='container_']");
 
     //Verificar si hay campos vacios
@@ -16,7 +18,21 @@ $(".next-button").on("click", function (event) {
             if (container == null) {
                 return true;
             } else {
-                return getComputedStyle(container).display != "none";
+                if (container.classList.contains("container_carnet_medico")) {
+                    var container_carnet =
+                        contenedor.querySelector(".container_carnet");
+                    var container_patologia = contenedor.querySelector(
+                        ".container_patologia"
+                    );
+
+                    return (
+                        getComputedStyle(container_carnet).display != "none" ||
+                        getComputedStyle(container_patologia).display != "none"
+                    );
+                } else {
+                    //Si los campos no estan ocultos
+                    return getComputedStyle(container).display != "none";
+                }
             }
         })
         .some((campo) => campo.value.trim() === "");

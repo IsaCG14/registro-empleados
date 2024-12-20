@@ -46,6 +46,12 @@ class PdfController extends Controller
                 $title = ' que ingresaron hasta ' . $fecha->format("d/m/Y");
                 $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->where('fecha_ingreso', '<=', $request['fecha_ingreso'])->get();
                 break;
+            case 5:
+                //Reporte por area
+                $area = \App\Models\Area::select('oficina')->where("id", $request['area'])->first();
+                $title = ' de ' . $area->oficina;
+                $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->where('area', $request['area'])->get();
+                break;
             default:
                 //Reporte general
                 $title = " registrados";
@@ -56,7 +62,14 @@ class PdfController extends Controller
         //Establecer columnas
         $atributos = $request->input('atributos', []);
 
-        $pdf = PDF::loadView('PDF_Estadisticas', ['empleados' => $empleados, 'title' => $title, 'atributos' => $request['atributos'], 'centros' => $centros, 'carnets' => $carnets, 'areas' => $areas]);
+        $hijos = null;
+        if (in_array('hijos', $atributos)) {
+            $hijos = \App\Models\Hijo::join('personas', 'hijos.id_persona', '=', 'personas.id')->select('hijos.*', 'hijos.id AS id_hijo', 'personas.*')->get();
+            $pdf = PDF::loadView('PDF_Hijos', ['empleados' => $empleados, 'title' => $title, 'atributos' => $request['atributos'], 'centros' => $centros, 'carnets' => $carnets, 'areas' => $areas, 'hijos' => $hijos]);
+        } else {
+            $pdf = PDF::loadView('PDF_Estadisticas', ['empleados' => $empleados, 'title' => $title, 'atributos' => $request['atributos'], 'centros' => $centros, 'carnets' => $carnets, 'areas' => $areas]);
+        }
+
         return $pdf->stream('empleados.pdf');
     }
 }

@@ -73,7 +73,8 @@ Route::get("/grafica", function () {
 
 Route::get("/reportes", function () {
     $centros = \App\Models\Centro::all();
-    return view("reportes", compact('centros'));
+    $areas = \App\Models\Area::all();
+    return view("reportes", ['centros' => $centros, 'areas' => $areas]);
 })->name("reportes")->middleware('auth');
 
 Route::resource("usuarios", UsuarioController::class)->middleware('check.user.access');

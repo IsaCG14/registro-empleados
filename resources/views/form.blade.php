@@ -302,76 +302,81 @@
                 </div>
             </div>
             <div class="contenedor contenedor-hide">
-                <h4 class="mb-5">Datos de carnet</h4>
-                <div>
-                    <div class="mb-3 row">
-                        <div class="col">
-                            <label for="exampleFormControlInput1" class="form-label">¿Tiene carnet de la
-                                patria?</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="carnet" id="carnet_si" checked
-                                    value="option1">
-                                <label class="form-check-label" for="inlineRadio1">Si</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="carnet" id="carnet_no"
-                                    value="option2">
-                                <label class="form-check-label" for="inlineRadio2">No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container_carnet">
+                <div class="container_carnet_medico">
+                    <h4 class="mb-5">Datos de carnet</h4>
+                    <div>
                         <div class="mb-3 row">
-                            <div class="col-lg-6">
-                                <label for="exampleFormControlInput1" class="form-label">Código<span>*</span>:</label>
-                                <input type="text" pattern="[0-9]{10}" class="form-control"
-                                    value="{{ old('codigo') }}" name="codigo" minlength="10" maxlength="10"
-                                    required>
-                                <div class="invalid-feedback">
-                                    Escribe un código válido.
+                            <div class="col">
+                                <label for="exampleFormControlInput1" class="form-label">¿Tiene carnet de la
+                                    patria?</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="carnet" id="carnet_si"
+                                        checked value="option1">
+                                    <label class="form-check-label" for="inlineRadio1">Si</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="carnet" id="carnet_no"
+                                        value="option2">
+                                    <label class="form-check-label" for="inlineRadio2">No</label>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <label for="exampleFormControlInput1" class="form-label">Serial<span>*</span>:</label>
-                                <input type="text" pattern="[0-9]{10}" minlength="10" maxlength="10"
-                                    class="form-control" value="{{ old('serial') }}" name="serial" required>
+                        </div>
+                        <div class="container_carnet">
+                            <div class="mb-3 row">
+                                <div class="col-lg-6">
+                                    <label for="exampleFormControlInput1"
+                                        class="form-label">Código<span>*</span>:</label>
+                                    <input type="text" pattern="[0-9]{10}" class="form-control"
+                                        value="{{ old('codigo') }}" name="codigo" minlength="10" maxlength="10"
+                                        required>
+                                    <div class="invalid-feedback">
+                                        Escribe un código válido.
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="exampleFormControlInput1"
+                                        class="form-label">Serial<span>*</span>:</label>
+                                    <input type="text" pattern="[0-9]{10}" minlength="10" maxlength="10"
+                                        class="form-control" value="{{ old('serial') }}" name="serial" required>
+                                    <div class="invalid-feedback">
+                                        Escribe un serial válido.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="mb-5">Datos médicos</h4>
+                    <div>
+                        <div class="mb-3 row">
+                            <div class="col">
+                                <label for="exampleFormControlInput1" class="form-label">¿Tiene alguna patologia
+                                    médica?</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="patologia"
+                                        id="patologia_si" checked value="option1">
+                                    <label class="form-check-label" for="inlineRadio1">Si</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="patologia"
+                                        id="patologia_no" value="option2">
+                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container_patologia">
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1"
+                                    class="form-label">Especifique<span>*</span>:</label>
+                                <input type="text" class="form-control" rows="3"
+                                    value="{{ old('patologia') }}" name="patologia" required>
                                 <div class="invalid-feedback">
-                                    Escribe un serial válido.
+                                    Especifique la patologia que tiene.
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <h4 class="mb-5">Datos médicos</h4>
-                <div>
-                    <div class="mb-3 row">
-                        <div class="col">
-                            <label for="exampleFormControlInput1" class="form-label">¿Tiene alguna patologia
-                                médica?</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="patologia" id="patologia_si"
-                                    checked value="option1">
-                                <label class="form-check-label" for="inlineRadio1">Si</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="patologia" id="patologia_no"
-                                    value="option2">
-                                <label class="form-check-label" for="inlineRadio2">No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container_patologia">
-                        <div class="mb-3">
-                            <label for="exampleFormControlTextarea1"
-                                class="form-label">Especifique<span>*</span>:</label>
-                            <input type="text" class="form-control" rows="3"
-                                value="{{ old('patologia') }}" name="patologia" required>
-                            <div class="invalid-feedback">
-                                Especifique la patologia que tiene.
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <p><span>*</span> Campos obligatorios</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="button" class="btn btn-primary back-button"><img src="/img/left.png"

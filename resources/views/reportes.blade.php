@@ -98,6 +98,13 @@
                     </div>
                 </div>
             </div>
+            <div class="ver-hijos">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" value="hijos">
+                    <label class="form-check-label" for="inlineCheckbox2">Ver información de hijos (solo se mostrarán los
+                        empleados con hijos)</label>
+                </div>
+            </div>
             <div class="col">
                 <form action="/pdf" target="_blank" class="reporteForm">
                     <input type="hidden" name="tipo" value="0">
@@ -149,6 +156,20 @@
                         <label class="form-label">Empleados por fecha de ingreso:</label>
                         <input type="date" name="fecha_ingreso" id="" class="form-control" required>
                         <input type="hidden" name="tipo" value="4">
+                        <input type="submit" class="btn btn-primary mt-3" value="Generar PDF">
+                    </form>
+                </div>
+            </div>
+            <div class="row my-4">
+                <div class="col">
+                    <form action="/pdf" target="_blank" class="reporteForm">
+                        <label class="form-label">Empleados por área:</label>
+                        <select class="form-select" name="area">
+                            @foreach ($areas as $area)
+                                <option value="{{ $area->id }}">{!! $area->oficina !!}</option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="tipo" value="5">
                         <input type="submit" class="btn btn-primary mt-3" value="Generar PDF">
                     </form>
                 </div>

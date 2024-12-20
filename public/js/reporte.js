@@ -1,7 +1,7 @@
 $(document).ready(function () {
     //Limitar checks
-    $("input[type='checkbox']").on("click", function () {
-        if ($("input[type='checkbox']:checked").length > 8) {
+    $(".selects-attribute input[type='checkbox']").on("click", function () {
+        if ($(".selects-attribute input[type='checkbox']:checked").length > 8) {
             $(this).prop("checked", false);
             alert("Solo puedes seleccionar hasta 8 atributos");
         }
