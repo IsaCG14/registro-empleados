@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    function formatearFecha(fecha) {
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth() + 1; // El mes es 0-indexado
+        let año = fecha.getFullYear();
+        return dia + "/" + mes + "/" + año;
+    }
+
     $(".ver-empleado").on("click", function () {
         var id = $(this).attr("id");
         var oficina;
@@ -27,7 +34,7 @@ $(document).ready(function () {
                         data.empleado.cedula +
                         "</p>" +
                         "<p><b>Fecha de nacimiento:</b> " +
-                        data.empleado.fecha_nacimiento +
+                        formatearFecha(fecha_nac) +
                         " (" +
                         Math.floor(anios) +
                         " años)" +
@@ -103,7 +110,7 @@ $(document).ready(function () {
                         data.empleado.cargo +
                         "</p>" +
                         "<p><b>Fecha de ingreso:</b> " +
-                        data.empleado.fecha_ingreso +
+                        formatearFecha(fecha_in) +
                         " (" +
                         Math.floor(anios_servicio) +
                         " años)</p>"
@@ -136,11 +143,12 @@ $(document).ready(function () {
 
                 //console.log(hijos)
                 $.each(hijos, function (index, hijo) {
+                    let fecha_nacimiento = new Date(hijo.fecha_nacimiento);
                     $("#mostrar-hijos").append(
                         "<tr><td>" +
                             hijo.nombre +
                             "</td><td>" +
-                            hijo.fecha_nacimiento +
+                            formatearFecha(fecha_nacimiento) +
                             "</td><td>" +
                             hijo.sexo +
                             "</td></tr>"

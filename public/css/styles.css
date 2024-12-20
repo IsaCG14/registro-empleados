@@ -1,11 +1,15 @@
 nav {
     top: 0;
-    z-index: 9999999;
+    z-index: 2;
 }
 
 canvas {
     max-width: 478px;
     max-height: 230px;
+}
+
+.dropdown-toggle {
+    z-index: 1;
 }
 
 .list {
