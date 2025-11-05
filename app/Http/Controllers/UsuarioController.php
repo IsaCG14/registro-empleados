@@ -17,6 +17,16 @@ class UsuarioController extends Controller
         return view("usuario", compact("users"));
     }
 
+    public function changeStatus($id)
+    {
+        $user = User::withTrashed()->find($id);
+
+        if ($user->deleted_at) {
+            $user->restore();
+        } 
+        return redirect("/usuarios");
+    }
+
     /**
      * Show the form for creating a new resource.
      */

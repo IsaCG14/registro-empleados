@@ -11,6 +11,7 @@
     <link href="{{ asset('librerias/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('librerias/datatables.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/jquery.dataTables.min.css') }}">
     <link rel="shortcut icon" href="img/icono.png" />
 </head>
@@ -27,17 +28,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link {{ strpos(url()->current(), 'empleados') ? 'active' : '' }}" aria-current="page"
-                        href="/lista-empleados">Inicio</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'personas') ? 'active' : '' }}" aria-current="page"
+                        href="/lista-personas">Inicio</a>
                     <a class="nav-link {{ strpos(url()->current(), 'grafica') ? 'active' : '' }}"
                         href="/grafica">Estadísticas</a>
-                    <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
-                        href="/reportes">Reportes</a>
-                    <a class="nav-link" target="_blank" href="/formulario">Registrar</a>
-                    @if (session('rol') == true)
-                        <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
+                    <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
+                        href="/reportes">Reportes</a> -->
+                    <a class="nav-link" href="/formulario">Registrar</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
                             href="/usuarios">Usuarios</a>
-                    @endif
                 </div>
             </div>
             <div>
@@ -56,17 +55,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link {{ strpos(url()->current(), 'empleados') ? 'active' : '' }}" aria-current="page"
-                        href="/lista-empleados">Inicio</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'personas') ? 'active' : '' }}" aria-current="page"
+                        href="/lista-personas">Inicio</a>
                     <a class="nav-link {{ strpos(url()->current(), 'grafica') ? 'active' : '' }}"
                         href="/grafica">Estadísticas</a>
-                    <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
-                        href="/reportes">Reportes</a>
-                    <a class="nav-link" target="_blank" href="/formulario">Registrar</a>
-                    @if (session('rol') == true)
-                        <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
+                    <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
+                        href="/reportes">Reportes</a> -->
+                    <a class="nav-link {{ strpos(url()->current(), 'formulario') ? 'active' : '' }}" href="/formulario">Registrar</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
                             href="/usuarios">Usuarios</a>
-                    @endif
                 </div>
             </div>
             <div>
@@ -77,22 +74,25 @@
             </div>
         </div>
     </nav>
-    @yield('content')
+    <div class="container">
+        @yield('content')
+    </div>
     <script src="{{ asset('librerias/jquery-3.7.1.min.js.js') }}"></script>
     <script src="{{ asset('librerias/bootstrap.bundle.min.js.js') }}"></script>
     <script src="{{ asset('librerias/select2.min.js.js') }}"></script>
     <script src="{{ asset('librerias/dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap5.min.js.js') }}"></script>
     <script src="{{ asset('js/bootstrap.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/validation.js') }}"></script>
     <script src="{{ asset('js/datatable.js') }}"></script>
-    <script src="{{ asset('js/ajax-modal.js') }}"></script>
-    <script src="{{ asset('js/ajax-hijo.js') }}"></script>
     <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
     <script src="{{ asset('js/alerts.js') }}"></script>
+    <script src="{{ asset('js/ajax-modal.js') }}"></script>
+    <script src="{{ asset('js/ajax-form.js') }}"></script>
     <script src="{{ asset('js/form.js') }}"></script>
     <script src="{{ asset('js/reporte.js') }}"></script>
+    <!--<script src="{{ asset('js/banner.js') }}"></script>-->
+    <script src="{{ asset('js/multi-step.js') }}"></script>
 </body>
 
 </html>

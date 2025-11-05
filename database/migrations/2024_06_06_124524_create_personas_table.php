@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('personas', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string("nombre", 255);
-            $table->string("sexo", 200);
+            $table->boolean("sexo");
             $table->date("fecha_nacimiento");
             $table->timestamps();
         });

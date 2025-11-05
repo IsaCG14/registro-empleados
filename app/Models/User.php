@@ -14,6 +14,10 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
     use SoftDeletes;
 
+    public function cita() {
+        return $this->hasMany(Cita::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *

@@ -10,11 +10,12 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    text-align: center;
-    align-items: center;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden !important;
 }
 
 form {
@@ -33,31 +34,29 @@ input:focus {
     animation: playOnce 1s steps(1) forwards;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-}
-
 .contenedor-hide {
     opacity: 0;
-    transform: translateX(-150%);
+    display: none !important;
+    top: 2000px !important;
 }
 
 .contenedor {
-    position: absolute;
     display: flex;
     flex-direction: column; /* O row, según tu diseño */
-    justify-content: space-between;
     background-color: white;
     border-radius: 25px;
     padding: 3em 5em;
-    width: 80vw;
-    margin: 7em 1em;
+    width: 90vw;
     min-height: 70vh;
+    max-height: 85vh;
     box-shadow: 6px 6px 6px 5px rgba(0, 0, 0, 0.1);
-    top: 2em;
-    left: 6em;
     transition: opacity 0.3s ease-in;
+    transition: display 0.5s ease-in;
+    overflow: auto;
+}
+
+.container-persona table {
+    width: 40%;
 }
 
 .contenedor-success {
@@ -73,7 +72,7 @@ input:focus {
     box-shadow: 6px 6px 6px 5px rgba(0, 0, 0, 0.1);
 }
 
-.progreso {
+/* .progreso {
     position: absolute;
     top: 1em;
     z-index: 9999;
@@ -81,7 +80,7 @@ input:focus {
     font-size: 2rem;
     color: rgb(135, 135, 135);
     display: flex;
-}
+} */
 
 .imhere {
     color: cornflowerblue;
@@ -101,7 +100,7 @@ div[class^="paso"] p {
     letter-spacing: -3px;
 }
 
-span {
+span, span:not(:where table) {
     color: red;
 }
 
@@ -109,10 +108,6 @@ span {
     h3 {
         font-size: 18px;
     }
-    .table-hijos {
-        font-size: 11px;
-    }
-
     #logo-corpo {
         width: 20em;
     }

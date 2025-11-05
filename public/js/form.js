@@ -1,23 +1,50 @@
-$("#new_centro").on("change", function () {
-    if ($(this).prop("checked")) {
-        $("#otro_centro").html(
-            "<input class='form-control my-2' placeholder='Escribe un nuevo centro electoral' type='text' name='nombre_centro' id='centro_nuevo' required>"
-        );
-    } else {
-        $("#centro_nuevo").remove();
-    }
-});
+const estado_select = $("#estado")
+const municipio_select = $("#municipio")
+const parroquia_select = $("#parroquia")
 
-//Funcion modal
-$("#añadirHijo").on("click", function () {
-    var cantidad = $("input[name='nro_hijos']").val();
-    var cantidadTabla = $(".table tbody tr").length;
+estado_select.on("change", function(){
+    var id_estado = estado_select.val()
+    $.ajax({
+        url: '/obtener-municipios/' + id_estado,
+        type: 'GET',
+        success: function(data){
+            //console.log(data);
+            //Eliminar lista anterior
+            municipio_select.html("")
+            //Añadir nueva lista
+            data.forEach(element => {
+                municipio_select.append("<option value='"+element.id_municipio+"'>"+element.municipio+"</option>")
+            });
+        },
+        error: function(xhr, status, error) {
+            console.log(error)
+        }
+    })
+})
 
-    if (cantidadTabla < cantidad) {
-        $("#info-hijos").modal("show");
-    }
-});
+municipio_select.on("change", function(){
+    var id_municipio = municipio_select.val()
+    $.ajax({
+        url: '/obtener-parroquias/' + id_municipio,
+        type: 'GET',
+        success: function(data){
+            //console.log(data);
+            //Eliminar lista anterior
+            parroquia_select.html("")
+            //Añadir nueva lista
+            data.forEach(element => {
+                parroquia_select.append("<option value='"+element.id_parroquia+"'>"+element.parroquia+"</option>")
+            });
+        },
+        error: function(xhr, status, error) {
+            console.log(error)
+        }
+    })
+})
 
-$("#agregar-hijo").on("click", function () {
-    //
-});
+//Funcion al seleccionar dia
+$("#dia").on("change", function(){
+    var dia = $("#dia").val()
+    //Redirigir a la misma pagina con el parametro dia
+    window.location.href = "/grafica?dia=" + dia
+})

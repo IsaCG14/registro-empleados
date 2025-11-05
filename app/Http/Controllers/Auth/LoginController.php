@@ -22,7 +22,8 @@ class LoginController extends Controller
             $request->session()->regenerate();
             session(['usuario' => $request['user']]);
             session(['rol' => $user->rol]);
-            return redirect()->intended('lista-empleados');
+            session(['id_usuario' => $user->id]);
+            return redirect()->intended('lista-personas');
         } else {
             throw ValidationValidationException::withMessages(['user' => 'Usuario o contraseña inválidos']);
         }

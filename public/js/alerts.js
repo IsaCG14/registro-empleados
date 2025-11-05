@@ -17,13 +17,13 @@ if (new URLSearchParams(window.location.search).get("editado") == 1) {
 }
 
 //Eliminacion de empleado
-$(".eliminar-empleado").on("click", function (e) {
+$(".eliminar-persona").on("click", function (e) {
     e.preventDefault();
     const href = $(this).attr("href");
 
     Swal.fire({
         title: "\xBFSeguro?",
-        text: "El empleado ser\u00e1 eliminado.",
+        text: "Toda la información del asunto ser\u00e1 eliminado.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -33,8 +33,35 @@ $(".eliminar-empleado").on("click", function (e) {
     }).then((result) => {
         if (result.isConfirmed) {
             Swal.fire({
-                title: "\xA1Empleado eliminado!",
-                text: "El empleado fue eliminado de la base de datos.",
+                title: "\xA1Asunto eliminado!",
+                text: "El asunto fue eliminado de la base de datos.",
+                icon: "success"
+            }).then(() => {
+                document.location.href = href;
+            })
+        }
+    })
+})
+
+//Eliminacion de usuario
+$(".eliminar-usuario").on("click", function (e) {
+    e.preventDefault();
+    const href = $(this).attr("href");
+
+    Swal.fire({
+        title: "\xBFSeguro?",
+        text: "El usuario ser\u00e1 desactivado.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Desactivar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "\xA1Usuario eliminado!",
+                text: "El usuario fue desactivado.",
                 icon: "success"
             }).then(() => {
                 document.location.href = href;

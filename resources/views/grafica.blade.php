@@ -1,20 +1,24 @@
 @extends('layouts.nav')
 @section('content')
-    <div class="contenedor-grid">
-        <div class="container">
+    <div class="contenedor">
+        <div>
             <h3>Estadísticas</h3>
             <!--<a href="/pdf" target="_blank" class="btn btn-primary my-4">Generar PDF</a>-->
-            <button id="generarPdfGeneral" class="btn btn-primary my-4">Generar PDF</button>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            <button id="generarPdfGeneral" class="btn btn-primary my-4 w-25">Generar PDF</button>
+                <!-- <div class="dropdown col">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Estilo de gráfica
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/grafica?tipo=pie">Gráfica de Pastel</a></li>
-                    <li><a class="dropdown-item" href="/grafica?tipo=doughnut">Gráfica de Rosca</a></li>
-                    <li><a class="dropdown-item" href="/grafica?tipo=bar">Gráfica de Barras</a></li>
-                </ul>
+                    </button>
+                    <ul class="dropdown-menu col">
+                        <li><a class="dropdown-item" href="/grafica?tipo=pie">Gráfica de Pastel</a></li>
+                        <li><a class="dropdown-item" href="/grafica?tipo=doughnut">Gráfica de Rosca</a></li>
+                        <li><a class="dropdown-item" href="/grafica?tipo=bar">Gráfica de Barras</a></li>
+                    </ul>
+                </div> -->
+            <div class="row w-50 my-3">
+                <label for="dia" class="col">Seleccionar día:</label>
+                    <input type="date" name="dia" id="dia" class="form-control col" value="{{ $dia ? $dia : date('Y-m-d')  }}">
             </div>
             <div class="row m-2" id="grafic-container">
                 <div class="col-lg-5 m-4">
@@ -28,28 +32,16 @@
                     <button class="btn btn-dark generarPdf">Descargar PDF</button>
                 </div>
                 <div class="col-lg-5 m-4">
-                    <h5>Gráfica por centro de votación</h5>
-                    <canvas id="grafica-centro"></canvas>
+                    <h5>Gráfica por asuntos atendidos</h5>
+                    <select name="usuario" id="user">
+                        <option value="0">General</option>
+                    </select>
+                    <canvas id="grafica-asunto"></canvas>
                     <button class="btn btn-dark generarPdf">Descargar PDF</button>
                 </div>
                 <div class="col-lg-5 m-4">
-                    <h5>Gráfica por tipo de empleado</h5>
-                    <canvas id="grafica-tipo"></canvas>
-                    <button class="btn btn-dark generarPdf">Descargar PDF</button>
-                </div>
-                <div class="col-lg-5 m-4">
-                    <h5>Gráfica por años de servicio</h5>
-                    <canvas id="grafica-servicio"></canvas>
-                    <button class="btn btn-dark generarPdf">Descargar PDF</button>
-                </div>
-                <div class="col-lg-5 m-4">
-                    <h5>Gráfica de estudiantes</h5>
-                    <canvas id="grafica-estudiante"></canvas>
-                    <button class="btn btn-dark generarPdf">Descargar PDF</button>
-                </div>
-                <div class="col-lg-5 m-4">
-                    <h5>Gráfica de empleados con hijos</h5>
-                    <canvas id="grafica-hijos"></canvas>
+                    <h5>Gráfica por sexos registrados por usuario</h5>
+                    <canvas id="grafica-sexo-usuario"></canvas>
                     <button class="btn btn-dark generarPdf">Descargar PDF</button>
                 </div>
             </div>
@@ -60,74 +52,111 @@
     <script src="{{ asset('librerias/pdf.min.js.js') }}"></script>
     <script src="{{ asset('librerias/jspdf.min.js.js') }}"></script>
     <script src="{{ asset('librerias/jspdf.plugin.autotable.js.js') }}"></script>
+    <script src="{{ asset('librerias/html2canvas.min.js') }}"></script>
     <script>
-        const empls = @json($empleados);
+        const citas = @json($citas);
+        console.log(citas)
 
         //Obtener tipo de grafica
         const url = new URLSearchParams(window.location.search)
 
         var tipo = (url.get("tipo") == null) ? 'pie' : url.get("tipo");
 
+        //Llenar select de usuarios
+        var usuarios = {};
+        citas.forEach(cita => {
+            var usuario = cita.usuarios;
+            if (!(usuario.name in usuarios)) {
+                usuarios[usuario.name] = true;
+                $("#user").append(`<option value="${usuario.id}">${usuario.name}</option>`);
+            }
+        });
+        //Obtener id del option seleccionado
+        $("#user").on("change", function() {
+            var userId = $(this).val();
+            //Mostrar solo asuntos registrados por ese usuario
+            var asuntoCounts = {};
+            citas.forEach(cita => {
+                if (cita.usuarios.id == userId) {
+                    var asunto = cita.patria.opciones;
+                    if (asunto in asuntoCounts) {
+                        asuntoCounts[asunto]++;
+                    } else {
+                        asuntoCounts[asunto] = 1;
+                    }
+                } else if (userId == 0) {
+                    var asunto = cita.patria.opciones;
+                    if (asunto in asuntoCounts) {
+                        asuntoCounts[asunto]++;
+                    } else {
+                        asuntoCounts[asunto] = 1;
+                    }
+                }
+            });
+            //Destruir grafica anterior
+            Chart.getChart("grafica-asunto")?.destroy();
+            //Actualizar grafica
+            const grafica_asunto = document.getElementById('grafica-asunto');
+            new Chart(grafica_asunto, {
+                type: tipo,
+                data: {
+                    labels: Object.keys(asuntoCounts).map(asunto => asunto + " (" + asuntoCounts[asunto] + ")"),
+                    datasets: [{
+                        label: 'Asuntos atendidos',
+                        data: Object.values(asuntoCounts),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                plugins: [plugin],
+            })
+        })
+
         //Grafica por sexo
         var num_f = 0
         var num_m = 0
-        var num_o = 0
-        //Grafica por tipo
-        var num_estudiante = 0
-        var no_estudiante = 0
-        var num_contratado = 0
-        var num_fijo = 0
-        var num_pasante = 0
-        var num_jubilado = 0
+
         //Grafica por edades
         var rango1 = 0
         var rango2 = 0
         var rango3 = 0
         var rango4 = 0
         var rango5 = 0
-        //Grafica por años de servicio
-        var anio1 = 0
-        var anio2 = 0
-        var anio3 = 0
-        var anio4 = 0
-        var anio5 = 0
-        //Grafica de hijos
-        var con_hijos = 0
-        var sin_hijos = 0
 
-        $.each(empls, function(key, value) {
+        //Grafica por asuntos
+        var asuntoCounts = {};
+
+        citas.forEach(cita => {
             //valorar genero
-            if (value.sexo == "Masculino") {
+            // console.log(cita.personas.sexo)
+            if (cita.personas.sexo == 1) {
                 num_m++
-            } else if (value.sexo == "Femenino") {
-                num_f++
-            } else if (value.sexo == "Otro") {
-                num_o++
-            }
-
-            //valorar tipo
-            if (value.tipo == 1) {
-                num_fijo++
-            } else if (value.tipo == 0) {
-                num_contratado++
-            } else if (value.tipo == 2) {
-                num_pasante++
-            } else if (value.tipo == 3) {
-                num_jubilado++
-            }
-
-            //Si es estudiante o no
-            if (value.estudiante == 1) {
-                num_estudiante++
             } else {
-                no_estudiante++
-            }
+                num_f++
+            } 
 
             //valorar edades
 
             //Calcular edad
             var fecha_actual = new Date();
-            var fecha_nac = new Date(value.fecha_nacimiento);
+            var fecha_nac = new Date(cita.personas.fecha_nacimiento);
             var edad = fecha_actual - fecha_nac;
             var anios = edad / (1000 * 60 * 60 * 24 * 365.25);
             edad = Math.floor(anios)
@@ -145,30 +174,12 @@
             } else if (edad >= 56) {
                 rango5++
             }
-
-            //Calcular años de servicio
-            var fecha_in = new Date(value.fecha_ingreso);
-            var tiempo = fecha_actual - fecha_in;
-            var anios_servicio = tiempo / (1000 * 60 * 60 * 24 * 365.25);
-            var anios = Math.floor(anios_servicio)
-
-            if (anios <= 5) {
-                anio1++
-            } else if (anios >= 6 && anios <= 10) {
-                anio2++
-            } else if (anios >= 11 && anios <= 15) {
-                anio3++
-            } else if (anios >= 16 && anios <= 20) {
-                anio4++
+            //valorar asuntos
+            var asunto = cita.patria.opciones;
+            if (asunto in asuntoCounts) {
+                asuntoCounts[asunto]++;
             } else {
-                anio5++
-            }
-
-            //Si tiene hijos o no
-            if (value.nro_hijos != 0) {
-                con_hijos++
-            } else {
-                sin_hijos++
+                asuntoCounts[asunto] = 1;
             }
         })
 
@@ -190,15 +201,19 @@
         new Chart(grafica_sexo, {
             type: tipo,
             data: {
-                labels: ['Masculino: ' + String(num_m), 'Femenino: ' + String(num_f), 'Otro: ' + String(num_o)],
+                labels: ['Masculino: ' + String(num_m), 'Femenino: ' + String(num_f)],
                 datasets: [{
-                    label: '# empleados',
-                    data: [num_m, num_f, num_o],
+                    label: '# personas',
+                    data: [num_m, num_f],
                     backgroundColor: [
-                        '#0dcaf0',
-                        '#d63384',
-                        'rgb(255, 205, 86)'
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
                     ],
+                    borderColor: [
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 99, 132)'
+                    ],
+                    borderWidth: 1
                 }]
             },
             plugins: [plugin],
@@ -214,7 +229,7 @@
                     "46 a 55 (" + rango4 + ")", "56+ (" + rango5 + ")"
                 ],
                 datasets: [{
-                    label: 'Empleados entre rango de edad',
+                    label: 'Personas entre rango de edad',
                     data: [rango1, rango2, rango3, rango4, rango5],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -236,104 +251,84 @@
             plugins: [plugin],
         })
 
-        //Grafica por centro de votación
-        const grafica_centro = document.getElementById('grafica-centro');
-        const centros = @json($centros);
-        var centros_label = []
-        var centros_total = []
-
-        $.each(centros, function(key, value) {
-            centros_label.push(value.nombre_centro + ": " + String(value.total))
-            centros_total.push(value.total)
-        })
-
-        new Chart(grafica_centro, {
+        const grafica_asunto = document.getElementById('grafica-asunto');
+        //Grafica por asuntos
+        new Chart(grafica_asunto, {
             type: tipo,
             data: {
-                labels: centros_label,
+                labels: Object.keys(asuntoCounts).map(asunto => asunto + " (" + asuntoCounts[asunto] + ")"),
                 datasets: [{
-                    label: '# empleados',
-                    data: centros_total
-                }]
-            },
-            plugins: [plugin],
-        });
-
-        //Grafica por tipo de empleado
-        const grafica_tipo = document.getElementById('grafica-tipo');
-
-        new Chart(grafica_tipo, {
-            type: tipo,
-            data: {
-                labels: ['Trabajador fijo: ' + String(num_fijo), 'Contratado: ' + String(num_contratado),
-                    'Pasante: ' + String(num_pasante), 'Jubilado: ' + String(num_jubilado)
-                ],
-                datasets: [{
-                    label: '# empleados',
+                    label: 'Asuntos atendidos',
+                    data: Object.values(asuntoCounts),
                     backgroundColor: [
-                        '#0d6efd',
-                        '#6f42c1',
-                        '#20c997',
-                        'rgba(75, 192, 192, 0.2)'
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
                     ],
-                    data: [num_fijo, num_contratado, num_pasante, num_jubilado],
-                }]
-            },
-            plugins: [plugin],
-        });
-
-        //Grafica por años de servicio
-        const grafica_servicio = document.getElementById('grafica-servicio');
-        new Chart(grafica_servicio, {
-            type: tipo,
-            data: {
-                labels: ["0 - 5 (" + anio1 + ")", "6 - 10 (" + anio2 + ")", "11 - 15 (" + anio3 + ")", "16 - 20 (" +
-                    anio4 + ")", "21+ (" + anio5 + ")"
-                ],
-                datasets: [{
-                    label: 'Empleados entre rango de años de servicio',
-                    data: [anio1, anio2, anio3, anio4, anio5],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
                     borderWidth: 1
                 }]
             },
             plugins: [plugin],
         })
 
-        //Grafica para estudiantes
-        const grafica_estudiante = document.getElementById('grafica-estudiante');
-
-        new Chart(grafica_estudiante, {
-            type: tipo,
+        const grafica_sexo_usuario = document.getElementById('grafica-sexo-usuario');
+        //Grafica por sexo registrado por usuario dividido por femenino y masculino en doble barra
+        var usuarioLabels = {};
+        citas.forEach(cita => {
+            var usuario = cita.usuarios.name;
+            if (!(usuario in usuarioLabels)) {
+                usuarioLabels[usuario] = { male: 0, female: 0 };
+            }
+            if (cita.personas.sexo == 1) {
+                usuarioLabels[usuario].male++;
+            } else {
+                usuarioLabels[usuario].female++;
+            }
+        });
+        new Chart(grafica_sexo_usuario, {
+            type: 'bar',
             data: {
-                labels: ['Estudiante: ' + String(num_estudiante), 'No estudiante: ' + String(no_estudiante)],
-                datasets: [{
-                    label: '# empleados',
-                    backgroundColor: [
-                        '#0d6efd',
-                        '#dc3545'
-                    ],
-                    data: [num_estudiante, no_estudiante]
-                }]
+                labels: Object.keys(usuarioLabels),
+                datasets: [
+                    {
+                        label: 'Masculino',
+                        data: Object.values(usuarioLabels).map(data => data.male),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Femenino',
+                        data: Object.values(usuarioLabels).map(data => data.female),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 1
+                    }
+                ]
             },
             plugins: [plugin],
-        });
-
-        //Grafica para estudiantes
-        const grafica_hijos = document.getElementById('grafica-hijos');
-
-        new Chart(grafica_hijos, {
-            type: tipo,
-            data: {
-                labels: ['Empleados con hijos: ' + String(con_hijos), 'Empleados sin hijos: ' + String(
-                    sin_hijos)],
-                datasets: [{
-                    label: '# empleados',
-                    data: [con_hijos, sin_hijos]
-                }]
-            },
-            plugins: [plugin],
-        });
-
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });    
+        
         //Descargar pdf
         $(".generarPdf").on("click", function() {
             //Obtener canvas
@@ -349,13 +344,16 @@
 
             pdf.text(title, 10, 10)
 
+            // Escalar la imagen al 400%
+            const imgWidth = grafica.width * 4; // 400% del ancho
+            const imgHeight = grafica.height * 4; // 400% de la altura
+
             pdf.addImage(pdfImage, 'JPEG', 15, 15, 270, 150)
 
             pdf.setProperties({
                 title: "Report"
             });
 
-            //pdf.save('chart.pdf')
             pdf.output('dataurlnewwindow');
         })
 
@@ -372,6 +370,7 @@
 
                 pdf.setFontSize(20)
                 var title = $(this).parent().find("h5").text()
+                title+= " - Registrados el "+@json($dia)
 
                 pdf.text(title, 10, heightText)
 

@@ -3,14 +3,14 @@
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Carnet;
+use App\Http\Controllers\MunicipioController;
+use App\Http\Controllers\ParroquiaController;
 use App\Http\Controllers\CentroController;
-use App\Http\Controllers\Empleado;
-use App\Http\Controllers\Hijo;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\Persona;
 use App\Models\Usuario;
 use App\Models\User;
+use App\Models\Cita;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -37,21 +37,16 @@ Route::get("/login", [User::class, function () {
 Route::post('login', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::get('/formulario', [Empleado::class, "create"])->name("form");
-Route::get("/lista-empleados", [Empleado::class, "index"])->name("index")->middleware('auth');
-Route::post('/guardar-empleado', [Empleado::class, "store"])->name("store");
-Route::get("/obtener-informacion/{id}", [Empleado::class, "show"]);
-Route::get("/eliminar-empleado/{id}", [Empleado::class, "destroy"]);
-Route::get("/editar-empleado/{id}", [Empleado::class, "edit"])->middleware('auth');
-Route::put("/actualizar-empleado/{id_empleado}", [Empleado::class, "update"])->name("update");
+Route::get('/formulario', [Persona::class, "create"])->name("form")->middleware('auth');
+Route::get("/lista-personas", [Persona::class, "index"])->name("index")->middleware('auth');
+Route::post('/guardar-persona', [Persona::class, "store"])->name("store");
+Route::get("/obtener-informacion/{id}", [Persona::class, "show"]);
+Route::get("/eliminar-persona/{id}", [Persona::class, "destroy"]);
+Route::get("/editar-persona/{id}", [Persona::class, "edit"])->middleware('auth');
+Route::put("/actualizar-persona/{id}", [Persona::class, "update"])->name("update");
 
-Route::get("/obtener-hijos/{id}", [Hijo::class, "show"]);
-Route::post("/registrar-hijo", [Hijo::class, "store"]);
-Route::get("/eliminar-hijo/{id}", [Hijo::class, "destroy"]);
-
-Route::get("/obtener-area/{id}", [AreaController::class, "show"]);
-
-Route::get("/obtener-carnet/{id}", [Carnet::class, "show"]);
+Route::get('/obtener-municipios/{id}', [MunicipioController::class, 'show']);
+Route::get('/obtener-parroquias/{id}', [ParroquiaController::class, 'show']);
 
 Route::get("/success", function () {
     return view("success");
@@ -61,33 +56,38 @@ Route::get("/error", function () {
     return view("error");
 })->name("error");
 
-Route::get("/grafica", function () {
-    $empleados = \App\Models\Empleado::join('personas', 'empleados.id_persona', '=', 'personas.id')->select('empleados.*', 'empleados.id AS id_empleado', 'personas.*')->get();
-    $centros = \App\Models\Centro::select('nombre_centro', \App\Models\Centro::raw('COUNT(empleados.id) as total'))
-        ->join('empleados', 'centros.id', '=', 'empleados.id_centro')
-        ->whereNull('empleados.deleted_at')
-        ->groupBy('nombre_centro')
-        ->get();
-    return view('grafica', ['empleados' => $empleados, 'centros' => $centros]);
+Route::get("/grafica/{dia?}", function ($dia = null) {
+    $dia = request()->get('dia', date('Y-m-d'));
+    $citas = Cita::with('personas', 'patria', 'usuarios')->where("fecha_cita", $dia)->get();
+    return view('grafica', compact('citas', 'dia'));
 })->name("grafica")->middleware('auth');
 
 Route::get("/reportes", function () {
-    $centros = \App\Models\Centro::all();
-    $areas = \App\Models\Area::all();
-    return view("reportes", ['centros' => $centros, 'areas' => $areas]);
+    return view("reportes");
 })->name("reportes")->middleware('auth');
 
-Route::resource("usuarios", UsuarioController::class)->middleware('check.user.access');
+//Route::get("usuarios", [UsuarioController::class, 'index'])->middleware('check.user.access');
 Route::post("registrar-usuario", [UsuarioController::class, "store"]);
 Route::post("editar-usuario", [UsuarioController::class, "update"]);
 Route::get("destroy/{id}", [UsuarioController::class, "destroy"]);
+Route::get("usuarios/{state?}", function($state = 0){
 
-Route::resource("centros", CentroController::class);
+    $state = request()->get('state');
+    if($state == 1 || $state === null){
+        $users = User::all();
+    } else {
+        $users = User::onlyTrashed()->get();
+    }
+        
+    return view('usuario', compact('users'));
 
-/*
-1: por area
-2: por sexo
-3: por tipo de empleado
-4: a partir de fecha de ingreso
-*/
+})->middleware('check.user.access');
+Route::get("cambiar-estado/{id}", [UsuarioController::class, "changeStatus"]);
+
 Route::get('/pdf', [PDFController::class, "getPDF"]);
+
+Route::get("/offline", function () {
+    return view("vendor.silviolleite.resources.offline");
+});
+
+Route::get("/api/persona/{cedula}", [Persona::class, "getPersonaByCedula"]);

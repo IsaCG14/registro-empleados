@@ -14,7 +14,9 @@ class Persona extends Model
     use SoftDeletes;
 
     protected $table = "personas";
-    protected $fillable = ["nombre", "sexo", "fecha_nacimiento", "estudiante"];
+    protected $fillable = ["cedula", "nombre", "sexo", "fecha_nacimiento",
+        "correo",
+        "telefono", "id_parroquia"];
     protected $dates = ['deleted_at'];
 
     protected function nombre(): Attribute
@@ -24,20 +26,7 @@ class Persona extends Model
         );
     }
 
-    protected function fechaNacimiento(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->format('d/m/Y')
-        );
-    }
-
-    public function empleado()
-    {
-        return $this->hasOne(Empleado::class);
-    }
-
-    public function hijo()
-    {
-        return $this->hasOne(Hijo::class);
+    public function cita() {
+        return $this->hasMany(Cita::class);
     }
 }

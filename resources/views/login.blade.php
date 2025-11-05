@@ -2,6 +2,10 @@
 <html lang="en">
 
 <head>
+    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/icons/icon-192x192.png">
+    <link rel="manifest" href="./manifest.json" />
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -11,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="/css/login.css">
     <link rel="shortcut icon" href="img/icono.png" />
+    @laravelPWA
 </head>
 
 <body>
