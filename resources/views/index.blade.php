@@ -20,6 +20,17 @@
     <div class="contenedor">
         <div class="container-personas">
             <h3 class="my-3">Lista de personas</h3>
+            <div class="row mb-4 w-75">
+                <form action="/pdf" target="_blank" class="row" class="reporteForm">
+                    <div class="col">
+                        <label for="inicio">Inicio:</label><input class="mt-3 form-control" type="date" name="inicio">
+                    </div>
+                    <div class="col">
+                        <label for="fin">Fin:</label><input class="mt-3 form-control" type="date" name="fin">
+                    </div>
+                    <input type="submit" class="btn btn-primary mt-3 col" value="Generar PDF general">
+                </form>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>

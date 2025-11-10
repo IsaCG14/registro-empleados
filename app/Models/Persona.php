@@ -19,6 +19,13 @@ class Persona extends Model
         "telefono", "id_parroquia"];
     protected $dates = ['deleted_at'];
 
+    // Cita.php
+
+    public function parroquia()
+    {
+        return $this->belongsTo(Parroquia::class, 'id_parroquia');
+    }
+
     protected function nombre(): Attribute
     {
         return Attribute::make(

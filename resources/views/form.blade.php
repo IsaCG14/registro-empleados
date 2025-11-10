@@ -117,15 +117,15 @@
                 <div class="mb-3 row">
                     <div class="col-lg-6">
                         <label for="exampleFormControlTextarea1" class="form-label">Parroquia de la que proviene:<span>*</span>:</label>
-                        <select class="form-select mb-3" name="estado" id="estado">
+                        <select class="form-select mb-3" name="estado" id="estado" required>
                             @foreach($estados as $estado)
                             <option value="{!!$estado->id_estado!!}">{!!$estado->estado!!}</option>
                             @endforeach
                         </select>
-                        <select class="form-select mb-3" name="municipio" id="municipio">
+                        <select class="form-select mb-3" name="municipio" id="municipio" required>
                             <option value="1">Municipio</option>
                         </select>
-                        <select class="form-select mb-3" name="parroquia" id="parroquia">
+                        <select class="form-select mb-3" name="parroquia" id="parroquia" required>
                             <option value="1">Parroquia</option>
                         </select>
                     </div>
