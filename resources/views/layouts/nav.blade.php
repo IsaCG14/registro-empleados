@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ <!-- data-bs-theme="dark" -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,14 +29,17 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link {{ strpos(url()->current(), 'personas') ? 'active' : '' }}" aria-current="page"
-                        href="/lista-personas">Inicio</a>
+                        href="/lista-personas">Ver listado</a>
                     <a class="nav-link {{ strpos(url()->current(), 'grafica') ? 'active' : '' }}"
                         href="/grafica">Estadísticas</a>
                     <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
                         href="/reportes">Reportes</a> -->
-                    <a class="nav-link" href="/formulario">Registrar</a>
+                    <a class="nav-link" href="/formulario">Registrar visita</a>
+                    <!--Restringir acceso a usuarios con rol false-->
+                    @if (auth()->user()->rol)
                     <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
                             href="/usuarios">Usuarios</a>
+                    @endif
                 </div>
             </div>
             <div>
@@ -56,14 +59,16 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link {{ strpos(url()->current(), 'personas') ? 'active' : '' }}" aria-current="page"
-                        href="/lista-personas">Inicio</a>
+                        href="/lista-personas">Ver listado</a>
                     <a class="nav-link {{ strpos(url()->current(), 'grafica') ? 'active' : '' }}"
                         href="/grafica">Estadísticas</a>
                     <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
                         href="/reportes">Reportes</a> -->
-                    <a class="nav-link {{ strpos(url()->current(), 'formulario') ? 'active' : '' }}" href="/formulario">Registrar</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'formulario') ? 'active' : '' }}" href="/formulario">Registrar visita</a>
+                    @if (auth()->user()->rol)
                     <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
                             href="/usuarios">Usuarios</a>
+                    @endif
                 </div>
             </div>
             <div>
@@ -77,6 +82,11 @@
     <div class="container">
         @yield('content')
     </div>
+    <footer>
+        <div class="text-center p-3 bg-dark text-white mt-4">
+            Corpocentro ® 2025. RIF: J-20008343-3. Copyleft. Desarollado por la Oficina de Tecnología de Información y Comunicación.
+        </div>
+    </footer>
     <script src="{{ asset('librerias/jquery-3.7.1.min.js.js') }}"></script>
     <script src="{{ asset('librerias/bootstrap.bundle.min.js.js') }}"></script>
     <script src="{{ asset('librerias/select2.min.js.js') }}"></script>

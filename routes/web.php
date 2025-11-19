@@ -58,7 +58,7 @@ Route::get("/error", function () {
 
 Route::get("/grafica/{dia?}", function ($dia = null) {
     $dia = request()->get('dia', date('Y-m-d'));
-    $citas = Cita::with('personas', 'patria', 'usuarios')->where("fecha_cita", $dia)->get();
+    $citas = Cita::with(['personas', 'asuntos.patria', 'usuarios'])->where("fecha_cita", $dia)->get();
     return view('grafica', compact('citas', 'dia'));
 })->name("grafica")->middleware('auth');
 
@@ -89,5 +89,6 @@ Route::get('/pdf', [PDFController::class, "getPDF"]);
 Route::get("/offline", function () {
     return view("vendor.silviolleite.resources.offline");
 });
-
+//Apis
+Route::get("/api/parroquia/{id}", [ParroquiaController::class, "obtener_ubicacion_completa"]);
 Route::get("/api/persona/{cedula}", [Persona::class, "getPersonaByCedula"]);

@@ -5,6 +5,8 @@
 }
 
 body {
+    /* background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='60' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(240,6.7%,17.6%,1)'/><path d='M-5 5L5.1 15 15 5l10 10'  stroke-linecap='square' stroke-width='1' stroke='hsla(47,80.9%,61%,1)' fill='none'/><path d='M-5 25L5.1 35 15 25l10 10'  stroke-linecap='square' stroke-width='1' stroke='hsla(4.1,89.6%,58.4%,1)' fill='none'/><path d='M-5 45L5.1 55 15 45l10 10'  stroke-linecap='square' stroke-width='1' stroke='hsla(186.8,100%,41.6%,1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>"); */
+    /* background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='60' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23ffffffff'/><path d='M-5 5L5.1 15 15 5l10 10'  stroke-linecap='square' stroke-width='1' stroke='hsla(47,80.9%,61%,1)' fill='none'/><path d='M-5 25L5.1 35 15 25l10 10'  stroke-linecap='square' stroke-width='1' stroke='hsla(4.1,89.6%,58.4%,1)' fill='none'/><path d='M-5 45L5.1 55 15 45l10 10'  stroke-linecap='square' stroke-width='1' stroke='hsla(186.8,100%,41.6%,1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>"); */
     background-image: url("/img/fondo.jpg");
     background-attachment: fixed;
     background-position: center;
@@ -13,9 +15,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    overflow-y: auto;
     overflow-x: hidden !important;
+}
+
+nav {
+    z-index: 9999;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 form {
@@ -41,18 +51,19 @@ input:focus {
 }
 
 .contenedor {
+    margin-left: auto;
+    margin-right: auto; 
+    margin-top: 40px; 
+    margin-bottom: 60px;
     display: flex;
-    flex-direction: column; /* O row, según tu diseño */
+    flex-direction: column; 
     background-color: white;
     border-radius: 25px;
     padding: 3em 5em;
-    width: 90vw;
-    min-height: 70vh;
-    max-height: 85vh;
+    width: 1250px;
     box-shadow: 6px 6px 6px 5px rgba(0, 0, 0, 0.1);
     transition: opacity 0.3s ease-in;
     transition: display 0.5s ease-in;
-    overflow: auto;
 }
 
 .container-persona table {
@@ -60,7 +71,6 @@ input:focus {
 }
 
 .contenedor-success {
-    background-color: white;
     border-radius: 50px;
     padding: 1em 5em;
     width: 80vw;

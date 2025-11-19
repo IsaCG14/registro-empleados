@@ -10,6 +10,7 @@ use App\Models\Cita;
 use App\Models\User; 
 use App\Models\Municipio; 
 use App\Models\Parroquia; 
+use App\Models\Asunto; 
 
 class Persona extends Controller
 {
@@ -18,7 +19,8 @@ class Persona extends Controller
      */
     public function index()
     {
-        $citas = Cita::with('personas', 'patria', 'usuarios')->get();
+        $citas = Cita::with(['personas', 'asuntos.patria', 'usuarios'])->get();
+        //$citas = Cita::with('personas', 'asuntos.patria', 'usuarios')->get();
         return view('index', compact('citas'));
     }
 
@@ -55,15 +57,27 @@ class Persona extends Controller
 
         $id_usuario = Auth::id();
 
-        Cita::create([
-            'id_persona' => $id_persona->id,
-            'id_patria' => $request['patria'],
-            'fecha_cita' => $request['fecha_cita'],
-            'detalles' => $request['detalles'],
-            'id_user' => $id_usuario
-        ]);
+        $cita_id = Cita::create([
+                'id_persona' => $id_persona->id,
+                'id_user' => $id_usuario,
+                'detalles' => $request['detalles'],
+                'fecha_cita' => $request['fecha_cita'],
+                'comuna' => $request['comuna'] ?? null,
+                'consejo_comunal' => $request['consejo'] ?? null,
+            ])->id;
 
-        return redirect('/lista-personas');
+        $patria_ids = $request->input('patria');
+
+        if (!empty($patria_ids) && is_array($patria_ids)) {
+            foreach ($patria_ids as $patria_id) {
+                Asunto::create([
+                    'cita_id' => $cita_id,
+                    'patria_id' => $patria_id, 
+                ]);
+            }
+        }
+
+        return redirect('/lista-personas')->with('success_alert', '¡Registro creado exitosamente!');
     }
 
     /**
@@ -71,7 +85,7 @@ class Persona extends Controller
      */
     public function show(string $id)
     {
-        $cita = Cita::with('personas', 'patria', 'usuarios')->find($id);
+        $cita = Cita::with('personas', 'asuntos.patria', 'usuarios')->find($id);
         $id_parroquia = $cita?->personas?->id_parroquia;
 
         if($id_parroquia) {

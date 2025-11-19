@@ -5,31 +5,31 @@
     <meta charset="utf-8">
     <title>PDF de personas</title>
     <style>
-        * {
-            font-family: sans-serif;
-        }
+    * {
+        font-family: sans-serif;
+    }
 
-        .table {
-            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-            font-size: 10px;
-            border-spacing: 0;
-            width: 100%;
-        }
+    .table {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        border-spacing: 0;
+        width: 100%;
+    }
 
-        .table td,
-        .table th {
-            padding: 8px;
-            text-align: center;
-        }
+    .table td,
+    .table th {
+        padding: 8px;
+        text-align: center;
+    }
 
-        .table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+    .table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-        .table th {
-            background-color: #00889f;
-            color: white;
-        }
+    .table th {
+        background-color: #00889f;
+        color: white;
+    }
     </style>
 </head>
 
@@ -51,16 +51,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($datos as $asunto)
-                        <tr>
-                            <th scope="row">{!! $asunto->personas->cedula !!}</th>
-                            <td>{!! $asunto->personas->nombre !!}</td>
-                            <td>{!! $asunto->personas->telefono !!}</td>
-                            <td>{!! $asunto->patria->opciones !!}</td>
-                            <td>{!! date('d/m/Y', strtotime($asunto->fecha_cita)) !!}</td>
-                            <td>{!! $asunto->personas->parroquia->parroquia !!} ({!! $asunto->personas->parroquia->municipio->estado->estado !!})</td>
-                            <td>{!! $asunto->usuarios->name !!}</td>
-                        </tr>
+                    @foreach ($datos as $cita)
+                    <tr>
+                        <th scope="row">{!! $cita->personas->cedula !!}</th>
+                        <td>{!! $cita->personas->nombre !!}</td>
+                        <td>{!! $cita->personas->telefono !!}</td>
+                        <td>
+                            @forelse ($cita->asuntos as $asunto)
+                            <span>{{ $asunto->patria->opciones }}</span>
+                            @if (!$loop->last)
+                            ,
+                            @endif
+                            @empty
+                            <span>N/A</span>
+                            @endforelse
+                        </td>
+                        <td>{!! date('d/m/Y', strtotime($cita->fecha_cita)) !!}</td>
+                        <td>{!! $cita->personas->parroquia->parroquia !!} ({!!
+                            $cita->personas->parroquia->municipio->estado->estado !!})</td>
+                        <td>{!! $cita->usuarios->name !!}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

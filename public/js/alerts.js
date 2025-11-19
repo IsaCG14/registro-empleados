@@ -4,13 +4,25 @@
  */
 
 
-//Edicion de empleado
+//Edicion de persona
 if (new URLSearchParams(window.location.search).get("editado") == 1) {
     Swal.fire({
         position: "bottom-end",
         icon: "success",
         title: "\xA1Actualizado!",
-        text: "Los datos del empleado se han actualizado.",
+        text: "Los datos de la persona se han actualizado.",
+        showConfirmButton: false,
+        timer: 5000
+    })
+}
+
+//Registro de persona
+if (new URLSearchParams(window.location.search).get("registrado") == 1) {
+    Swal.fire({
+        position: "bottom-end",
+        icon: "success",
+        title: "\xA1Registrado!",
+        text: "Los datos de la persona fueron registrados exitosamente.",
         showConfirmButton: false,
         timer: 5000
     })

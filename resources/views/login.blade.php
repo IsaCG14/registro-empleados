@@ -22,9 +22,9 @@
     <div class="container">
         <form action="" method="post">
             @csrf
-            <img class="m-3" src="/img/user.png" alt="user" width="110" height="110">
+            <img class="m-3" src="/img/logocorpo.png" alt="user" width="110" height="110">
             <h2>Iniciar sesión</h2>
-            <div>
+            <div class="flex justify-center">
                 <div class="mb-3 mt-3">
                     <label for="exampleFormControlInput1" class="form-label">Usuario:</label>
                     <input type="text" class="form-control" autofocus value="{{ old('user') }}" name="user"
@@ -33,16 +33,9 @@
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Contraseña:</label>
                     <input type="password" class="form-control" name="password" required>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" name="remember">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Recordar sesión
-                        </label>
-                    </div>
-                    <a href="/formulario">Registrarse como empleado.</a>
                 </div>
                 <div class="mb-3">
-                    <input type="submit" class="btn btn-primary" value="Iniciar sesión">
+                    <input type="submit" class="btn btn-primary w-100" value="Iniciar sesión">
                 </div>
             </div>
             @foreach ($errors->all() as $error)

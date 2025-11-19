@@ -12,7 +12,7 @@ class PdfController extends Controller
 {
     public function getPdf(Request $request)
     {
-        $citas = Cita::with('personas', 'patria', 'usuarios','personas.parroquia.municipio.estado')->whereBetween("fecha_cita", [$request['inicio'], $request['fin']])->get();
+        $citas = Cita::with('personas', 'asuntos.patria', 'usuarios','personas.parroquia.municipio.estado')->whereBetween("fecha_cita", [$request['inicio'], $request['fin']])->get();
 
         $title = 'Citas registradas entre ' . $request['inicio'] . ' y ' . $request['fin'];
 

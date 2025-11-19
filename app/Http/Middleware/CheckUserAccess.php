@@ -17,9 +17,9 @@ class CheckUserAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // if (!session("rol")) {
-        //     return redirect("/login");
-        // }
+        if (!session("rol")) {
+            return redirect("/");
+        }
         return $next($request);
     }
 }

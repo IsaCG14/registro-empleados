@@ -7,7 +7,7 @@ $(document).ready(function () {
     }
 
     function generarFecha(fecha) {
-        let partes = fecha.split('-');
+        let partes = fecha.split("-");
         return new Date(partes[0], partes[1] - 1, partes[2]);
     }
 
@@ -23,16 +23,16 @@ $(document).ready(function () {
             success: function (data) {
                 //Calcular edad
                 fecha_actual = new Date();
-                
-                fecha_nac = generarFecha(data[0].personas.fecha_nacimiento)
-                fecha_cita = generarFecha(data[0].fecha_cita)
+
+                fecha_nac = generarFecha(data[0].personas.fecha_nacimiento);
+                fecha_cita = generarFecha(data[0].fecha_cita);
 
                 //Obtener edad
                 var edad = fecha_actual - fecha_nac;
                 var anios = edad / (1000 * 60 * 60 * 24 * 365.25);
-                console.log(data[1])
+                console.log(data[1]);
 
-                 $(".informacion-personal").html(
+                $(".informacion-personal").html(
                     "<p><b>Nombre:</b> " +
                         data[0].personas.nombre +
                         "</p>" +
@@ -46,7 +46,9 @@ $(document).ready(function () {
                         " años)" +
                         "</p>" +
                         "<p><b>Sexo:</b> " +
-                        ((data[0].personas.sexo == 0) ? "Femenino" : "Masculino") +
+                        (data[0].personas.sexo == 0
+                            ? "Femenino"
+                            : "Masculino") +
                         "</p>" +
                         "<p><b>Correo:</b> " +
                         data[0].personas.correo +
@@ -55,19 +57,34 @@ $(document).ready(function () {
                         data[0].personas.telefono +
                         "</p>" +
                         "<p><b>Proveniencia:</b> " +
-                        data[1].parroquia + " (Municipio "+ data[1].municipio.municipio+", Estado "+data[1].municipio.estado.estado+")"+
+                        data[1].parroquia +
+                        " (Municipio " +
+                        data[1].municipio.municipio +
+                        ", Estado " +
+                        data[1].municipio.estado.estado +
+                        ")" +
                         "</p>"
                 );
-
-                $(".informacion-cita").html(
-                    "<p><b>Asunto:</b> " +
-                        data[0].patria.opciones +
-                        "</p>" +
-                        "<p><b>Fecha cita:</b> " +
+                var asuntos = data[0].asuntos;
+                //Limpiar informacion anterior
+                $(".informacion-cita").empty();
+                //Agregar los asuntos
+                $(".informacion-cita").append("<b>Asuntos:</b><ul>");
+                asuntos.forEach((asunto) => {
+                    $(".informacion-cita").append(
+                        "<li><p>" + asunto.patria.opciones + "</p></li>"
+                    );
+                });
+                var detalles = data[0].detalles ? data[0].detalles : "Ninguno";
+                $(".informacion-cita").append(
+                    "</ul><p><b>Fecha cita:</b> " +
                         formatearFecha(fecha_cita) +
                         "<p><b>Detalles:</b> " +
-                        data[0].detalles +
-                        "</p><br>"
+                        detalles +
+                        "</p><br>" +
+                        "<p><b>Registrado por:</b> " +
+                        data[0].usuarios.name +
+                        "</p>"
                 );
             },
             error: function (xhr, status, error) {

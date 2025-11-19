@@ -15,4 +15,8 @@ class Patria extends Model
     public function cita() {
         return $this->hasMany(Cita::class);
     }
+
+    public function asuntos() {
+        return $this->hasMany(Asunto::class, 'patria_id');
+    }
 }

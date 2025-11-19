@@ -46,6 +46,12 @@ class ParroquiaController extends Controller
         return $parroquia;
     }
 
+    public function obtener_ubicacion_completa(string $id)
+    {
+        $parroquia = Parroquia::with('municipio.estado')->find($id);
+        return $parroquia;
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

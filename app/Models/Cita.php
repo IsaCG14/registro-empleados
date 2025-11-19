@@ -9,7 +9,7 @@ class Cita extends Model
 {
     use HasFactory;
     protected $table = 'citas';
-    protected $fillable = ['id_persona', 'id_user', 'id_patria', 'detalles', 'fecha_cita'];
+    protected $fillable = ['id_persona', 'id_user', 'detalles', 'fecha_cita', 'comuna', 'consejo_comunal'];
 
     public function personas() {
         return $this->belongsTo(Persona::class, 'id_persona');
@@ -19,7 +19,7 @@ class Cita extends Model
         return $this->belongsTo(User::class, 'id_user')->withTrashed();;
     }
 
-    public function patria() {
-        return $this->belongsTo(Patria::class ,'id_patria');
+    public function asuntos() {
+        return $this->hasMany(Asunto::class, 'cita_id');
     }
 }
