@@ -35,8 +35,8 @@
                     <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
                         href="/reportes">Reportes</a> -->
                     <a class="nav-link" href="/formulario">Registrar visita</a>
-                    <!--Restringir acceso a usuarios con rol false-->
-                    @if (auth()->user()->rol)
+                    <!--Permitir acceso solo al usuario 'Master'-->
+                    @if (auth()->user()->id == 1)
                     <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
                             href="/usuarios">Usuarios</a>
                     @endif
@@ -65,7 +65,7 @@
                     <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
                         href="/reportes">Reportes</a> -->
                     <a class="nav-link {{ strpos(url()->current(), 'formulario') ? 'active' : '' }}" href="/formulario">Registrar visita</a>
-                    @if (auth()->user()->rol)
+                    @if (auth()->user()->id == 1)
                     <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
                             href="/usuarios">Usuarios</a>
                     @endif

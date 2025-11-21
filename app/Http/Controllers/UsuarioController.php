@@ -74,7 +74,8 @@ class UsuarioController extends Controller
         if (!empty($request['name'])) {
             $user->fill([
                 'name' => $request["name"],
-                'user' => $request['user']
+                'user' => $request['user'],
+                'rol' => !empty($request['rol']) ? 1 : 0,
             ]);
         } else {
             $user->password = Hash::make($request['password']);

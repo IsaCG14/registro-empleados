@@ -62,8 +62,8 @@ class Persona extends Controller
                 'id_user' => $id_usuario,
                 'detalles' => $request['detalles'],
                 'fecha_cita' => $request['fecha_cita'],
-                'comuna' => $request['comuna'] ?? null,
-                'consejo_comunal' => $request['consejo'] ?? null,
+                'comuna' => $request['nombre_comuna'] ?? null,
+                'consejo_comunal' => $request['nombre_consejo'] ?? null,
             ])->id;
 
         $patria_ids = $request->input('patria');
@@ -106,18 +106,18 @@ class Persona extends Controller
      */
     public function edit(string $id)
     {
-        $cita = Cita::with('personas', 'patria', 'usuarios')->find($id);
+        $cita = Cita::with('personas', 'asuntos.patria', 'usuarios')->find($id);
         $id_parroquia = $cita?->personas?->id_parroquia;
         $estados = Estado::all();
         $municipios = Municipio::all();
         $parroquias = Parroquia::all();
-        $asuntos = Patria::all();
+        $asuntos_patria = Patria::all();
 
         if($id_parroquia) {
             $proveniencia = Parroquia::with('municipio.estado')->where('id_parroquia', $id_parroquia)->first();
         }
         
-        return view('editar', compact(['cita', 'proveniencia', 'estados', 'municipios', 'parroquias', 'asuntos']));
+        return view('editar', compact(['cita', 'proveniencia', 'estados', 'municipios', 'parroquias', 'asuntos_patria']));
     }
 
     /**
@@ -128,14 +128,26 @@ class Persona extends Controller
         $cita = Cita::find($id);
         $persona = \App\Models\Persona::find($cita->id_persona);
         $id_usuario = Auth::id();
-
+        $asunto = Asunto::where('cita_id', $id);
+        $asunto->delete();
+        
         $cita->fill([
             'id_persona' => $cita->id_persona,
-            'id_patria' => $request['patria'],
             'fecha_cita' => $request['fecha_cita'],
             'detalles' => $request['detalles'],
-            'id_user' => $id_usuario
+            'id_user' => $id_usuario,
+            'comuna' => $request['nombre_comuna'] ?? null,
+            'consejo_comunal' => $request['nombre_consejo'] ?? null
         ]);
+
+        $patria_ids = $request->input('patria');       
+        if (!empty($patria_ids) && is_array($patria_ids)) {
+            foreach ($patria_ids as $patria_id) {
+                $asunto->updateOrCreate(
+                    ['cita_id' => $id, 'patria_id' => $patria_id]
+                );
+            }
+        }
 
         $persona->fill([
             'cedula' => $request['cedula'],

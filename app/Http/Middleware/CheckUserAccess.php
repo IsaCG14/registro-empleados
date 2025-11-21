@@ -17,7 +17,8 @@ class CheckUserAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session("rol")) {
+        $user = auth()->user();
+        if ($user->user != 'Master') {
             return redirect("/");
         }
         return $next($request);

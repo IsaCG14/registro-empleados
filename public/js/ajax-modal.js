@@ -31,6 +31,8 @@ $(document).ready(function () {
                 var edad = fecha_actual - fecha_nac;
                 var anios = edad / (1000 * 60 * 60 * 24 * 365.25);
                 console.log(data[1]);
+                var consejo = data[0].consejo_comunal ? data[0].consejo_comunal : "No pertenece";
+                var comuna = data[0].comuna ? data[0].comuna : "No pertenece";
 
                 $(".informacion-personal").html(
                     "<p><b>Nombre:</b> " +
@@ -63,6 +65,12 @@ $(document).ready(function () {
                         ", Estado " +
                         data[1].municipio.estado.estado +
                         ")" +
+                        "</p>" +
+                        "<p><b>Consejo Comunal:</b> " +
+                        consejo +
+                        "</p>" +
+                        "<p><b>Comuna:</b> " +
+                        comuna +
                         "</p>"
                 );
                 var asuntos = data[0].asuntos;

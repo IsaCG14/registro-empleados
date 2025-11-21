@@ -70,10 +70,15 @@
                         <td>{!! $cita->personas->parroquia->parroquia !!} ({!!
                             $cita->personas->parroquia->municipio->estado->estado !!})</td>
                         <td>{!! $cita->usuarios->name !!}</td>
-                    </tr>
+                    </tr> 
                     @endforeach
                 </tbody>
             </table>
+            <br>
+            <h5>Estadísticas</h5>
+            <p>Total de citas: {{ $total }}</p>
+            <p>Total de citas masculinas: {{ $masculino }}</p>
+            <p>Total de citas femeninas: {{ $femenino }}</p>
         </div>
     </div>
 </body>
