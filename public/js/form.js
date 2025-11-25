@@ -42,9 +42,17 @@ municipio_select.on("change", function(){
     })
 })
 
-//Funcion al seleccionar dia
-$("#dia").on("change", function(){
-    var dia = $("#dia").val()
+//Funcion al seleccionar dia inicio y fin
+$("#inicio").on("change", function(){
+    var dia_inicio = $("#inicio").val()
+    var dia_fin = $("#fin").val()
     //Redirigir a la misma pagina con el parametro dia
-    window.location.href = "/grafica?dia=" + dia
+    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
+})
+
+$("#fin").on("change", function(){
+    var dia_inicio = $("#inicio").val()
+    var dia_fin = $("#fin").val()
+    //Redirigir a la misma pagina con el parametro dia
+    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
 })

@@ -21,7 +21,7 @@
     <div class="container-personas">
         <h3 class="my-3">Lista de personas</h3>
         <div class="row mb-4 w-75">
-            <form action="/pdf" target="_blank" class="row g-3 align-items-center" class="reporteForm">
+            <form action="/pdf" target="_blank" class="row g-3 align-items-center reporteForm">
                 <div class="col-auto">
                     <label for="inicio">Inicio:</label>
                 </div>
@@ -35,6 +35,13 @@
                     <input class="form-control" type="date" name="fin" required>
                 </div>
                 <input type="submit" class="btn btn-primary mt-3 col" value="Generar PDF general">
+            </form>
+        </div>
+        <div class="row my-3 w-50">
+            <form method="GET" action="{{ route('index') }}" class="d-flex my-3">
+                <input type="text" name="busqueda" class="form-control me-2" placeholder="Buscar por cédula o nombre..."
+                    value="{{ $busqueda ?? '' }}">
+                <button type="submit" class="btn btn-primary">Buscar</button>
             </form>
         </div>
         <table class="table table-striped">
@@ -81,18 +88,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-2">
+            {{ $citas->links() }}
+        </div>
     </div>
 </div>
-@if(session('success_alert'))
-<script>
-Swal.fire({
-    icon: 'success',
-    title: '¡Operación Exitosa!',
-    text: '{{ session('
-    success_alert ') }}',
-    showConfirmButton: false,
-    timer: 3000
-});
-</script>
-@endif
 @endsection

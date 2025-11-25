@@ -17,10 +17,21 @@ class Persona extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $citas = Cita::with(['personas', 'asuntos.patria', 'usuarios'])->get();
-        //$citas = Cita::with('personas', 'asuntos.patria', 'usuarios')->get();
+        $busqueda = $request->input('busqueda');
+
+        $query = Cita::with(['personas', 'asuntos.patria', 'usuarios'])->orderBy('fecha_cita', 'desc');
+
+        if($busqueda) {
+            $query->whereHas('personas', function ($q) use ($busqueda) {
+            // Buscar la cadena en la cédula O el nombre de la persona
+                $q->where('cedula', 'like', '%' . $busqueda . '%')->orWhere('nombre', 'like', '%' . $busqueda . '%');
+          });
+        }
+
+        $citas = $query->paginate(10);
+        
         return view('index', compact('citas'));
     }
 
@@ -76,8 +87,8 @@ class Persona extends Controller
                 ]);
             }
         }
-
-        return redirect('/lista-personas')->with('success_alert', '¡Registro creado exitosamente!');
+        session()->flash('success_alert', '¡Registro creado exitosamente!');
+        return redirect('/lista-personas');
     }
 
     /**
@@ -161,6 +172,7 @@ class Persona extends Controller
 
         $cita->save();
         $persona->save();
+        session()->flash('success_alert', '¡El registro fue actualizado!');
         return redirect("/lista-personas");
     }
 

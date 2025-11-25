@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\ParroquiaController;
 use App\Http\Controllers\CentroController;
+use App\Http\Controllers\CitaController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\Persona;
 use App\Models\Usuario;
@@ -56,11 +57,7 @@ Route::get("/error", function () {
     return view("error");
 })->name("error");
 
-Route::get("/grafica/{dia?}", function ($dia = null) {
-    $dia = request()->get('dia', date('Y-m-d'));
-    $citas = Cita::with(['personas', 'asuntos.patria', 'usuarios'])->where("fecha_cita", $dia)->get();
-    return view('grafica', compact('citas', 'dia'));
-})->name("grafica")->middleware('auth');
+Route::get("/grafica", [CitaController::class, "obtener_graficas"])->name("grafica")->middleware('auth');
 
 Route::get("/reportes", function () {
     return view("reportes");

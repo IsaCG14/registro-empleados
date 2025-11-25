@@ -3,9 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cita;
 
 class CitaController extends Controller
 {
+    public function obtener_graficas(Request $request)
+    {
+        $inicio = $request->input('inicio', date('Y-m-d'));
+        $fin = $request->input('fin', date('Y-m-d'));
+        $citas = Cita::with(['personas', 'asuntos.patria', 'usuarios'])->whereBetween('fecha_cita', [$inicio, $fin])->get();
+        return view('grafica', compact('citas', 'inicio', 'fin'));
+    }
     /**
      * Display a listing of the resource.
      */

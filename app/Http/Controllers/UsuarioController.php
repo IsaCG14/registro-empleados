@@ -23,6 +23,7 @@ class UsuarioController extends Controller
 
         if ($user->deleted_at) {
             $user->restore();
+            session()->flash('success_alert', '¡Usuario activado!');
         } 
         return redirect("/usuarios");
     }
@@ -45,6 +46,7 @@ class UsuarioController extends Controller
             'user' => $request['user'],
             'password' => Hash::make($request['password'])
         ]);
+        session()->flash('success_alert', '¡Usuario registrado exitosamente!');
         return redirect("/usuarios");
     }
 
@@ -82,6 +84,7 @@ class UsuarioController extends Controller
         }
 
         $user->save();
+        session()->flash('success_alert', '¡Datos del usuario actualizados!');
         return redirect("/usuarios");
     }
 
