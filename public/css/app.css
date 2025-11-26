@@ -93,6 +93,11 @@ input:focus {
     display: flex;
 } */
 
+/* #grafica-asunto {
+    max-width: 1700px;
+    margin: auto;
+} */
+
 .imhere {
     color: cornflowerblue;
     /*text-shadow: 0 0 11px cornflowerblue;*/

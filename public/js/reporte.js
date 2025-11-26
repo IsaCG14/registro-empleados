@@ -19,15 +19,26 @@ $(".generarPdf").on("click", function() {
 
     pdf.addImage(pdfImage, 'JPEG', 15, 15, 270, 150)
 
-    if (title.includes("asunto")) {
-        var userId = $("#user").val();
-        var userName = $("#user option:selected").text();
-        if (userId != 0) {
-            pdf.text("Usuario: " + userName, 10, 170)
-        } else {
-            pdf.text("Usuario: General", 10, 170)
+    if (title.includes("Gráfica de asuntos atendidos por usuario")) {
+            var userId = $("#user").val();
+            var userName = $("#user option:selected").text();
+            if (userId != 0) {
+                pdf.text("Usuario: " + userName, 10, 170)
+            } else {
+                pdf.text("Usuario: General", 10, 170)
+            }
+        } else if (title.includes("municipio")) {
+            var estadoId = $("#estado-municipio").val();
+            var estadoName = $("#estado-municipio option:selected").text();
+            pdf.text("Estado: " + estadoName, 10, 170)
+        } else if (title.includes("parroquia")) {
+            var estadoId = $("#estado").val();
+            var estadoName = $("#estado option:selected").text();
+            pdf.text("Estado: " + estadoName, 10, 170)
+            var municipioId = $("#municipio").val();
+            var municipioName = $("#municipio option:selected").text();
+            pdf.text("Municipio: " + municipioName, 10, 180)
         }
-    }
 
     pdf.setProperties({
         title: "Report"
@@ -57,7 +68,7 @@ $("#generarPdfGeneral").on("click", function(e) {
 
         pdf.addImage(pdfImage, 'JPEG', 15, heightGrafica, 270, 150)
 
-        if (title.includes("asunto")) {
+        if (title.includes("Gráfica de asuntos atendidos por usuario")) {
             var userId = $("#user").val();
             var userName = $("#user option:selected").text();
             if (userId != 0) {
@@ -65,6 +76,17 @@ $("#generarPdfGeneral").on("click", function(e) {
             } else {
                 pdf.text("Usuario: General", 10, heightGrafica + 160)
             }
+        } else if (title.includes("municipio")) {
+            var estadoId = $("#estado-municipio").val();
+            var estadoName = $("#estado-municipio option:selected").text();
+            pdf.text("Estado: " + estadoName, 10, heightGrafica + 160)
+        } else if (title.includes("parroquia")) {
+            var estadoId = $("#estado").val();
+            var estadoName = $("#estado option:selected").text();
+            pdf.text("Estado: " + estadoName, 10, heightGrafica + 160)
+            var municipioId = $("#municipio").val();
+            var municipioName = $("#municipio option:selected").text();
+            pdf.text("Municipio: " + municipioName, 10, heightGrafica + 170)
         }
 
         heightText += 200

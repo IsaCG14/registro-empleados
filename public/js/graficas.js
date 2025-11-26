@@ -65,7 +65,7 @@ $("#user").on("change", function() {
     //Actualizar grafica
     const grafica_asunto = document.getElementById('grafica-asunto');
     new Chart(grafica_asunto, {
-        type: tipo,
+        type: "bar",
         data: {
             labels: Object.keys(asuntoCounts).map(asunto => asunto + " (" + asuntoCounts[asunto] + ")"),
             datasets: [{
@@ -223,7 +223,7 @@ new Chart(grafica_edad, {
 const grafica_asunto = document.getElementById('grafica-asunto');
 //Grafica por asuntos
 new Chart(grafica_asunto, {
-    type: tipo,
+    type: "bar",
     data: {
         labels: Object.keys(asuntoCounts).map(asunto => asunto + " (" + asuntoCounts[asunto] + ")"),
         datasets: [{
@@ -368,6 +368,7 @@ generarGraficaPorEstado(citas, tipo, plugin);
 async function generarGraficaPorMunicipio(citas, tipo, plugin) {
     const grafica_municipio = document.getElementById('grafica-municipio');
     var municipioCounts = {};
+    var estado = $("#estado-municipio").val();
 
     // Crear un array de Promesas
     const promesas = citas.map(cita => {
@@ -388,9 +389,14 @@ async function generarGraficaPorMunicipio(citas, tipo, plugin) {
         }
 
         if (municipio in municipioCounts) {
-            municipioCounts[municipio]++;
+            //Solo incluir municipios del estado seleccionado
+            if (ubicacion.municipio.estado.id_estado.toString() === estado) {
+                municipioCounts[municipio]++;
+            }
         } else {
-            municipioCounts[municipio] = 1;
+            if (ubicacion.municipio.estado.id_estado.toString() === estado) {
+                municipioCounts[municipio] = 1;
+            }
         }
     });
 
@@ -423,10 +429,18 @@ async function generarGraficaPorMunicipio(citas, tipo, plugin) {
 
 // Llama a la nueva función
 generarGraficaPorMunicipio(citas, tipo, plugin);
+//Llamar al cambiar el estado
+$("#estado-municipio").on("change", function() {
+    //Destruir grafica anterior
+    Chart.getChart("grafica-municipio")?.destroy();
+    //Generar nueva grafica
+    generarGraficaPorMunicipio(citas, tipo, plugin);
+});
 
 async function generarGraficaPorParroquia(citas, tipo, plugin) {
     const grafica_parroquia = document.getElementById('grafica-parroquia');
     var parroquiaCounts = {};
+    var municipio = $("#municipio").val();
 
     const promesas = citas.map(cita => {
         return ubicacion_persona_promesa(cita.personas.id_parroquia.toString());
@@ -444,9 +458,14 @@ async function generarGraficaPorParroquia(citas, tipo, plugin) {
         }
 
         if (parroquia in parroquiaCounts) {
-            parroquiaCounts[parroquia]++;
+            //Solo incluir parroquias del municipio seleccionado
+            if (ubicacion.municipio.id_municipio.toString() === municipio) {
+                parroquiaCounts[parroquia]++;
+            }
         } else {
-            parroquiaCounts[parroquia] = 1;
+            if (ubicacion.municipio.id_municipio.toString() === municipio) {
+                parroquiaCounts[parroquia] = 1;
+            }
         }
     });
 
@@ -477,3 +496,25 @@ async function generarGraficaPorParroquia(citas, tipo, plugin) {
 }
 
 generarGraficaPorParroquia(citas, tipo, plugin);
+//Llamar al cambiar el municipio
+$("#municipio").on("change", function() {
+    //Destruir grafica anterior
+    Chart.getChart("grafica-parroquia")?.destroy();
+    //Generar nueva grafica
+    generarGraficaPorParroquia(citas, tipo, plugin);
+});
+
+//Funcion al seleccionar dia inicio y fin
+$("#inicio").on("change", function(){
+    var dia_inicio = $("#inicio").val()
+    var dia_fin = $("#fin").val()
+    //Redirigir a la misma pagina con el parametro dia
+    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
+})
+
+$("#fin").on("change", function(){
+    var dia_inicio = $("#inicio").val()
+    var dia_fin = $("#fin").val()
+    //Redirigir a la misma pagina con el parametro dia
+    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
+})

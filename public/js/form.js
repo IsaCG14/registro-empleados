@@ -2,57 +2,52 @@ const estado_select = $("#estado")
 const municipio_select = $("#municipio")
 const parroquia_select = $("#parroquia")
 
-estado_select.on("change", function(){
-    var id_estado = estado_select.val()
+//Funcion para obtener municipios y parroquias
+function obtener_municipios_parroquias(select, tipo){
+    var id = select.val()
+    var url = ''
+    if(tipo === 'estado'){
+        url = '/obtener-municipios/' + id
+    } else if(tipo === 'municipio'){
+        url = '/obtener-parroquias/' + id
+    }
     $.ajax({
-        url: '/obtener-municipios/' + id_estado,
+        url: url,
         type: 'GET',
         success: function(data){
-            //console.log(data);
             //Eliminar lista anterior
-            municipio_select.html("")
+            if(tipo === 'estado'){
+                municipio_select.html("")
+            } else if(tipo === 'municipio'){
+                parroquia_select.html("")
+            }
             //Añadir nueva lista
             data.forEach(element => {
-                municipio_select.append("<option value='"+element.id_municipio+"'>"+element.municipio+"</option>")
+                if(tipo === 'estado'){
+                    municipio_select.append("<option value='"+element.id_municipio+"'>"+element.municipio+"</option>")
+                } else if(tipo === 'municipio'){
+                    parroquia_select.append("<option value='"+element.id_parroquia+"'>"+element.parroquia+"</option>")
+                }
             });
         },
         error: function(xhr, status, error) {
             console.log(error)
         }
     })
-})
+}
 
+estado_select.on("change", function() {
+    obtener_municipios_parroquias(estado_select, 'estado')
+})
 municipio_select.on("change", function(){
-    var id_municipio = municipio_select.val()
-    $.ajax({
-        url: '/obtener-parroquias/' + id_municipio,
-        type: 'GET',
-        success: function(data){
-            //console.log(data);
-            //Eliminar lista anterior
-            parroquia_select.html("")
-            //Añadir nueva lista
-            data.forEach(element => {
-                parroquia_select.append("<option value='"+element.id_parroquia+"'>"+element.parroquia+"</option>")
-            });
-        },
-        error: function(xhr, status, error) {
-            console.log(error)
-        }
-    })
+    obtener_municipios_parroquias(municipio_select, 'municipio')
 })
 
-//Funcion al seleccionar dia inicio y fin
-$("#inicio").on("change", function(){
-    var dia_inicio = $("#inicio").val()
-    var dia_fin = $("#fin").val()
-    //Redirigir a la misma pagina con el parametro dia
-    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
+//Cargar municipios y parroquias al hacer click en el select
+estado_select.on("click", function() {
+    obtener_municipios_parroquias(estado_select, 'estado')
+})
+municipio_select.on("click", function(){
+    obtener_municipios_parroquias(municipio_select, 'municipio')
 })
 
-$("#fin").on("change", function(){
-    var dia_inicio = $("#inicio").val()
-    var dia_fin = $("#fin").val()
-    //Redirigir a la misma pagina con el parametro dia
-    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
-})

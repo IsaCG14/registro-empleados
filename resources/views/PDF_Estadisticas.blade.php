@@ -76,9 +76,9 @@
             </table>
             <br>
             <h5>Estadísticas</h5>
-            <p>Total de citas: {{ $total }}</p>
-            <p>Total de citas masculinas: {{ $masculino }}</p>
-            <p>Total de citas femeninas: {{ $femenino }}</p>
+            <p>Total atendidos: {{ $total }}</p>
+            <p>Total atendidos masculinos: {{ $masculino }}</p>
+            <p>Total atendidos femeninos: {{ $femenino }}</p>
         </div>
     </div>
 </body>
