@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Estado;
 use App\Models\Patria;
-use App\Models\Cita;
+use App\Models\Atendidos;
 use App\Models\User; 
 use App\Models\Municipio; 
 use App\Models\Parroquia; 
@@ -21,7 +21,7 @@ class Persona extends Controller
     {
         $busqueda = $request->input('busqueda');
 
-        $query = Cita::with(['personas', 'asuntos.patria', 'usuarios'])->orderBy('fecha_cita', 'desc');
+        $query = Atendidos::with(['personas', 'asuntos.patria', 'usuarios'])->orderBy('fecha_atencion', 'desc');
 
         if($busqueda) {
             $query->whereHas('personas', function ($q) use ($busqueda) {
@@ -30,9 +30,9 @@ class Persona extends Controller
           });
         }
 
-        $citas = $query->paginate(10);
+        $atendidos = $query->paginate(10);
         
-        return view('index', compact('citas'));
+        return view('index', compact('atendidos'));
     }
 
     public function create()
@@ -68,11 +68,11 @@ class Persona extends Controller
 
         $id_usuario = Auth::id();
 
-        $cita_id = Cita::create([
+        $cita_id = Atendidos::create([
                 'id_persona' => $id_persona->id,
                 'id_user' => $id_usuario,
                 'detalles' => $request['detalles'],
-                'fecha_cita' => $request['fecha_cita'],
+                'fecha_atencion' => $request['fecha_cita'],
                 'comuna' => $request['nombre_comuna'] ?? null,
                 'consejo_comunal' => $request['nombre_consejo'] ?? null,
             ])->id;
@@ -82,7 +82,7 @@ class Persona extends Controller
         if (!empty($patria_ids) && is_array($patria_ids)) {
             foreach ($patria_ids as $patria_id) {
                 Asunto::create([
-                    'cita_id' => $cita_id,
+                    'atencion_id' => $cita_id,
                     'patria_id' => $patria_id, 
                 ]);
             }
@@ -96,7 +96,7 @@ class Persona extends Controller
      */
     public function show(string $id)
     {
-        $cita = Cita::with('personas', 'asuntos.patria', 'usuarios')->find($id);
+        $cita = Atendidos::with('personas', 'asuntos.patria', 'usuarios')->find($id);
         $id_parroquia = $cita?->personas?->id_parroquia;
 
         if($id_parroquia) {
@@ -117,7 +117,7 @@ class Persona extends Controller
      */
     public function edit(string $id)
     {
-        $cita = Cita::with('personas', 'asuntos.patria', 'usuarios')->find($id);
+        $cita = Atendidos::with('personas', 'asuntos.patria', 'usuarios')->find($id);
         $id_parroquia = $cita?->personas?->id_parroquia;
         $estados = Estado::all();
         $municipios = Municipio::all();
@@ -136,15 +136,15 @@ class Persona extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $cita = Cita::find($id);
+        $cita = Atendidos::find($id);
         $persona = \App\Models\Persona::find($cita->id_persona);
         $id_usuario = Auth::id();
-        $asunto = Asunto::where('cita_id', $id);
+        $asunto = Asunto::where('atencion_id', $id);
         $asunto->delete();
         
         $cita->fill([
             'id_persona' => $cita->id_persona,
-            'fecha_cita' => $request['fecha_cita'],
+            'fecha_atencion' => $request['fecha_atencion'],
             'detalles' => $request['detalles'],
             'id_user' => $id_usuario,
             'comuna' => $request['nombre_comuna'] ?? null,
@@ -155,7 +155,7 @@ class Persona extends Controller
         if (!empty($patria_ids) && is_array($patria_ids)) {
             foreach ($patria_ids as $patria_id) {
                 $asunto->updateOrCreate(
-                    ['cita_id' => $id, 'patria_id' => $patria_id]
+                    ['atencion_id' => $id, 'patria_id' => $patria_id]
                 );
             }
         }
@@ -181,7 +181,7 @@ class Persona extends Controller
      */
     public function destroy(string $id)
     {
-        Cita::destroy($id);
+        Atendidos::destroy($id);
         return redirect("/lista-personas");
     }
 }

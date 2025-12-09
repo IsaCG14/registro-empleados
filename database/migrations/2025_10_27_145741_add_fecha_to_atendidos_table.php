@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('citas', function (Blueprint $table) {
-            $table->string('comuna')->nullable()->after('detalles');
-            $table->string('consejo_comunal')->nullable()->after('comuna');
+        Schema::table('atendidos', function (Blueprint $table) {
+            $table->date('fecha_atencion');
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('citas', function (Blueprint $table) {
-            $table->dropColumn('comuna');
-            $table->dropColumn('consejo_comunal');
+        Schema::table('atendidos', function (Blueprint $table) {
+            $table->dropColumn('fecha_atencion');
         });
     }
 };

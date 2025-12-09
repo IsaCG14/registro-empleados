@@ -176,7 +176,7 @@
             <div class="mb-3 row">
                 <div class="col">
                     <label for="exampleFormControlTextarea1" class="form-label">Fecha de atención:</label>
-                    <input type="date" class="form-control" value="{{$cita->fecha_cita}}" name="fecha_cita" rows="3"
+                    <input type="date" class="form-control" value="{{$cita->fecha_atencion}}" name="fecha_atencion" rows="3"
                         required>
                     <div class="invalid-feedback">
                         Ingrese la fecha de atención.

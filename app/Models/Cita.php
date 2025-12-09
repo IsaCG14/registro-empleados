@@ -9,17 +9,9 @@ class Cita extends Model
 {
     use HasFactory;
     protected $table = 'citas';
-    protected $fillable = ['id_persona', 'id_user', 'detalles', 'fecha_cita', 'comuna', 'consejo_comunal'];
-
-    public function personas() {
-        return $this->belongsTo(Persona::class, 'id_persona');
-    }
-
-    public function usuarios() {
-        return $this->belongsTo(User::class, 'id_user')->withTrashed();;
-    }
-
-    public function asuntos() {
-        return $this->hasMany(Asunto::class, 'cita_id');
+    protected $fillable = ['fecha_cita', 'hora_cita', 'id_atencion', 'status'];
+    
+    public function atendidos() {
+        return $this->belongsTo(Atendidos::class, 'id_atencion');
     }
 }

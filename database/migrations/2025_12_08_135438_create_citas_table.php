@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('asunto', function (Blueprint $table) {
+        Schema::create('citas', function (Blueprint $table) {
             $table->id();
-            $table->foreign('atencion_id')->references('id')->on('atendidos')->onDelete('cascade');
-            $table->unsignedBigInteger('atencion_id');
-            $table->foreign('patria_id')->references('id')->on('patria')->onDelete('cascade');
-            $table->unsignedBigInteger('patria_id');
+            $table->date('fecha_cita');
+            $table->time('hora_cita');
+            $table->unsignedBigInteger('id_atencion');
+            $table->foreign('id_atencion')->references('id')->on('atendidos')->onDeleted('cascade');
+            $table->string('status')->default('pendiente');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asunto');
+        Schema::dropIfExists('citas');
     }
 };

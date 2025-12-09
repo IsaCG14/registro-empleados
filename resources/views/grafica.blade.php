@@ -78,7 +78,7 @@
 <script src="{{ asset('librerias/jspdf.plugin.autotable.js.js') }}"></script>
 <script src="{{ asset('librerias/html2canvas.min.js') }}"></script>
 <script>
-const citas = @json($citas);
+const citas = @json($atendidos);
 let fecha_inicio = @json($inicio);
 let fecha_fin = @json($fin);
 

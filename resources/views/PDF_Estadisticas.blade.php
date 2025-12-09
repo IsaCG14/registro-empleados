@@ -66,7 +66,7 @@
                             <span>N/A</span>
                             @endforelse
                         </td>
-                        <td>{!! date('d/m/Y', strtotime($cita->fecha_cita)) !!}</td>
+                        <td>{!! date('d/m/Y', strtotime($cita->fecha_atencion)) !!}</td>
                         <td>{!! $cita->personas->parroquia->parroquia !!} ({!!
                             $cita->personas->parroquia->municipio->estado->estado !!})</td>
                         <td>{!! $cita->usuarios->name !!}</td>

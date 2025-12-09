@@ -9,13 +9,13 @@ class Asunto extends Model
 {
     use HasFactory;
     protected $table = 'asunto';
-    protected $fillable = ['cita_id', 'patria_id'];
+    protected $fillable = ['atencion_id', 'patria_id'];
 
     public function patria() {
         return $this->belongsTo(Patria::class ,'patria_id');
     }
 
-    public function cita() {
-        return $this->belongsTo(Cita::class, 'cita_id');
+    public function atendidos() {
+        return $this->belongsTo(Atendidos::class, 'atencion_id');
     }
 }

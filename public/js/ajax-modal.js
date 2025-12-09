@@ -25,7 +25,7 @@ $(document).ready(function () {
                 fecha_actual = new Date();
 
                 fecha_nac = generarFecha(data[0].personas.fecha_nacimiento);
-                fecha_cita = generarFecha(data[0].fecha_cita);
+                fecha_atencion = generarFecha(data[0].fecha_atencion);
 
                 //Obtener edad
                 var edad = fecha_actual - fecha_nac;
@@ -75,18 +75,18 @@ $(document).ready(function () {
                 );
                 var asuntos = data[0].asuntos;
                 //Limpiar informacion anterior
-                $(".informacion-cita").empty();
+                $(".informacion-atendido").empty();
                 //Agregar los asuntos
-                $(".informacion-cita").append("<b>Asuntos:</b><ul>");
+                $(".informacion-atendido").append("<b>Asuntos:</b><ul>");
                 asuntos.forEach((asunto) => {
-                    $(".informacion-cita").append(
+                    $(".informacion-atendido").append(
                         "<li><p>" + asunto.patria.opciones + "</p></li>"
                     );
                 });
                 var detalles = data[0].detalles ? data[0].detalles : "Ninguno";
-                $(".informacion-cita").append(
-                    "</ul><p><b>Fecha cita:</b> " +
-                        formatearFecha(fecha_cita) +
+                $(".informacion-atendido").append(
+                    "</ul><p><b>Fecha de atención:</b> " +
+                        formatearFecha(fecha_atencion) +
                         "<p><b>Detalles:</b> " +
                         detalles +
                         "</p><br>" +

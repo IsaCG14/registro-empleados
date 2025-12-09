@@ -8,6 +8,7 @@ use App\Http\Controllers\ParroquiaController;
 use App\Http\Controllers\CentroController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\AtendidosController;
 use App\Http\Controllers\Persona;
 use App\Models\Usuario;
 use App\Models\User;
@@ -57,11 +58,15 @@ Route::get("/error", function () {
     return view("error");
 })->name("error");
 
-Route::get("/grafica", [CitaController::class, "obtener_graficas"])->name("grafica")->middleware('auth');
+Route::get("/grafica", [AtendidosController::class, "obtener_graficas"])->name("grafica")->middleware('auth');
 
 Route::get("/reportes", function () {
     return view("reportes");
 })->name("reportes")->middleware('auth');
+
+Route::get("/calendario", function () {
+    return view("calendario");
+})->name("calendario")->middleware('auth');
 
 //Route::get("usuarios", [UsuarioController::class, 'index'])->middleware('check.user.access');
 Route::post("registrar-usuario", [UsuarioController::class, "store"]);
@@ -89,3 +94,6 @@ Route::get("/offline", function () {
 //Apis
 Route::get("/api/parroquia/{id}", [ParroquiaController::class, "obtener_ubicacion_completa"]);
 Route::get("/api/persona/{cedula}", [Persona::class, "getPersonaByCedula"]);
+
+Route::get("/agendar-cita/{id}", [CitaController::class, "create"])->name("agendar-cita")->middleware('auth');
+Route::post("/guardar-cita", [CitaController::class, "store"])->name("guardar-cita");
