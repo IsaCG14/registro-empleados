@@ -1,11 +1,72 @@
 const daysTag = document.querySelector(".days"),
     currentDate = document.querySelector(".current-date"),
     prevNextIcon = document.querySelectorAll(".icons span");
+const ocupadosArray = [];
 
 const fechaSeleccionada = document.getElementById("fecha-seleccionada");
 const horaSeleccionada = document.getElementById("hora-seleccionada");
 
 console.log("Citas cargadas:", citas);
+
+function obtenerCitasPorFecha(fecha) {
+    fetch(`/api/citas/${fecha}`)
+        .then((response) => response.json())
+        .then((data) => {
+            //Si hay datos llenar tabla
+            const tablaCitas = document.getElementById("tabla-citas");
+            //Limpiar cuerpo de tabla
+            tablaCitas.innerHTML = "";
+
+            if (data.length > 0) {
+                data.forEach((cita) => {
+                    const fila = document.createElement("tr");
+                    if (
+                        cita.status === "Pendiente" ||
+                        cita.status === "Reagendada"
+                    ) {
+                        var badgeClass = "warning text-dark";
+                    } else if (cita.status === "Atendida") {
+                        var badgeClass = "success";
+                    } else if (cita.status === "Cancelada") {
+                        var badgeClass = "danger";
+                    }
+                    let asuntos = "";
+                    for (let asunto of cita.atendidos.asuntos) {
+                        asuntos += asunto.patria.opciones + ", ";
+                    }
+
+                    fila.innerHTML = `
+                    <td>${cita.atendidos.personas.cedula}</td>
+                    <td>${cita.atendidos.personas.nombre}</td>
+                    <td>${asuntos}</td>
+                    <td>${cita.hora_cita}</td>
+                    <td><span class="badge bg-${badgeClass}">${cita.status}</span></td>
+                `;
+                    tablaCitas.appendChild(fila);
+                });
+            } else {
+                const fila = document.createElement("tr");
+                fila.innerHTML = `
+                <td colspan="4">No hay citas para esta fecha.</td>
+            `;
+                tablaCitas.appendChild(fila);
+            }
+        })
+        .catch((error) => console.error("Error:", error));
+}
+
+function formatearFecha(fecha) {
+    const year = fecha.getUTCFullYear();
+    const month = fecha.getUTCMonth(); // 0-11
+    const day = fecha.getUTCDate();
+    const formateadorMes = new Intl.DateTimeFormat('es-ES', { month: 'long', timeZone: 'UTC' });
+
+    const fechaTemporal = new Date(Date.UTC(year, month, 1)); 
+
+    const mes = formateadorMes.format(fechaTemporal);
+
+    return `${day} de ${mes} de ${year}`;
+}
 
 // getting new date, current year and month
 let date = new Date(),
@@ -132,23 +193,30 @@ function attachDayHandlers() {
         li.onclick = function () {
             if (li.classList.contains("inactive")) return;
 
-            if (selectedDay === d) {
-                // deseleccionar mismo día
-                li.classList.remove("selected");
-                selectedDay = null;
-            } else {
-                // quitar selección anterior y marcar la nueva
-                const prev = daysTag.querySelector("li.selected");
-                if (prev) prev.classList.remove("selected");
-                li.classList.add("selected");
-                selectedDay = d;
-            }
+            // Mostrar citas de ese dia en la tabla
+            const fecha = li.getAttribute("data-date");
 
-            // mostrar fecha seleccionada
-            //Formatear fecha a DD/MM/YYYY
-            // const [year, month, day] = selectedDay.split("-");
-            // const formattedDate = `${day}/${month}/${year}`;
-            fechaSeleccionada.value = selectedDay;
+            // Obtener registros de la cita
+            const title = document.getElementById("titulo-cita");
+            //Formatear fecha para mostrar
+            title.innerText = formatearFecha(new Date(fecha));
+            obtenerCitasPorFecha(fecha);
+
+            if (!li.classList.contains("ocupado")) {
+                if (selectedDay === d) {
+                    // deseleccionar mismo día
+                    li.classList.remove("selected");
+                    selectedDay = null;
+                } else {
+                    // quitar selección anterior y marcar la nueva
+                    const prev = daysTag.querySelector("li.selected");
+                    if (prev) prev.classList.remove("selected");
+                    li.classList.add("selected");
+                    selectedDay = d;
+                }
+
+                fechaSeleccionada.value = selectedDay;
+            }
         };
     });
 }
@@ -176,17 +244,22 @@ prevNextIcon.forEach((icon) => {
 //Marcar la fecha seleccionada si ya existe una cita programada
 function marcarFechaSeleccionada() {
     // obtener id de asunto de forma segura (puede ser undefined)
-    const asuntoId = (typeof asunto !== "undefined" && asunto && asunto.id) ? String(asunto.id) : null;
+    const asuntoId =
+        typeof asunto !== "undefined" && asunto && asunto.id
+            ? String(asunto.id)
+            : null;
 
     // asegurarse de que el calendario está renderizado (li existen)
     const lis = daysTag.querySelectorAll("li");
     if (!lis || lis.length === 0) return;
 
     // primero quitar marcas previas
-    lis.forEach(li => {
+    lis.forEach((li) => {
         li.classList.remove("ocupado", "selected");
-        // restaurar manejador por si fue removido (re-render attachDayHandlers ya lo hace, esto es por seguridad)
     });
+
+    // usar array local para evitar acumulación entre llamadas
+    const ocupadosLocal = [];
 
     for (let cita of citas) {
         const fechaCita = String(cita.fecha_cita);
@@ -195,21 +268,29 @@ function marcarFechaSeleccionada() {
             selectedDay = fechaCita;
             if (fechaSeleccionada) fechaSeleccionada.value = fechaCita;
             if (horaSeleccionada) horaSeleccionada.value = cita.hora_cita || "";
-            // marcar visiblemente en los li actuales (si existe)
             const li = daysTag.querySelector(`li[data-date="${fechaCita}"]`);
             if (li) li.classList.add("selected");
-            // no break: puede haber solo una, pero dejamos que marque todas coincidencias si las hay
         } else {
-            // marcar como ocupado si la fecha está en el mes visible
-            const li = daysTag.querySelector(`li[data-date="${fechaCita}"]`);
-            if (li) {
-                li.classList.add("ocupado"); // usar string, no array
-                li.onclick = null;
-            }
+            ocupadosLocal.push(fechaCita);
+        }
+    }
+
+    // Contar cuantas citas hay por fecha (usando el array local)
+    const conteoFechas = {};
+    for (let fecha of ocupadosLocal) {
+        conteoFechas[fecha] = (conteoFechas[fecha] || 0) + 1;
+    }
+
+    // Marcar fechas ocupadas sólo si tienen 2 o más citas
+    for (let fecha in conteoFechas) {
+        const li = daysTag.querySelector(`li[data-date="${fecha}"]`);
+        if (li && conteoFechas[fecha] >= 2) {
+            li.classList.add("ocupado");
         }
     }
 }
 
 window.addEventListener("load", () => {
+    obtenerCitasPorFecha(new Date().toISOString().split("T")[0]);
     marcarFechaSeleccionada();
 });

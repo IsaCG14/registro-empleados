@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <div class="contenedor">
-        <h3>Actualizar Persona</h3>
+        <h3>Actualizar Asunto</h3>
         <img src="img/header.png" class="mb-4" width="90%" alt="">
         <form class="needs-validation" action="{{route('update', ['id' => $cita->id])}}" method="POST" novalidate>
             @csrf

@@ -6,13 +6,13 @@
         <button type="button" id="generarPdfGeneral" class="btn btn-primary my-4 w-25">Generar PDF</button>
         <div class="row w-auto my-3">
             <div class="col-6 d-flex align-items-center">
-                <label for="inicio" class="me-2 text-nowrap">Inicio:</label>
+                <label for="inicio" class="me-2 text-nowrap">Desde:</label>
                 <input type="date" name="inicio" id="inicio" class="form-select"
                     value="{{ $inicio ? $inicio : date('Y-m-d')  }}">
             </div>
 
             <div class="col-6 d-flex align-items-center">
-                <label for="fin" class="me-2 text-nowrap">Fin:</label>
+                <label for="fin" class="me-2 text-nowrap">Hasta:</label>
                 <input type="date" name="fin" id="fin" class="form-select" value="{{ $fin ? $fin : date('Y-m-d')  }}">
             </div>
         </div>

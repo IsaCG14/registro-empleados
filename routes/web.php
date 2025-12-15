@@ -97,3 +97,5 @@ Route::get("/api/persona/{cedula}", [Persona::class, "getPersonaByCedula"]);
 
 Route::get("/agendar-cita/{id}", [CitaController::class, "create"])->name("agendar-cita")->middleware('auth');
 Route::post("/guardar-cita", [CitaController::class, "store"])->name("guardar-cita");
+Route::get("/api/citas/{fecha}", [CitaController::class, "show"]);
+Route::get("/citas", [CitaController::class, "index"])->name("citas")->middleware('auth');

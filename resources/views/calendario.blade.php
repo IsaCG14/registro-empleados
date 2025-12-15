@@ -1,7 +1,7 @@
 @extends('layouts.nav')
 @section('content')
 <div class="row">
-    <div class="wrapper m-5 col">
+    <div class="wrapper m-3 col">
         <header>
             <p class="current-date"></p>
             <div class="icons">
@@ -23,7 +23,7 @@
             <ul class="days"></ul>
         </div>
     </div>
-    <div class="col contenedor">
+    <div class="col contenedor m-3">
         <h4>Agendar cita</h4>
         <div class="guide row mt-4">
             <div class="guide-1 col">
@@ -69,35 +69,19 @@
     </div>
 </div>
 <div class="contenedor">
-    <h3 class="my-3">Citas de ese día</h3>
+    <h3 class="my-3">Citas de <span id="titulo-cita">hoy</span></h3>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">Cédula</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Asunto</th>
+                <th scope="col">Hora</th>
                 <th scope="col">Status</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>Juan Lopez</td>
-                <td>V-12345678</td>
-                <td>No ingresa patria</td>
-                <td><span class="badge bg-danger">No atendido</span></td>
-            </tr>
-            <tr>
-                <td>Maria Perez</td>
-                <td>V-87654321</td>
-                <td>Actualización de datos</td>
-                <td><span class="badge bg-success">Atendido</span></td>
-            </tr>
-            <tr>
-                <td>Carlos Gomez</td>
-                <td>V-11223344</td>
-                <td>Consulta general</td>
-                <td><span class="badge bg-warning text-dark">Reagendado</span></td>
-            </tr>
+        <tbody id="tabla-citas">
+            <!-- Aquí se llenarán las citas mediante JavaScript -->
         </tbody>
     </table>
 </div>

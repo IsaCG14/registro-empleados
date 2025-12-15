@@ -157,6 +157,12 @@
                                     No
                                 </label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="0" name="consejo" checked>
+                                <label class="form-check-label" for="consejo">
+                                    No sabe
+                                </label>
+                            </div>
                         </div>
                         <div>
                             <label for="exampleFormControlTextarea1" class="form-label">Nombre del consejo
@@ -182,6 +188,12 @@
                                 <input class="form-check-input" type="radio" name="comuna" checked value="0">
                                 <label class="form-check-label" for="comuna">
                                     No
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="comuna" checked value="0">
+                                <label class="form-check-label" for="comuna">
+                                    No sabe
                                 </label>
                             </div>
                         </div>

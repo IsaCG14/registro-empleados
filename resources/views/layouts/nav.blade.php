@@ -35,6 +35,8 @@
                     <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
                         href="/reportes">Reportes</a> -->
                     <a class="nav-link" href="/formulario">Registrar visita</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'citas') ? 'active' : '' }}"
+                        href="/citas">Control de citas</a>
                     <!--Permitir acceso solo al usuario 'Master'-->
                     @if (auth()->user()->id == 1)
                     <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
@@ -66,6 +68,8 @@
                         href="/reportes">Reportes</a> -->
                     <a class="nav-link {{ strpos(url()->current(), 'formulario') ? 'active' : '' }}"
                         href="/formulario">Registrar visita</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'citas') ? 'active' : '' }}"
+                        href="/citas">Control de citas</a>
                     @if (auth()->user()->id == 1)
                     <a class="nav-link {{ strpos(url()->current(), 'usuarios') ? 'active' : '' }}"
                         href="/usuarios">Usuarios</a>
@@ -107,6 +111,7 @@
     Swal.fire({
         icon: 'success',
         title: '¡Operación Exitosa!',
+        theme: 'dark',
         text: @json(session('success_alert')),
         showConfirmButton: false,
         timer: 3000

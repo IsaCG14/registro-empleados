@@ -13,7 +13,9 @@ class CitaController extends Controller
      */
     public function index()
     {
-        //
+        $query = Cita::with('atendidos.personas', 'atendidos.asuntos.patria');
+        $citas = $query->paginate(10);
+        return view('citas', compact('citas'));
     }
 
     /**
@@ -56,9 +58,11 @@ class CitaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $fecha)
     {
-        //
+        //Obtener las citas de la fecha dada
+        $citas = Cita::with('atendidos.personas', 'atendidos.asuntos.patria')->where('fecha_cita', $fecha)->get();
+        return response()->json($citas);
     }
 
     /**
