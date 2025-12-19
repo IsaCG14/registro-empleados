@@ -95,6 +95,8 @@ Route::get("/offline", function () {
 Route::get("/api/parroquia/{id}", [ParroquiaController::class, "obtener_ubicacion_completa"]);
 Route::get("/api/persona/{cedula}", [Persona::class, "getPersonaByCedula"]);
 
+Route::get("/terminar-cita/{id}", [CitaController::class, "update"])->name("terminar-cita")->middleware('auth');
+Route::get("/cancelar-cita/{id}", [CitaController::class, "destroy"])->name("cancelar-cita")->middleware('auth');
 Route::get("/agendar-cita/{id}", [CitaController::class, "create"])->name("agendar-cita")->middleware('auth');
 Route::post("/guardar-cita", [CitaController::class, "store"])->name("guardar-cita");
 Route::get("/api/citas/{fecha}", [CitaController::class, "show"]);

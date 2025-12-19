@@ -19,7 +19,7 @@
 </div>
 <div class="contenedor">
     <div class="container-personas">
-        <h3 class="my-3">Lista de personas</h3>
+        <h3 class="my-3">Lista de asuntos</h3>
         <div class="row mb-4 w-75">
             <form action="/pdf" target="_blank" class="row g-3 align-items-center reporteForm">
                 <div class="col-auto">

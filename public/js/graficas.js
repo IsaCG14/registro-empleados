@@ -24,7 +24,7 @@ var tipo = (url.get("tipo") == null) ? 'pie' : url.get("tipo");
 
 //Llenar select de usuarios
 var usuarios = {};
-citas.forEach(cita => {
+atendidos.forEach(cita => {
     var usuario = cita.usuarios;
     if (!(usuario.name in usuarios)) {
         usuarios[usuario.name] = true;
@@ -36,7 +36,7 @@ $("#user").on("change", function() {
     var userId = $(this).val();
     //Mostrar solo asuntos registrados por ese usuario
     var asuntoCounts = {};
-    citas.forEach(cita => {
+    atendidos.forEach(cita => {
         if (cita.usuarios.id == userId) {
             var asuntos = cita.asuntos;
             asuntos.forEach(asunto => {
@@ -100,7 +100,7 @@ var rango5 = 0
 //Grafica por asuntos
 var asuntoCounts = {};
 
-citas.forEach(cita => {
+atendidos.forEach(cita => {
     //valorar genero
     // console.log(cita.personas.sexo)
     if (cita.personas.sexo == 1) {
@@ -186,7 +186,7 @@ new Chart(grafica_edad, {
         datasets: [{
             label: 'Personas entre rango de edad',
             data: [rango1, rango2, rango3, rango4, rango5],
-            bacgroundColor: [
+            backgroundColor: [
                 'rgba(255, 99, 132, 0.8)',
                 'rgba(255, 159, 64, 0.8)',
                 'rgba(255, 205, 86, 0.8)',
@@ -224,7 +224,7 @@ new Chart(grafica_asunto, {
 const grafica_sexo_usuario = document.getElementById('grafica-sexo-usuario');
 //Grafica por sexo registrado por usuario dividido por femenino y masculino en doble barra
 var usuarioLabels = {};
-citas.forEach(cita => {
+atendidos.forEach(cita => {
     var usuario = cita.usuarios.name;
     if (!(usuario in usuarioLabels)) {
         usuarioLabels[usuario] = {
@@ -264,13 +264,13 @@ new Chart(grafica_sexo_usuario, {
     }
 });
 
-async function generarGraficaPorEstado(citas, tipo, plugin) {
+async function generarGraficaPorEstado(atendidos, tipo, plugin) {
     const grafica_estado = document.getElementById('grafica-estado');
     var estadoCounts = {};
 
     // Crear un array de Promesas
     // Mapeamos cada cita a una llamada a la función Promesa
-    const promesas = citas.map(cita => {
+    const promesas = atendidos.map(cita => {
         return ubicacion_persona_promesa(cita.personas.id_parroquia.toString());
     });
 
@@ -321,15 +321,15 @@ async function generarGraficaPorEstado(citas, tipo, plugin) {
 
 // Llama a la nueva función
 // Asegúrate de que 'tipo' y 'plugin' están definidos
-generarGraficaPorEstado(citas, tipo, plugin);
+generarGraficaPorEstado(atendidos, tipo, plugin);
 
-async function generarGraficaPorMunicipio(citas, tipo, plugin) {
+async function generarGraficaPorMunicipio(atendidos, tipo, plugin) {
     const grafica_municipio = document.getElementById('grafica-municipio');
     var municipioCounts = {};
     var estado = $("#estado-municipio").val();
 
     // Crear un array de Promesas
-    const promesas = citas.map(cita => {
+    const promesas = atendidos.map(cita => {
         return ubicacion_persona_promesa(cita.personas.id_parroquia.toString());
     });
 
@@ -380,21 +380,21 @@ async function generarGraficaPorMunicipio(citas, tipo, plugin) {
 }
 
 // Llama a la nueva función
-generarGraficaPorMunicipio(citas, tipo, plugin);
+generarGraficaPorMunicipio(atendidos, tipo, plugin);
 //Llamar al cambiar el estado
 $("#estado-municipio").on("change", function() {
     //Destruir grafica anterior
     Chart.getChart("grafica-municipio")?.destroy();
     //Generar nueva grafica
-    generarGraficaPorMunicipio(citas, tipo, plugin);
+    generarGraficaPorMunicipio(atendidos, tipo, plugin);
 });
 
-async function generarGraficaPorParroquia(citas, tipo, plugin) {
+async function generarGraficaPorParroquia(atendidos, tipo, plugin) {
     const grafica_parroquia = document.getElementById('grafica-parroquia');
     var parroquiaCounts = {};
     var municipio = $("#municipio").val();
 
-    const promesas = citas.map(cita => {
+    const promesas = atendidos.map(cita => {
         return ubicacion_persona_promesa(cita.personas.id_parroquia.toString());
     });
 
@@ -441,13 +441,47 @@ async function generarGraficaPorParroquia(citas, tipo, plugin) {
     console.log("Gráfica de parroquias dibujada con los datos finales.");
 }
 
-generarGraficaPorParroquia(citas, tipo, plugin);
+generarGraficaPorParroquia(atendidos, tipo, plugin);
+
+//Generar grafica por status de citas
+const grafica_cita = document.getElementById('grafica-cita');
+var statusCounts = {};
+
+//Contar status de citas
+citas.forEach(cita => {
+    var status = cita.status;
+    if (status in statusCounts) {
+        statusCounts[status]++;
+    } else {
+        statusCounts[status] = 1;
+    }
+});
+
+//Dibujar grafica
+new Chart(grafica_cita, {
+    type: tipo,
+    data: {
+        labels: Object.keys(statusCounts).map(status => status + " (" + statusCounts[status] + ")"),
+        datasets: [{
+            label: 'Status de citas',
+            data: Object.values(statusCounts),
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 205, 86, 0.8)',
+                'rgba(255, 99, 132, 0.8)'
+            ]
+        }]
+    },
+    plugins: [plugin],
+});
+
 //Llamar al cambiar el municipio
 $("#municipio").on("change", function() {
     //Destruir grafica anterior
     Chart.getChart("grafica-parroquia")?.destroy();
     //Generar nueva grafica
-    generarGraficaPorParroquia(citas, tipo, plugin);
+    generarGraficaPorParroquia(atendidos, tipo, plugin);
 });
 
 //Funcion al seleccionar dia inicio y fin

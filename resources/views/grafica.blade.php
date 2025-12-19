@@ -68,6 +68,11 @@
                 <canvas id="grafica-asunto"></canvas> 
                 <button class="btn btn-dark generarPdf">Descargar PDF</button>
             </div>
+            <div class="col-lg-5 m-4">
+                <h5>Gráfica de status de citas</h5>
+                <canvas id="grafica-cita"></canvas> 
+                <button class="btn btn-dark generarPdf">Descargar PDF</button>
+            </div>
         </div>
     </div>
 </div>
@@ -78,7 +83,8 @@
 <script src="{{ asset('librerias/jspdf.plugin.autotable.js.js') }}"></script>
 <script src="{{ asset('librerias/html2canvas.min.js') }}"></script>
 <script>
-const citas = @json($atendidos);
+const atendidos = @json($atendidos);
+const citas = @json($citas);
 let fecha_inicio = @json($inicio);
 let fecha_fin = @json($fin);
 

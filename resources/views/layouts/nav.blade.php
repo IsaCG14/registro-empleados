@@ -89,7 +89,7 @@
     </div>
     <footer>
         <div class="text-center p-3 bg-dark text-white mt-4">
-            Corpocentro ® 2025. RIF: J-20008343-3. Copyleft. Desarollado por la Oficina de Tecnología de Información y
+            Corpocentro ® <span id="year"></span>. RIF: J-20008343-3. Copyleft. Desarollado por la Oficina de Tecnología de Información y
             Comunicación.
         </div>
     </footer>
@@ -104,6 +104,7 @@
     <script src="{{ asset('js/ajax-form.js') }}"></script>
     <script src="{{ asset('js/form.js') }}"></script>
     <script src="{{ asset('js/reporte.js') }}"></script>
+    <script src="{{ asset('js/citas.js') }}"></script>
     <!--<script src="{{ asset('js/banner.js') }}"></script>-->
     <script src="{{ asset('js/multi-step.js') }}"></script>
     @if(session('success_alert'))
@@ -118,6 +119,28 @@
     });
     </script>
     @endif
+    @if(session('citas_alert'))
+    <script>
+    //Obtener dia actual
+    const diaActual = new Date().toISOString().split('T')[0];
+
+    Swal.fire({
+        title: @json(session('citas_alert')),
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Ver citas pendientes",
+        cancelButtonText: "Ver luego",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $(location).attr('href', "/citas?inicio=" + diaActual + "&fin=" + diaActual);
+        }
+    })
+    </script>
+    @endif
+    <script>
+    // Obtener el año actual y establecerlo en el elemento con id "year"
+    document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>

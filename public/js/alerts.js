@@ -81,3 +81,31 @@ $(".eliminar-usuario").on("click", function (e) {
         }
     })
 })
+
+//Eliminacion de usuario
+$(".eliminar-cita").on("click", function (e) {
+    e.preventDefault();
+    const href = $(this).attr("href");
+
+    Swal.fire({
+        title: "\xBFSeguro?",
+        text: "La cita ser\u00e1 cancelada.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Aceptar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "\xA1Cita cancelada!",
+                text: "La cita fue cancelada.",
+                icon: "success"
+            }).then(() => {
+                document.location.href = href;
+            })
+        }
+    })
+})
+               

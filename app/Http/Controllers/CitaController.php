@@ -11,16 +11,15 @@ class CitaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = Cita::with('atendidos.personas', 'atendidos.asuntos.patria');
+        $inicio = $request->input('inicio', date('Y-m-d'));
+        $fin = $request->input('fin', date('Y-m-d'));
+        $query = Cita::with('atendidos.personas', 'atendidos.asuntos.patria')->whereBetween('fecha_cita', [$inicio, $fin]);
         $citas = $query->paginate(10);
-        return view('citas', compact('citas'));
+        return view('citas', compact(['citas', 'inicio', 'fin']));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $asunto = Atendidos::with('personas', 'asuntos.patria', 'usuarios')->find(request()->route('id'));
@@ -42,7 +41,7 @@ class CitaController extends Controller
             $citaExistente->status = 'Reagendada';
             $citaExistente->save();
             session()->flash('success_alert', '¡Cita reagendada exitosamente!');
-            return redirect()->route('index');
+            return redirect()->route('citas');
         } else {
             Cita::create([
                 'fecha_cita' => $request->input('fecha_cita'),
@@ -51,7 +50,7 @@ class CitaController extends Controller
                 'status' => 'Pendiente',
             ]);
             session()->flash('success_alert', '¡Cita agendada exitosamente!');
-            return redirect()->route('index');
+            return redirect()->route('citas');
         }
     }
 
@@ -78,7 +77,11 @@ class CitaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $cita = Cita::find($id);
+        $cita->status = 'Atendida';
+        $cita->save();
+        session()->flash('success_alert', '¡Cita marcada como atendida exitosamente!');
+        return redirect()->route('citas');
     }
 
     /**
@@ -86,6 +89,8 @@ class CitaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Cita::destroy($id);
+        session()->flash('success_alert', '¡Cita cancelada exitosamente!');
+        return redirect()->route('citas');
     }
 }
