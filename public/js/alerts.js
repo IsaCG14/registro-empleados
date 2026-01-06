@@ -89,7 +89,7 @@ $(".eliminar-cita").on("click", function (e) {
 
     Swal.fire({
         title: "\xBFSeguro?",
-        text: "La cita ser\u00e1 cancelada.",
+        text: "La cita ser\u00e1 eliminada.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

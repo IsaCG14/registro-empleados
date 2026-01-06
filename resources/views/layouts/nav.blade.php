@@ -112,7 +112,6 @@
     Swal.fire({
         icon: 'success',
         title: '¡Operación Exitosa!',
-        theme: 'dark',
         text: @json(session('success_alert')),
         showConfirmButton: false,
         timer: 3000

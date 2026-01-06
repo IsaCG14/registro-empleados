@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="/css/login.css">
     <link rel="shortcut icon" href="img/icono.png" />
-    @laravelPWA
 </head>
 
 <body>

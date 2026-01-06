@@ -7,7 +7,7 @@
             <div class="icons">
                 <span id="prev" class="material-symbols-rounded">
                     <</span>
-                        <span id="next" class="material-symbols-rounded">></span>
+                <span id="next" class="material-symbols-rounded">></span>
             </div>
         </header>
         <div class="calendar">
@@ -48,7 +48,8 @@
                         <p><b>Nombre: </b>{{$asunto->personas->nombre}}</p>
                         <!-- <p id="fecha-seleccionada"></p> -->
                         <label for="fecha"><b>Fecha seleccionada:</b><input id="fecha-seleccionada" name="fecha_cita" type="date" readonly class="form-control mb-3" required></label>
-                        <label for="hora"><b>Hora:</b><input id="hora-seleccionada" type="time" class="form-control" name="hora_cita" required></label>
+                        <br><label for="hora"><b>Hora:</b><input id="hora-seleccionada" type="time" class="form-control" name="hora_cita" required></label>
+                        <br><span class="error-hora"></span>
                     </div>
                     <div class="col">
                         <p><b>Teléfono: </b>{{$asunto->personas->telefono}}</p>
@@ -69,7 +70,7 @@
     </div>
 </div>
 <div class="contenedor">
-    <h3 class="my-3">Citas de <span id="titulo-cita">hoy</span></h3>
+    <h3 class="my-3">Citas: <span id="titulo-cita"></span></h3>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -81,13 +82,13 @@
             </tr>
         </thead>
         <tbody id="tabla-citas">
-            <!-- Aquí se llenarán las citas mediante JavaScript -->
+        <!--Llenar con Javascript-->
         </tbody>
     </table>
 </div>
 </div>
 <script>
-    const citas = @json($citas);
+    const citasRegistradas = @json($citas);
     const asunto = @json($asunto);
 </script>
 <script src="{{ asset('js/calendario.js') }}"></script>

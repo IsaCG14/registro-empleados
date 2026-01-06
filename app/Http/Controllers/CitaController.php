@@ -54,13 +54,21 @@ class CitaController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function citasMes(string $mes)
+    {
+        //Obtener las citas del mes dado
+        $citas = Cita::with('atendidos.personas', 'atendidos.asuntos.patria')
+            ->where('fecha_cita', 'like', "$mes%")
+            ->get();
+        return response()->json($citas);
+    }
+
     public function show(string $fecha)
     {
         //Obtener las citas de la fecha dada
-        $citas = Cita::with('atendidos.personas', 'atendidos.asuntos.patria')->where('fecha_cita', $fecha)->get();
+        $citas = Cita::with('atendidos.personas', 'atendidos.asuntos.patria')
+        ->where('fecha_cita', $fecha)
+        ->get();
         return response()->json($citas);
     }
 

@@ -42,7 +42,10 @@
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
                 <th scope="col">Status</th>
-                <th scope="col">Acciones</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody id="tabla-citas">
@@ -58,7 +61,7 @@
                     </ul>
                 </td>
                 <td>{{$cita->fecha_cita}}</td>
-                <td>{{$cita->hora_cita}}</td>
+                <td>{{ \Carbon\Carbon::parse($cita->hora_cita)->format('h:i A') }}</td>
                 <td>
                     @if ($cita->status == 'Pendiente')
                     <span class="badge bg-secondary">{{$cita->status}}</span>
@@ -79,7 +82,9 @@
                                 d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
                             <path
                                 d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
-                        </svg></button>
+                        </svg> Ver</button>
+                </td>
+                <td>
                     @if($cita->status != 'Atendida')
                     <a href="/agendar-cita/{{$cita->id_atencion}}" class="btn btn-warning btn-sm mb-1"><svg
                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -90,6 +95,10 @@
                             <path
                                 d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5" />
                         </svg> Reagendar</a>
+                    @endif
+                </td>
+                <td>
+                    @if($cita->status != 'Atendida')
                     <a href="/terminar-cita/{{$cita->id}}" class="btn btn-success btn-sm mb-1"><svg
                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-clipboard-check" viewBox="0 0 16 16">
@@ -100,6 +109,10 @@
                             <path
                                 d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
                         </svg> Atendida</a>
+                    @endif
+                </td>
+                <td>
+                    @if($cita->status != 'Atendida')
                     <a href="/cancelar-cita/{{$cita->id}}" class="btn btn-danger btn-sm eliminar-cita mb-1"><svg
                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-clipboard2-x" viewBox="0 0 16 16">
