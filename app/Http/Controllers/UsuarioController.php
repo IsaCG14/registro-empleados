@@ -42,7 +42,7 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         //Validar que nombre de usuario no exista
-        $user = User::where('user', $request['user'])->first();
+        $user = User::where('user', $request['user'])->withTrashed()->first();
         if ($user) {
             session()->flash('error_alert', '¡El nombre de usuario ya existe!');
             return redirect("/usuarios");
@@ -101,7 +101,7 @@ class UsuarioController extends Controller
         return redirect("/usuarios");
     }
 
-    /**
+    /**net/be427782-c283-4b38-84a9-0ec492af2bc1
      * Remove the specified resource from storage.
      */
     public function destroy($id)
