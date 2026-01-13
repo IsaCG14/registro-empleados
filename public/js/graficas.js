@@ -445,7 +445,12 @@ generarGraficaPorParroquia(atendidos, tipo, plugin);
 
 //Generar grafica por status de citas
 const grafica_cita = document.getElementById('grafica-cita');
-var statusCounts = {};
+var statusCounts = {
+    "Atendida": 0,
+    "Pendiente": 0,
+    "Reagendada": 0,
+    "Retrasada": 0
+};
 
 //Contar status de citas
 citas.forEach(cita => {

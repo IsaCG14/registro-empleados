@@ -44,7 +44,9 @@ $(".generarPdf").on("click", function() {
         title: "Report"
     });
 
-    pdf.output('dataurlnewwindow');
+    const blob = pdf.output('blob');
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
 })
 
 //Descargar pdf
@@ -53,7 +55,7 @@ $("#generarPdfGeneral").on("click", function(e) {
     let heightText = 10
     let heightGrafica = 15
     let heightTotal = 200
-    let pdf = new jsPDF('p', 'mm', [1400, 300])
+    let pdf = new jsPDF('p', 'mm', [1600, 300])
 
     $("canvas").each(function(index) {
         var canvas = $(this).attr("id")
@@ -92,5 +94,7 @@ $("#generarPdfGeneral").on("click", function(e) {
         heightText += 200
         heightGrafica += 200
     })
-    pdf.output('dataurlnewwindow')
+    const blob = pdf.output('blob');
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
 })

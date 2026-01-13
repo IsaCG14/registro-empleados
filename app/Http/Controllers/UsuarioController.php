@@ -41,11 +41,18 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        User::create([
-            'name' => $request['name'],
-            'user' => $request['user'],
-            'password' => Hash::make($request['password'])
-        ]);
+        //Validar que nombre de usuario no exista
+        $user = User::where('user', $request['user'])->first();
+        if ($user) {
+            session()->flash('error_alert', '¡El nombre de usuario ya existe!');
+            return redirect("/usuarios");
+        } else {
+            User::create([
+                'name' => $request['name'],
+                'user' => $request['user'],
+                'password' => Hash::make($request['password'])
+            ]);
+        }
         session()->flash('success_alert', '¡Usuario registrado exitosamente!');
         return redirect("/usuarios");
     }
@@ -88,13 +95,19 @@ class UsuarioController extends Controller
         return redirect("/usuarios");
     }
 
+    public function bloq_user($id) {
+        $user = User::find($id);
+        $user->delete();
+        return redirect("/usuarios");
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        $user->delete();
+        $user = User::withTrashed()->find($id);
+        $user->forceDelete();
         return redirect("/usuarios");
     }
 }

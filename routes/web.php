@@ -72,6 +72,7 @@ Route::get("/calendario", function () {
 Route::post("registrar-usuario", [UsuarioController::class, "store"]);
 Route::post("editar-usuario", [UsuarioController::class, "update"]);
 Route::get("destroy/{id}", [UsuarioController::class, "destroy"]);
+Route::get("bloq/{id}", [UsuarioController::class, "bloq_user"]);
 Route::get("usuarios/{state?}", function($state = 0){
 
     $state = request()->get('state');

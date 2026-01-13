@@ -83,6 +83,33 @@ $(".eliminar-usuario").on("click", function (e) {
 })
 
 //Eliminacion de usuario
+$(".eliminarp-usuario").on("click", function (e) {
+    e.preventDefault();
+    const href = $(this).attr("href");
+
+    Swal.fire({
+        title: "\xBFSeguro?",
+        text: "El usuario ser\u00e1 eliminado.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "\xA1Usuario eliminado!",
+                text: "El usuario fue eliminado.",
+                icon: "success"
+            }).then(() => {
+                document.location.href = href;
+            })
+        }
+    })
+})
+
+//Eliminacion de usuario
 $(".eliminar-cita").on("click", function (e) {
     e.preventDefault();
     const href = $(this).attr("href");

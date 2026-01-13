@@ -118,6 +118,19 @@
     });
     </script>
     @endif
+
+    @if(session('error_alert'))
+    <script>
+    Swal.fire({
+        icon: 'error',
+        title: '¡Operación Fallida!',
+        text: @json(session('error_alert')),
+        showConfirmButton: false,
+        timer: 3000
+    });
+    </script>
+    @endif
+
     @if(session('citas_alert'))
     <script>
     //Obtener dia actual
