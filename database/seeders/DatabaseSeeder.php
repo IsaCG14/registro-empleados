@@ -31,5 +31,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Patria::factory()->create(['opciones' => 'Transferencia Petro']);
         \App\Models\Patria::factory()->create(['opciones' => 'Alistamiento']);
         \App\Models\Patria::factory()->create(['opciones' => 'Asesoramiento']);
+        \App\Models\Patria::factory()->create(['opciones' => 'Infocentro']);
+        \App\Models\Patria::factory()->create(['opciones' => 'Instituto geográfico']);
     }
 }

@@ -136,12 +136,12 @@
                         </div>
                     </div> -->
                     <div>
-                        <label for="exampleFormControlTextarea1" class="form-label">Nombre del consejo
+                        <label for="exampleFormControlTextarea1" class="form-label">Nombre del circuito
                             comunal:</label>
                         <input type="text" class="form-control" value="{{$cita->consejo_comunal}}"
                             name="nombre_consejo" id="nombre_consejo">
                         <div class="invalid-feedback">
-                            Escribe el nombre del consejo comunal.
+                            Escribe el nombre del circuito comunal.
                         </div>
                     </div>
                 </div>

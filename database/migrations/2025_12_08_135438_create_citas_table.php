@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('fecha_cita');
             $table->time('hora_cita');
             $table->unsignedBigInteger('id_atencion');
-            $table->foreign('id_atencion')->references('id')->on('atendidos')->onDeleted('cascade');
+            $table->foreign('id_atencion')->references('id')->on('atendidos')->onDelete('cascade');
             $table->string('status')->default('pendiente');
             $table->timestamps();
         });

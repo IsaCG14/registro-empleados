@@ -14,8 +14,29 @@ class AtendidosController extends Controller
         $estados = Estado::all();
         $inicio = $request->input('inicio', date('Y-m-d'));
         $fin = $request->input('fin', date('Y-m-d'));
-        $atendidos = Atendidos::with(['personas', 'asuntos.patria', 'usuarios'])->whereBetween('fecha_atencion', [$inicio, $fin])->get();
-        $citas = Cita::whereBetween('fecha_cita', [$inicio, $fin])->get();
-        return view('grafica', compact('atendidos', 'inicio', 'fin', 'estados', 'citas'));
+        $ver = $request->input('ver', 'general');
+        $id_usuario = auth()->user()->id; 
+
+        $queryAtendidos = Atendidos::with(['personas', 'asuntos.patria', 'usuarios'])->whereBetween('fecha_atencion', [$inicio, $fin]);
+        $queryCitas = Cita::whereBetween('fecha_cita', [$inicio, $fin]);
+
+        if ($ver === 'mis-estadisticas') {
+            $queryAtendidos->where('id_user', $id_usuario);
+            $queryCitas->whereHas('atendidos', function ($query) use ($id_usuario) {
+                $query->where('id_user', $id_usuario);
+            });
+        }
+
+        $atendidos = $queryAtendidos->get();
+        $citas = $queryCitas->get();
+
+        $citas_total = $atendidos->count();
+
+        $circuitos = $atendidos->filter(fn($cita) => !empty($cita->consejo_comunal))->count();
+        $comunas = $atendidos->filter(fn($cita) => !empty($cita->comuna))->count();
+
+        $sin_especificar = $citas_total - ($circuitos + $comunas);
+
+        return view('grafica', compact('atendidos', 'inicio', 'fin', 'estados', 'citas', 'circuitos', 'comunas', 'sin_especificar', 'id_usuario'));
     }
 }

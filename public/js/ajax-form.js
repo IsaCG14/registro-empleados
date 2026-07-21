@@ -82,31 +82,28 @@ button_search.addEventListener("click", function () {
         .catch((error) => console.error("Error:", error));
 });
 
-//Añadir campo consejo comunal al seleccionar si en el select
+//Añadir campo consejo comunal o comuna al seleccionar en el select
 const radioButtonsConsejo = document.querySelectorAll('input[name="consejo"]');
 const consejoCampo = document.querySelector("#nombre_consejo");
+const comunaCampo = document.querySelector("#nombre_comuna");
 
 radioButtonsConsejo.forEach((radio) => {
     radio.addEventListener("change", function () {
-        if (this.value == 1) {
-            consejoCampo.disabled = false;
-        } else if (this.value == 0) {
-            consejoCampo.disabled = true;
+        if (this.value == 0) {
+            // Mostrar consejo, ocultar comuna
+            consejoCampo.classList.remove("hidden");
+            comunaCampo.classList.add("hidden");
+            comunaCampo.value = ""; // Limpiar valor al ocultar
+        } else if (this.value == 1) {
+            // Ocultar consejo, mostrar comuna
+            consejoCampo.classList.add("hidden");
+            comunaCampo.classList.remove("hidden");
+            consejoCampo.value = ""; // Limpiar valor al ocultar
+        } else {
+            // Ocultar ambos
+            consejoCampo.classList.add("hidden");
+            comunaCampo.classList.add("hidden");
             consejoCampo.value = "";
-        }
-    });
-});
-
-//Añadir campo consejo comunal al seleccionar si en el select
-const radioButtonsComuna = document.querySelectorAll('input[name="comuna"]');
-const comunaCampo = document.querySelector("#nombre_comuna");
-
-radioButtonsComuna.forEach((radio) => {
-    radio.addEventListener("change", function () {
-        if (this.value == 1) {
-            comunaCampo.disabled = false;
-        } else if (this.value == 0) {
-            comunaCampo.disabled = true;
             comunaCampo.value = "";
         }
     });

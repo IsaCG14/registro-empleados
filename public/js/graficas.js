@@ -17,27 +17,31 @@ function ubicacion_persona_promesa(id) {
     });
 }
 
+const plugin = {
+    id: 'customCanvasBackgroundColor',
+    beforeDraw: (chart, args, options) => {
+        const {
+            ctx
+        } = chart;
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = options.color || '#ffffff';
+        ctx.fillRect(0, 0, chart.width, chart.height);
+        ctx.restore();
+    }
+};
+
 //Obtener tipo de grafica
 const url = new URLSearchParams(window.location.search)
 
-var tipo = (url.get("tipo") == null) ? 'pie' : url.get("tipo");
+var tipo = (url.get("ver") != null) ? url.get("ver") : '';
+var asuntoCounts = {};
 
-//Llenar select de usuarios
-var usuarios = {};
-atendidos.forEach(cita => {
-    var usuario = cita.usuarios;
-    if (!(usuario.name in usuarios)) {
-        usuarios[usuario.name] = true;
-        $("#user").append(`<option value="${usuario.id}">${usuario.name}</option>`);
-    }
-});
-//Obtener id del option seleccionado
-$("#user").on("change", function() {
-    var userId = $(this).val();
-    //Mostrar solo asuntos registrados por ese usuario
-    var asuntoCounts = {};
+if (tipo == 'mis-estadisticas') {
+    //Mostrar solo asuntos registrados por este usuario
+    $(".btn-secondary.dropdown-toggle").text("Mis estadísticas")
     atendidos.forEach(cita => {
-        if (cita.usuarios.id == userId) {
+        if (cita.usuarios && cita.usuarios.id == id_usuario) {
             var asuntos = cita.asuntos;
             asuntos.forEach(asunto => {
                 var opcion = asunto.patria.opciones;
@@ -47,18 +51,23 @@ $("#user").on("change", function() {
                     asuntoCounts[opcion] = 1;
                 }
             });
-        } else if (userId == 0) {
-            var asuntos = cita.asuntos;
-            asuntos.forEach(asunto => {
-                var opcion = asunto.patria.opciones;
-                if (opcion in asuntoCounts) {
-                    asuntoCounts[opcion]++;
-                } else {
-                    asuntoCounts[opcion] = 1;
-                }
-            })
         }
     });
+} else {
+    $(".btn-secondary.dropdown-toggle").text("Estadísticas generales")
+    atendidos.forEach(cita => {
+        var asuntos = cita.asuntos;
+        asuntos.forEach(asunto => {
+            var opcion = asunto.patria.opciones;
+            if (opcion in asuntoCounts) {
+                asuntoCounts[opcion]++;
+            } else {
+                asuntoCounts[opcion] = 1;
+            }
+        });
+    });
+}
+
 
     //Destruir grafica anterior
     Chart.getChart("grafica-asunto")?.destroy();
@@ -85,7 +94,7 @@ $("#user").on("change", function() {
         },
         plugins: [plugin],
     })
-})
+
 
 var num_f = 0
 var num_m = 0
@@ -98,7 +107,6 @@ var rango4 = 0
 var rango5 = 0
 
 //Grafica por asuntos
-var asuntoCounts = {};
 
 atendidos.forEach(cita => {
     //valorar genero
@@ -143,27 +151,14 @@ atendidos.forEach(cita => {
     })
 })
 
-const plugin = {
-    id: 'customCanvasBackgroundColor',
-    beforeDraw: (chart, args, options) => {
-        const {
-            ctx
-        } = chart;
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.fillStyle = options.color || '#ffffff';
-        ctx.fillRect(0, 0, chart.width, chart.height);
-        ctx.restore();
-    }
-};
 //Grafica por sexo
 const grafica_sexo = document.getElementById('grafica-sexo');
 new Chart(grafica_sexo, {
-    type: tipo,
+    type: 'bar',
     data: {
         labels: ['Masculino: ' + String(num_m), 'Femenino: ' + String(num_f)],
         datasets: [{
-            label: '# personas',
+            label: '# sexo de personas atendidas',
             data: [num_m, num_f],
             backgroundColor: [
                 'rgba(54, 163, 235, 0.8)',
@@ -178,7 +173,7 @@ const grafica_edad = document.getElementById('grafica-edad');
 
 //Grafica por edades 
 new Chart(grafica_edad, {
-    type: tipo,
+    type: 'bar',
     data: {
         labels: ["18 a 24 (" + rango1 + ")", "25 a 30 (" + rango2 + ")", "31 a 45 (" + rango3 + ")",
             "46 a 55 (" + rango4 + ")", "56+ (" + rango5 + ")"
@@ -198,28 +193,28 @@ new Chart(grafica_edad, {
     plugins: [plugin],
 })
 
-const grafica_asunto = document.getElementById('grafica-asunto');
-//Grafica por asuntos
-new Chart(grafica_asunto, {
-    type: "bar",
-    data: {
-        labels: Object.keys(asuntoCounts).map(asunto => asunto + " (" + asuntoCounts[asunto] + ")"),
-        datasets: [{
-            label: 'Asuntos atendidos',
-            data: Object.values(asuntoCounts),
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.8)',
-                'rgba(255, 159, 64, 0.8)',
-                'rgba(255, 205, 86, 0.8)',
-                'rgba(75, 192, 192, 0.8)',
-                'rgba(54, 162, 235, 0.8)',
-                'rgba(153, 102, 255, 0.8)',
-                'rgba(201, 203, 207, 0.8)'
-            ]
-        }]
-    },
-    plugins: [plugin],
-})
+// const grafica_asunto = document.getElementById('grafica-asunto');
+// //Grafica por asuntos
+// new Chart(grafica_asunto, {
+//     type: "bar",
+//     data: {
+//         labels: Object.keys(asuntoCounts).map(asunto => asunto + " (" + asuntoCounts[asunto] + ")"),
+//         datasets: [{
+//             label: 'Asuntos atendidos',
+//             data: Object.values(asuntoCounts),
+//             backgroundColor: [
+//                 'rgba(255, 99, 132, 0.8)',
+//                 'rgba(255, 159, 64, 0.8)',
+//                 'rgba(255, 205, 86, 0.8)',
+//                 'rgba(75, 192, 192, 0.8)',
+//                 'rgba(54, 162, 235, 0.8)',
+//                 'rgba(153, 102, 255, 0.8)',
+//                 'rgba(201, 203, 207, 0.8)'
+//             ]
+//         }]
+//     },
+//     plugins: [plugin],
+// })
 
 const grafica_sexo_usuario = document.getElementById('grafica-sexo-usuario');
 //Grafica por sexo registrado por usuario dividido por femenino y masculino en doble barra
@@ -243,11 +238,13 @@ new Chart(grafica_sexo_usuario, {
     data: {
         labels: Object.keys(usuarioLabels),
         datasets: [{
+                axis: 'y',
                 label: 'Masculino',
                 data: Object.values(usuarioLabels).map(data => data.male),
                 backgroundColor: 'rgba(54, 162, 235, 0.8)',
             },
             {
+                axis: 'y',
                 label: 'Femenino',
                 data: Object.values(usuarioLabels).map(data => data.female),
                 backgroundColor: 'rgba(255, 99, 132, 0.8)',
@@ -256,11 +253,7 @@ new Chart(grafica_sexo_usuario, {
     },
     plugins: [plugin],
     options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
+        indexAxis: 'y'
     }
 });
 
@@ -300,7 +293,7 @@ async function generarGraficaPorEstado(atendidos, tipo, plugin) {
 
     // Dibujar la Gráfica con los datos finales
     new Chart(grafica_estado, {
-        type: tipo,
+        type: 'bar',
         data: {
             labels: Object.keys(estadoCounts).map(estado => estado + " (" + estadoCounts[estado] + ")"),
             datasets: [{
@@ -338,21 +331,11 @@ async function generarGraficaPorMunicipio(atendidos, tipo, plugin) {
 
     // Procesar los resultados
     resultados.forEach((ubicacion) => {
-        let municipio = null;
-
-        if (ubicacion && ubicacion.municipio) {
-            municipio = ubicacion.municipio.municipio;
-        } else {
-            municipio = "Desconocido"; 
-        }
-
-        if (municipio in municipioCounts) {
-            //Solo incluir municipios del estado seleccionado
-            if (ubicacion.municipio.estado.id_estado.toString() === estado) {
+        if (ubicacion && ubicacion.municipio && ubicacion.municipio.estado && ubicacion.municipio.estado.id_estado.toString() === estado) {
+            let municipio = ubicacion.municipio.municipio || "Desconocido";
+            if (municipio in municipioCounts) {
                 municipioCounts[municipio]++;
-            }
-        } else {
-            if (ubicacion.municipio.estado.id_estado.toString() === estado) {
+            } else {
                 municipioCounts[municipio] = 1;
             }
         }
@@ -360,7 +343,7 @@ async function generarGraficaPorMunicipio(atendidos, tipo, plugin) {
 
     // Dibujar la Gráfica
     new Chart(grafica_municipio, {
-        type: tipo,
+        type: 'bar',
         data: {
             labels: Object.keys(municipioCounts).map(municipio => municipio + " (" + municipioCounts[municipio] + ")"),
             datasets: [{
@@ -401,28 +384,18 @@ async function generarGraficaPorParroquia(atendidos, tipo, plugin) {
     const resultados = await Promise.all(promesas);
 
     resultados.forEach((ubicacion) => {
-        let parroquia = null;
-
-        if (ubicacion && ubicacion.parroquia) {
-            parroquia = ubicacion.parroquia;
-        } else {
-            parroquia = "Desconocido"; 
-        }
-
-        if (parroquia in parroquiaCounts) {
-            //Solo incluir parroquias del municipio seleccionado
-            if (ubicacion.municipio.id_municipio.toString() === municipio) {
+        if (ubicacion && ubicacion.municipio && ubicacion.municipio.id_municipio.toString() === municipio) {
+            let parroquia = ubicacion.parroquia || "Desconocido";
+            if (parroquia in parroquiaCounts) {
                 parroquiaCounts[parroquia]++;
-            }
-        } else {
-            if (ubicacion.municipio.id_municipio.toString() === municipio) {
+            } else {
                 parroquiaCounts[parroquia] = 1;
             }
         }
     });
 
     new Chart(grafica_parroquia, {
-        type: tipo,
+        type: 'bar',
         data: {
             labels: Object.keys(parroquiaCounts).map(parroquia => parroquia + " (" + parroquiaCounts[parroquia] + ")"),
             datasets: [{
@@ -464,7 +437,7 @@ citas.forEach(cita => {
 
 //Dibujar grafica
 new Chart(grafica_cita, {
-    type: tipo,
+    type: 'bar',
     data: {
         labels: Object.keys(statusCounts).map(status => status + " (" + statusCounts[status] + ")"),
         datasets: [{
@@ -481,6 +454,79 @@ new Chart(grafica_cita, {
     plugins: [plugin],
 });
 
+//Grafica comunas y circuitos comunales
+// const grafica_comuna = document.getElementById('grafica-comuna');
+// var proveniencia = {
+//     "Comunas": 0,
+//     "Circuitos comunales" : 0,
+//     "Sin conocimiento" : 0
+// }
+
+// atendidos.forEach(cita => {
+//     var comuna = cita.asuntos.atendidos.comuna;
+//     var circuito = cita.asuntos.atendidos.consejo_comunal;
+//     if (comuna in proveniencia) {
+//         proveniencia[comuna]++;
+//     } else {
+//         proveniencia[comuna] = 1;
+//     }
+//     if (circuito in proveniencia) {
+//         proveniencia[circuito]++;
+//     } else {
+//         proveniencia[circuito] = 1;
+//     }
+// });
+
+// new Chart(grafica_comuna, {
+//     type: tipo,
+//     data: {
+//         labels: Object.keys(proveniencia).map(proveniencia => proveniencia + " (" + proveniencia[proveniencia] + ")"),
+//         datasets: [{
+//             label: 'Proveniencia de personas por comuna y circuito comunal',
+//             data: Object.values(proveniencia),
+//             backgroundColor: [
+//                 'rgba(75, 192, 192, 0.8)',
+//                 'rgba(54, 162, 235, 0.8)',
+//                 'rgba(255, 205, 86, 0.8)',
+//                 'rgba(255, 99, 132, 0.8)'
+//             ]
+//         }]
+//     },
+//     plugins: [plugin],
+// });
+
+generarGraficaPorComuna(atendidos, tipo, plugin);
+
+async function generarGraficaPorComuna(atendidos, tipo, plugin) {
+    const grafica_comuna = document.getElementById('grafica-comuna');
+    var proveniencia = {
+        "Comunas": comunas,
+        "Circuitos comunales" : circuitos,
+        "Sin conocimiento" : sin_conocimiento
+    }
+
+    console.log(proveniencia);
+
+    new Chart(grafica_comuna, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(proveniencia).map(key => key + " (" + proveniencia[key] + ")"),
+            datasets: [{
+                label: 'Personas pertenecientes a Comunas o Circuitos Comunales',
+                data: Object.values(proveniencia),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(54, 162, 235, 0.8)'
+                ]
+            }]
+        },
+        plugins: [plugin],
+    });
+    
+    console.log("Gráfica de comunas dibujada con los datos finales.");
+}
+
 //Llamar al cambiar el municipio
 $("#municipio").on("change", function() {
     //Destruir grafica anterior
@@ -494,12 +540,12 @@ $("#inicio").on("change", function(){
     var dia_inicio = $("#inicio").val()
     var dia_fin = $("#fin").val()
     //Redirigir a la misma pagina con el parametro dia
-    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
+    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin + "&ver=" + tipo
 })
 
 $("#fin").on("change", function(){
     var dia_inicio = $("#inicio").val()
     var dia_fin = $("#fin").val()
     //Redirigir a la misma pagina con el parametro dia
-    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin
+    window.location.href = "/grafica?inicio=" + dia_inicio + "&fin=" + dia_fin + "&ver=" + tipo
 })
