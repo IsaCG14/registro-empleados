@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Estado;
 use App\Models\Patria;
 use App\Models\Atendidos;
-use App\Models\User; 
-use App\Models\Municipio; 
-use App\Models\Parroquia; 
-use App\Models\Asunto; 
+use App\Models\User;
+use App\Models\Municipio;
+use App\Models\Parroquia;
+use App\Models\Asunto;
 
 class Persona extends Controller
 {
@@ -23,15 +23,15 @@ class Persona extends Controller
 
         $query = Atendidos::with(['personas', 'asuntos.patria', 'usuarios'])->orderBy('fecha_atencion', 'desc');
 
-        if($busqueda) {
+        if ($busqueda) {
             $query->whereHas('personas', function ($q) use ($busqueda) {
-            // Buscar la cadena en la cédula O el nombre de la persona
+                // Buscar la cadena en la cédula O el nombre de la persona
                 $q->where('cedula', 'like', '%' . $busqueda . '%')->orWhere('nombre', 'like', '%' . $busqueda . '%');
-          });
+            });
         }
 
         $atendidos = $query->paginate(10);
-        
+
         return view('index', compact('atendidos'));
     }
 
@@ -42,53 +42,55 @@ class Persona extends Controller
         return view("form", compact(["estados", "asuntos"]));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        // Buscar persona por cédula
+        $persona = \App\Models\Persona::where('cedula', $request["cedula"])->first();
 
-        //Validar si la persona con dicha cedula ya esta registrada
-        $persona = \App\Models\Persona::where('cedula', $request['cedula'])->first();
-        if(!$persona) {
-            \App\Models\Persona::create([
+        if ($persona) {
+            $nombreFormulario = $request->input('nombre');
+            if ($nombreFormulario && strcasecmp(trim($persona->nombre), trim($nombreFormulario)) !== 0) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error_alert', 'La cédula pertenece a otra persona.');
+            }
+        } else {
+            // Crear nueva persona
+            $persona = \App\Models\Persona::create([
                 'cedula' => $request['cedula'],
                 'nombre' => $request['nombre'],
                 'fecha_nacimiento' => $request['fecha_nacimiento'],
                 'correo' => $request['correo'],
                 'telefono' => $request['telefono'],
                 'sexo' => $request['sexo'],
-                'id_parroquia' => $request->get('parroquia')
-            ]);
-            $id_persona = \App\Models\Persona::select('id')->orderBy('id', 'desc')->first();
-        
-        } else {
-            $id_persona = \App\Models\Persona::select('id')->where('cedula', $request['cedula'])->first();
-        }
-
-        $id_usuario = Auth::id();
-
-        $cita_id = Atendidos::create([
-                'id_persona' => $id_persona->id,
-                'id_user' => $id_usuario,
-                'detalles' => $request['detalles'],
-                'fecha_atencion' => $request['fecha_cita'],
                 'comuna' => $request['nombre_comuna'] ?? null,
                 'consejo_comunal' => $request['nombre_consejo'] ?? null,
-            ])->id;
+                'id_parroquia' => $request->get('parroquia')
+            ]);
+        }
 
+        // Crear registro de atención
+        $cita_id = Atendidos::create([
+            'id_persona' => $persona->id,
+            'id_user' => auth()->id(),
+            'detalles' => $request['detalles'],
+            'fecha_atencion' => $request['fecha_cita'],
+        ])->id;
+
+        // Crear asuntos si existen
         $patria_ids = $request->input('patria');
 
         if (!empty($patria_ids) && is_array($patria_ids)) {
             foreach ($patria_ids as $patria_id) {
                 Asunto::create([
                     'atencion_id' => $cita_id,
-                    'patria_id' => $patria_id, 
+                    'patria_id' => $patria_id,
                 ]);
             }
         }
-        session()->flash('success_alert', '¡Registro creado exitosamente!');
-        return redirect('/lista-personas');
+
+        return redirect('/lista-personas')
+            ->with('success_alert', '¡Registro creado exitosamente!');
     }
 
     /**
@@ -99,10 +101,10 @@ class Persona extends Controller
         $cita = Atendidos::with('personas', 'asuntos.patria', 'usuarios')->find($id);
         $id_parroquia = $cita?->personas?->id_parroquia;
 
-        if($id_parroquia) {
+        if ($id_parroquia) {
             $proveniencia = Parroquia::with('municipio.estado')->where('id_parroquia', $id_parroquia)->first();
         }
-        
+
         return [$cita, $proveniencia];
     }
 
@@ -124,10 +126,10 @@ class Persona extends Controller
         $parroquias = Parroquia::all();
         $asuntos_patria = Patria::all();
 
-        if($id_parroquia) {
+        if ($id_parroquia) {
             $proveniencia = Parroquia::with('municipio.estado')->where('id_parroquia', $id_parroquia)->first();
         }
-        
+
         return view('editar', compact(['cita', 'proveniencia', 'estados', 'municipios', 'parroquias', 'asuntos_patria']));
     }
 
@@ -141,17 +143,15 @@ class Persona extends Controller
         $id_usuario = Auth::id();
         $asunto = Asunto::where('atencion_id', $id);
         $asunto->delete();
-        
+
         $cita->fill([
             'id_persona' => $cita->id_persona,
             'fecha_atencion' => $request['fecha_atencion'],
             'detalles' => $request['detalles'],
             'id_user' => $id_usuario,
-            'comuna' => $request['nombre_comuna'] ?? null,
-            'consejo_comunal' => $request['nombre_consejo'] ?? null
         ]);
 
-        $patria_ids = $request->input('patria');       
+        $patria_ids = $request->input('patria');
         if (!empty($patria_ids) && is_array($patria_ids)) {
             foreach ($patria_ids as $patria_id) {
                 $asunto->updateOrCreate(
@@ -167,6 +167,8 @@ class Persona extends Controller
             'correo' => $request['correo'],
             'telefono' => $request['telefono'],
             'sexo' => $request['sexo'],
+            'comuna' => $request['nombre_comuna'] ?? null,
+            'consejo_comunal' => $request['nombre_consejo'] ?? null,
             'id_parroquia' => $request->get('parroquia')
         ]);
 

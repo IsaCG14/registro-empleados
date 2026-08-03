@@ -14,9 +14,17 @@ class Persona extends Model
     use SoftDeletes;
 
     protected $table = "personas";
-    protected $fillable = ["cedula", "nombre", "sexo", "fecha_nacimiento",
+    protected $fillable = [
+        "cedula",
+        "nombre",
+        "sexo",
+        "fecha_nacimiento",
         "correo",
-        "telefono", "id_parroquia"];
+        "telefono",
+        "id_parroquia",
+        "comuna",
+        "consejo_comunal"
+    ];
     protected $dates = ['deleted_at'];
 
     // Cita.php
@@ -33,7 +41,8 @@ class Persona extends Model
         );
     }
 
-    public function cita() {
+    public function cita()
+    {
         return $this->hasMany(Cita::class);
     }
 }

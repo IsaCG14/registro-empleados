@@ -1,21 +1,14 @@
-//Descargar pdf
+//Descargar pdf individual (una grafica por hoja A4)
 $(".generarPdf").on("click", function() {
-    //Obtener canvas
     var canvas = $(this).parent().find("canvas").attr("id")
     const grafica = document.getElementById(canvas)
-    //crear imagen
     const pdfImage = grafica.toDataURL('image/jpeg', 1.0)
-    //imagen a pdf
-    let pdf = new jsPDF('landscape')
-    //Añadir titulo y descripcion 
+    let pdf = new jsPDF('landscape', 'mm', 'a4')
     pdf.setFontSize(20)
     var title = $(this).parent().find("h5").text()
+    title += " - " + dia_inicio + " a " + dia_fin
 
     pdf.text(title, 10, 10)
-
-    // Escalar la imagen al 400%
-    const imgWidth = grafica.width * 4; // 400% del ancho
-    const imgHeight = grafica.height * 4; // 400% de la altura
 
     pdf.addImage(pdfImage, 'JPEG', 15, 15, 270, 150)
 
@@ -49,50 +42,49 @@ $(".generarPdf").on("click", function() {
     window.open(url, '_blank');
 })
 
-//Descargar pdf
+//Descargar pdf general (una grafica por hoja A4)
 $("#generarPdfGeneral").on("click", function(e) {
     e.preventDefault();
-    let heightText = 10
-    let heightGrafica = 15
-    let heightTotal = 200
-    let pdf = new jsPDF('p', 'mm', [1600, 300])
+    let pdf = new jsPDF('landscape', 'mm', 'a4')
+    let firstPage = true;
 
     $("canvas").each(function(index) {
+        if (!firstPage) {
+            pdf.addPage();
+        }
+        firstPage = false;
+
         var canvas = $(this).attr("id")
         var grafica = document.getElementById(canvas)
         var pdfImage = grafica.toDataURL("image/jpeg", 1.0)
 
         pdf.setFontSize(20)
         var title = $(this).parent().find("h5").text()
-        title += " - Registrados entre " + dia_inicio + " y " + dia_fin
+        title += " - " + dia_inicio + " y " + dia_fin
 
-        pdf.text(title, 10, heightText)
-
-        pdf.addImage(pdfImage, 'JPEG', 15, heightGrafica, 270, 150)
+        pdf.text(title, 10, 15)
+        pdf.addImage(pdfImage, 'JPEG', 15, 25, 270, 150)
 
         if (title.includes("Gráfica de asuntos atendidos por usuario")) {
             var userId = $("#user").val();
             var userName = $("#user option:selected").text();
             if (userId != 0) {
-                pdf.text("Usuario: " + userName, 10, heightGrafica + 160)
+                pdf.text("Usuario: " + userName, 10, 185)
             } else {
-                pdf.text("Usuario: General", 10, heightGrafica + 160)
+                pdf.text("Usuario: General", 10, 185)
             }
         } else if (title.includes("municipio")) {
             var estadoId = $("#estado-municipio").val();
             var estadoName = $("#estado-municipio option:selected").text();
-            pdf.text("Estado: " + estadoName, 10, heightGrafica + 160)
+            pdf.text("Estado: " + estadoName, 10, 185)
         } else if (title.includes("parroquia")) {
             var estadoId = $("#estado").val();
             var estadoName = $("#estado option:selected").text();
-            pdf.text("Estado: " + estadoName, 10, heightGrafica + 160)
+            pdf.text("Estado: " + estadoName, 10, 185)
             var municipioId = $("#municipio").val();
             var municipioName = $("#municipio option:selected").text();
-            pdf.text("Municipio: " + municipioName, 10, heightGrafica + 170)
+            pdf.text("Municipio: " + municipioName, 10, 195)
         }
-
-        heightText += 200
-        heightGrafica += 200
     })
     const blob = pdf.output('blob');
     const url = URL.createObjectURL(blob);

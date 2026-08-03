@@ -5,11 +5,16 @@
     <meta charset="utf-8">
     <title>Reporte de Atención</title>
     <style>
+        /* Configuración de los márgenes de página para el PDF */
+        @page {
+            margin: 20px 20px 80px 20px;
+        }
+
         body {
             font-family: 'Helvetica', sans-serif;
             color: #333;
             line-height: 1.4;
-            margin: 20px;
+            margin-bottom: 70px;
         }
 
         h2 {
@@ -20,9 +25,11 @@
 
         footer {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            bottom: -40px;
+            left: 0px;
+            right: 0px;
+            height: 60px;
+            text-align: center;
         }
 
         /* Tabla */
@@ -51,11 +58,18 @@
             background-color: #f9f9f9;
         }
 
+        /* Evitar que una fila de la tabla se rompa feo entre dos páginas */
+        tr {
+            page-break-inside: avoid;
+        }
+
         /* Contenedor de Estadísticas */
         .stats-wrapper {
             display: table;
             width: 100%;
             margin-top: 25px;
+            page-break-inside: avoid;
+            /* Mantiene las tarjetas juntas */
         }
 
         .stat-card {
@@ -103,19 +117,20 @@
         </thead>
         <tbody>
             @foreach ($datos as $cita)
-            <tr>
-                <td>{!! $cita->personas->cedula !!}</td>
-                <td>{!! $cita->personas->nombre !!}</td>
-                <td>{!! $cita->personas->telefono !!}</td>
-                <td>
-                    @forelse ($cita->asuntos as $asunto)
-                    {{ $asunto->patria->opciones }}{{ !$loop->last ? ', ' : '' }}
-                    @empty N/A @endforelse
-                </td>
-                <td>{!! date('d/m/Y', strtotime($cita->fecha_atencion)) !!}</td>
-                <td>{!! $cita->personas->parroquia->parroquia !!} ({!! $cita->personas->parroquia->municipio->estado->estado !!})</td>
-                <td>{!! $cita->usuarios->name !!}</td>
-            </tr>
+                <tr>
+                    <td>{!! $cita->personas->cedula !!}</td>
+                    <td>{!! $cita->personas->nombre !!}</td>
+                    <td>{!! $cita->personas->telefono !!}</td>
+                    <td>
+                        @forelse ($cita->asuntos as $asunto)
+                            {{ $asunto->patria->opciones }}{{ !$loop->last ? ', ' : '' }}
+                        @empty N/A @endforelse
+                    </td>
+                    <td>{!! date('d/m/Y', strtotime($cita->fecha_atencion)) !!}</td>
+                    <td>{!! $cita->personas->parroquia->parroquia !!}
+                        ({!! $cita->personas->parroquia->municipio->estado->estado !!})</td>
+                    <td>{!! $cita->usuarios->name !!}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
@@ -148,7 +163,9 @@
                 <td>{{ $comunas }}</td>
                 <td>
                     <div style="background: #eee; width: 300px; height: 10px; border-radius: 5px;">
-                        <div style="background: #00889f; width: {{ $total > 0 ? ($comunas/$total)*100 : 0 }}%; height: 100%; border-radius: 5px;"></div>
+                        <div
+                            style="background: #00889f; width: {{ $total > 0 ? ($comunas / $total) * 100 : 0 }}%; height: 100%; border-radius: 5px;">
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -157,7 +174,9 @@
                 <td>{{ $circuitos }}</td>
                 <td>
                     <div style="background: #eee; width: 300px; height: 10px; border-radius: 5px;">
-                        <div style="background: #ff9f40; width: {{ $total > 0 ? ($circuitos/$total)*100 : 0 }}%; height: 100%; border-radius: 5px;"></div>
+                        <div
+                            style="background: #ff9f40; width: {{ $total > 0 ? ($circuitos / $total) * 100 : 0 }}%; height: 100%; border-radius: 5px;">
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -166,7 +185,9 @@
                 <td>{{ $sin_especificar }}</td>
                 <td>
                     <div style="background: #eee; width: 300px; height: 10px; border-radius: 5px;">
-                        <div style="background: #ff6384; width: {{ $total > 0 ? ($sin_especificar/$total)*100 : 0 }}%; height: 100%; border-radius: 5px;"></div>
+                        <div
+                            style="background: #ff6384; width: {{ $total > 0 ? ($sin_especificar / $total) * 100 : 0 }}%; height: 100%; border-radius: 5px;">
+                        </div>
                     </div>
                 </td>
             </tr>

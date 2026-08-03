@@ -38,6 +38,39 @@ canvas {
     margin-bottom: 3em;
 }
 
+.table th {
+    white-space: nowrap;
+    font-size: 0.70rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    font-size: 0.70rem;
+    vertical-align: middle;
+}
+
+.badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.pagination {
+    margin-bottom: 0;
+}
+
+.pagination .page-link {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+}
+
+@media (max-width: 768px) {
+    .contenedor {
+        padding: 1.5em !important;
+        border-radius: 15px !important;
+    }
+}
+
 @media (max-width: 600px) {
     .oculto {
         display: none;

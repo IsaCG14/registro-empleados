@@ -1,7 +1,7 @@
 $(document).ready(function () {
     function formatearFecha(fecha) {
-        let dia = fecha.getDate();
-        let mes = fecha.getMonth() + 1; // El mes es 0-indexado
+        let dia = String(fecha.getDate()).padStart(2, "0");
+        let mes = String(fecha.getMonth() + 1).padStart(2, "0");
         let año = fecha.getFullYear();
         return dia + "/" + mes + "/" + año;
     }
@@ -11,89 +11,62 @@ $(document).ready(function () {
         return new Date(partes[0], partes[1] - 1, partes[2]);
     }
 
-    $(".ver-persona").on("click", function () {
+    $(document).on("click", ".ver-persona", function () {
         var id = $(this).attr("id");
 
-        $(".informacion-personal").empty();
+        $(".informacion-personal, .informacion-atendido").empty();
 
-        //Mostrar datos en el modal de ver
         $.ajax({
             url: "/obtener-informacion/" + id,
             type: "GET",
             success: function (data) {
-                //Calcular edad
-                fecha_actual = new Date();
+                var p = data[0].personas;
+                var fecha_actual = new Date();
+                var fecha_nac = generarFecha(p.fecha_nacimiento);
+                var fecha_atencion = generarFecha(data[0].fecha_atencion);
+                var edad = Math.floor((fecha_actual - fecha_nac) / (1000 * 60 * 60 * 24 * 365.25));
 
-                fecha_nac = generarFecha(data[0].personas.fecha_nacimiento);
-                fecha_atencion = generarFecha(data[0].fecha_atencion);
+                var consejo = p.consejo_comunal || "Sin especificar";
+                var comuna = p.comuna || "Sin especificar";
+                var detalles = data[0].detalles || "Ninguno";
+                var ubicacion = data[1]
+                    ? data[1].parroquia + " (Municipio " + data[1].municipio.municipio + ", Estado " + data[1].municipio.estado.estado + ")"
+                    : "No especificada";
 
-                //Obtener edad
-                var edad = fecha_actual - fecha_nac;
-                var anios = edad / (1000 * 60 * 60 * 24 * 365.25);
-                console.log(data[1]);
-                var consejo = data[0].consejo_comunal ? data[0].consejo_comunal : "Sin especificar";
-                var comuna = data[0].comuna ? data[0].comuna : "Sin especificar";
+                var sexo = p.sexo == 0 ? "Femenino" : "Masculino";
 
-                $(".informacion-personal").html(
-                    "<p><b>Nombre:</b> " +
-                        data[0].personas.nombre +
-                        "</p>" +
-                        "<p><b>Cédula:</b> " +
-                        data[0].personas.cedula +
-                        "</p>" +
-                        "<p><b>Fecha de nacimiento:</b> " +
-                        formatearFecha(fecha_nac) +
-                        " (" +
-                        Math.floor(anios) +
-                        " años)" +
-                        "</p>" +
-                        "<p><b>Sexo:</b> " +
-                        (data[0].personas.sexo == 0
-                            ? "Femenino"
-                            : "Masculino") +
-                        "</p>" +
-                        "<p><b>Correo:</b> " +
-                        data[0].personas.correo +
-                        "</p>" +
-                        "<p><b>Teléfono:</b> " +
-                        data[0].personas.telefono +
-                        "</p>" +
-                        "<p><b>Proveniencia:</b> " +
-                        data[1].parroquia +
-                        " (Municipio " +
-                        data[1].municipio.municipio +
-                        ", Estado " +
-                        data[1].municipio.estado.estado +
-                        ")" +
-                        "</p>" +
-                        "<p><b>Circuito Comunal:</b> " +
-                        consejo +
-                        "</p>" +
-                        "<p><b>Comuna:</b> " +
-                        comuna +
-                        "</p>"
-                );
-                var asuntos = data[0].asuntos;
-                //Limpiar informacion anterior
-                $(".informacion-atendido").empty();
-                //Agregar los asuntos
-                $(".informacion-atendido").append("<b>Asuntos:</b><ul>");
-                asuntos.forEach((asunto) => {
-                    $(".informacion-atendido").append(
-                        "<li><p>" + asunto.patria.opciones + "</p></li>"
-                    );
-                });
-                var detalles = data[0].detalles ? data[0].detalles : "Ninguno";
-                $(".informacion-atendido").append(
-                    "</ul><p><b>Fecha de atención:</b> " +
-                        formatearFecha(fecha_atencion) +
-                        "<p><b>Detalles:</b> " +
-                        detalles +
-                        "</p><br>" +
-                        "<p><b>Registrado por:</b> " +
-                        data[0].usuarios.name +
-                        "</p>"
-                );
+                $(".informacion-personal").html(`
+                    <div class="card-section h-100">
+                        <h4><i class="bi bi-person-fill"></i> Datos personales</h4>
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr><td class="fw-semibold ps-0" style="width:130px">Nombre:</td><td>${p.nombre}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Cédula:</td><td>${p.cedula}</td></tr>
+                            <tr><td class="fw-semibold ps-0">F. nacimiento:</td><td>${formatearFecha(fecha_nac)} (${edad} años)</td></tr>
+                            <tr><td class="fw-semibold ps-0">Sexo:</td><td>${sexo}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Correo:</td><td>${p.correo || "—"}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Teléfono:</td><td>${p.telefono || "—"}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Proveniencia:</td><td>${ubicacion}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Circuito comunal:</td><td>${consejo}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Comuna:</td><td>${comuna}</td></tr>
+                        </table>
+                    </div>
+                `);
+
+                var asuntosHtml = data[0].asuntos.map(a =>
+                    `<span class="badge bg-danger me-1">${a.patria.opciones}</span>`
+                ).join("") || '<span class="text-muted">N/A</span>';
+
+                $(".informacion-atendido").html(`
+                    <div class="card-section h-100">
+                        <h4><i class="bi bi-clipboard-data"></i> Datos de atención</h4>
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr><td class="fw-semibold ps-0" style="width:130px">Asuntos:</td><td>${asuntosHtml}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Fecha de atención:</td><td>${formatearFecha(fecha_atencion)}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Detalles:</td><td>${detalles}</td></tr>
+                            <tr><td class="fw-semibold ps-0">Registrado por:</td><td>${data[0].usuarios.name}</td></tr>
+                        </table>
+                    </div>
+                `);
             },
             error: function (xhr, status, error) {
                 console.log(error);

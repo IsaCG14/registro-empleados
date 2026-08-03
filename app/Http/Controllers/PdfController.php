@@ -12,15 +12,6 @@ class PdfController extends Controller
 {
     public function getPdf(Request $request)
     {
-        // $atendidos = Atendidos::with('personas', 'asuntos.patria', 'asuntos.atendidos', 'usuarios','personas.parroquia.municipio.estado')->whereBetween("fecha_atencion", [$request['inicio'], $request['fin']])->orderBy('fecha_atencion', 'asc')->get();
-
-        // //Sacar totales
-        // $citas_total = $atendidos->count();
-        // $citas_masculino = $atendidos->where('personas.sexo', '1')->count();
-        // $citas_femenino = $atendidos->where('personas.sexo', '0')->count();
-        // $circuitos = $atendidos->whereNotNull('asuntos.atendidos.consejo_comunal')->count();
-        // $comunas = $atendidos->whereNotNull('asuntos.atendidos.comuna')->count();
-        // $sin_especificar = $citas_total - $circuitos - $comunas;
         $inicio = $request->input('inicio');
         $fin = $request->input('fin');
         $scope = $request->input('scope', 'general');
@@ -38,19 +29,12 @@ class PdfController extends Controller
         // Conteo eficiente usando filter o sum
         $citas_total = $atendidos->count();
 
-        // Si sexo es 1 y 0, puedes usar:
         $citas_masculino = $atendidos->filter(fn($a) => $a->personas->sexo == 1)->count();
         $citas_femenino = $citas_total - $citas_masculino;
 
-        // Para circuitos/comunas, como es una relación compleja, 
-        // asegúrate de iterar sobre la colección de asuntos de cada cita
-        $circuitos = $atendidos->filter(function ($cita) {
-            return $cita->asuntos->contains(fn($asunto) => !empty($asunto->atendidos->consejo_comunal));
-        })->count();
+        $circuitos = $atendidos->filter(fn($cita) => !empty($cita->personas->consejo_comunal))->count();
 
-        $comunas = $atendidos->filter(function ($cita) {
-            return $cita->asuntos->contains(fn($asunto) => !empty($asunto->atendidos->comuna));
-        })->count();
+        $comunas = $atendidos->filter(fn($cita) => !empty($cita->personas->comuna))->count();
 
         $sin_especificar = $citas_total - ($circuitos + $comunas);
 
@@ -60,8 +44,7 @@ class PdfController extends Controller
 
         if ($scope === 'mis_estadisticas') {
             $title = 'Mis personas atendidas entre ' . $fecha_inicio . ' y ' . $fecha_fin;
-        }
-        else {
+        } else {
             $title = 'Personas atendidas entre ' . $fecha_inicio . ' y ' . $fecha_fin;
         }
 

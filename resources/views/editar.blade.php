@@ -138,7 +138,7 @@
                     <div>
                         <label for="exampleFormControlTextarea1" class="form-label">Nombre del circuito
                             comunal:</label>
-                        <input type="text" class="form-control" value="{{$cita->consejo_comunal}}"
+                        <input type="text" class="form-control" value="{{$cita->personas->consejo_comunal}}"
                             name="nombre_consejo" id="nombre_consejo">
                         <div class="invalid-feedback">
                             Escribe el nombre del circuito comunal.
@@ -165,7 +165,7 @@
                     <div>
                         <label for="exampleFormControlTextarea1" class="form-label">Nombre de la
                             Comuna:</label>
-                        <input type="text" class="form-control" value="{{$cita->comuna}}" name="nombre_comuna"
+                        <input type="text" class="form-control" value="{{$cita->personas->comuna}}" name="nombre_comuna"
                             id="nombre_comuna">
                         <div class="invalid-feedback">
                             Escribe el nombre de la comuna.

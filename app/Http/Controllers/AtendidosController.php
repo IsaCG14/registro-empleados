@@ -15,7 +15,7 @@ class AtendidosController extends Controller
         $inicio = $request->input('inicio', date('Y-m-d'));
         $fin = $request->input('fin', date('Y-m-d'));
         $ver = $request->input('ver', 'general');
-        $id_usuario = auth()->user()->id; 
+        $id_usuario = auth()->user()->id;
 
         $queryAtendidos = Atendidos::with(['personas', 'asuntos.patria', 'usuarios'])->whereBetween('fecha_atencion', [$inicio, $fin]);
         $queryCitas = Cita::whereBetween('fecha_cita', [$inicio, $fin]);
@@ -28,12 +28,14 @@ class AtendidosController extends Controller
         }
 
         $atendidos = $queryAtendidos->get();
+        // $personasUnicas = $atendidos->unique('personas.cedula');
         $citas = $queryCitas->get();
 
         $citas_total = $atendidos->count();
 
-        $circuitos = $atendidos->filter(fn($cita) => !empty($cita->consejo_comunal))->count();
-        $comunas = $atendidos->filter(fn($cita) => !empty($cita->comuna))->count();
+        //Obtener personas sin repetir la misma cedula
+        $circuitos = $atendidos->filter(fn($atendido) => !empty($atendido->personas->consejo_comunal))->count();
+        $comunas = $atendidos->filter(fn($atendido) => !empty($atendido->personas->comuna))->count();
 
         $sin_especificar = $citas_total - ($circuitos + $comunas);
 

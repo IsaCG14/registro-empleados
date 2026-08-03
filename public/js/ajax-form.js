@@ -1,5 +1,15 @@
 const button_search = document.querySelector("#button-search");
 
+function seleccionarRadioConsejo(valor) {
+    const radios = document.querySelectorAll('input[name="consejo"]');
+    radios.forEach(radio => {
+        if (radio.value == valor) {
+            radio.checked = true;
+        }
+        radio.disabled = true; // Deshabilita la opción para que no la cambien
+    });
+}
+
 button_search.addEventListener("click", function () {
     const cedulaInput = document.querySelector("#cedula");
     const cedula = cedulaInput.value;
@@ -26,7 +36,7 @@ button_search.addEventListener("click", function () {
                     document.querySelector("#sexo-f").checked = true;
                 }
                 document.querySelector("input[name='sexo']").disabled = true;
-                
+
                 //Poner datos de donde vive
                 var parroquia = data.id_parroquia;
                 fetch(`/api/parroquia/${parroquia}`)
@@ -48,6 +58,50 @@ button_search.addEventListener("click", function () {
                         console.error("Error parroquia:", error)
                     );
 
+                console.log(data.comuna)
+                console.log(data.consejo_comunal)
+
+                // Elementos de la vista
+                const divComuna = document.querySelector("#nombre_comuna");
+                const inputComuna = document.querySelector("#nombre_comuna_input");
+
+                const divConsejo = document.querySelector("#nombre_consejo");
+                const inputConsejo = document.querySelector("#nombre_consejo_input");
+
+                // Lógica condicional
+                if (data.comuna) {
+                    // 1. Marcar radio Comuna (value = 1)
+                    seleccionarRadioConsejo(1);
+
+                    // 2. Mostrar u ocultar contenedores
+                    divComuna.classList.remove("hidden");
+                    divConsejo.classList.add("hidden");
+
+                    // 3. Asignar valor y deshabilitar el input interno
+                    inputComuna.value = data.comuna;
+                    inputComuna.disabled = true;
+
+                } else if (data.consejo_comunal) {
+                    // 1. Marcar radio Consejo/Circuito (value = 0)
+                    seleccionarRadioConsejo(0);
+
+                    // 2. Mostrar u ocultar contenedores
+                    divConsejo.classList.remove("hidden");
+                    divComuna.classList.add("hidden");
+
+                    // 3. Asignar valor y deshabilitar el input interno
+                    inputConsejo.value = data.consejo_comunal;
+                    inputConsejo.disabled = true;
+
+                } else {
+                    // 1. Marcar radio "No sabe" (value = 3)
+                    seleccionarRadioConsejo(3);
+
+                    // 2. Ocultar ambos
+                    divConsejo.classList.add("hidden");
+                    divComuna.classList.add("hidden");
+                }
+
                 //Mostrar alerta de que la persona ya existe
                 Swal.fire({
                     icon: "info",
@@ -55,7 +109,7 @@ button_search.addEventListener("click", function () {
                     text: "Los datos han sido cargados en el formulario.",
                 });
                 document.querySelector("#messaje-cedula").innerHTML = "";
-                
+
             } else {
                 //Mostrar mensaje de que la persona no existe
                 document.querySelector("#messaje-cedula").innerHTML =

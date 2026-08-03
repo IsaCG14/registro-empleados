@@ -147,10 +147,10 @@ span, span:not(:where table) {
   appearance: none !important;
   background-color: #fff !important;
   font: inherit !important;
-  color: #3059e2 !important;
+  color: #bfbfbf !important;
   width: 1.15em !important;
   height: 1.15em !important;
-  border: 0.15em solid #3059e2 !important;
+  border: 0.15em solid #bfbfbf !important;
   border-radius: 0.15em !important;
   transform: translateY(-0.075em) !important;
   display: grid !important;
