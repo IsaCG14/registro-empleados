@@ -109,7 +109,7 @@
                 </table>
             </div>
 
-            <div class="mt-3 d-flex justify-content-center">
+            <div class="mt-2">
                 {{ $atendidos->links() }}
             </div>
         </div>

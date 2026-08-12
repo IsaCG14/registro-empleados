@@ -20,6 +20,14 @@ canvas {
     display: none !important;
 }
 
+.modal {
+    z-index: 1055 !important;
+}
+
+.modal-backdrop {
+    z-index: 1050 !important;
+}
+
 .modal-header-background {
     background: #154acf;
 }
