@@ -9,8 +9,9 @@
     @endif
     <form class="needs-validation" action="/guardar-persona" method="POST" novalidate>
         <div class="contenedor">
-            <div class="card-section">
-                <h4>Datos personales</h4>
+            <h4>Registrar asunto atendido</h4>
+            <div class="card-section my-3">
+                <h5>Datos personales</h5>
                 @csrf
                 <div class="mb-3 row">
                     <div class="mb-3 col-lg-6">
@@ -48,17 +49,17 @@
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="correo" class="form-label">Correo<span>*</span>:</label>
+                        <label for="correo" class="form-label">Correo:</label>
                         <input type="text" pattern="[a-zA-ZÑñÁáÉéÍíÓóÚú0-9._\-]+@[a-zA-ZÑñÁáÉéÍíÓóÚú0-9.\-]+\.[a-zA-Z]{2,}$"
-                            class="form-control" value="{{ old('correo') }}" name="correo" id="correo" required>
+                            class="form-control" value="{{ old('correo') }}" name="correo" id="correo">
                         <div class="invalid-feedback">
                             Escribe una dirección de correo electrónico válido.
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
-                        <label for="telefono" class="form-label">Teléfono<span>*</span>:</label>
+                        <label for="telefono" class="form-label">Teléfono:</label>
                         <input type="text" pattern="[0-9]{11}" minlength="11" maxlength="11" class="form-control"
-                            value="{{ old('telefono') }}" name="telefono" id="telefono" required>
+                            value="{{ old('telefono') }}" name="telefono" id="telefono">
                         <div class="invalid-feedback">
                             Escribe un número de teléfono válido.
                         </div>
@@ -78,7 +79,7 @@
             </div>
             <div class="row mb-3">
                 <div class="card-section col m-3">
-                    <h4>Datos de provenencia</h4>
+                    <h5>Datos de provenencia</h5>
                     <div class="mb-3 row">
                         <div class="col-lg-12">
                             <label for="estado" class="form-label">Estado<span>*</span>:</label>
@@ -103,7 +104,7 @@
                 </div>
 
                 <div class="card-section col m-3">
-                    <h4>Circuito Comunal o Comuna</h4>
+                    <h5>Circuito Comunal o Comuna</h5>
                     <div class="mb-3 row">
                         <div class="col-lg-12">
                             <label class="form-label">¿Su comunidad pertenece a un Circuito Comunal o Comuna?</label>
@@ -148,7 +149,7 @@
             </div>
 
             <div class="card-section">
-                <h4>Detalles de la visita</h4>
+                <h5>Detalles de la visita</h5>
                 <div class="mb-3 row">
                     <div class="col">
                         <div class="col-lg-12 mb-3">

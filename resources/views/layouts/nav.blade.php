@@ -32,9 +32,9 @@
                     <a class="nav-link {{ strpos(url()->current(), 'personas') ? 'active' : '' }}" aria-current="page"
                         href="/lista-personas">Ver listado</a>
                     <a class="nav-link {{ strpos(url()->current(), 'grafica') ? 'active' : '' }}"
-                        href="/grafica">Estadísticas</a>
-                    <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
-                        href="/reportes">Reportes</a> -->
+                        href="/grafica">Gráficas</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
+                        href="/reportes">Reportes</a>
                     <a class="nav-link {{ strpos(url()->current(), 'citas') ? 'active' : '' }}" href="/citas">Control de
                         citas</a>
                     <!--Permitir acceso solo al usuario 'Master'-->
@@ -87,9 +87,9 @@
                     <a class="nav-link {{ strpos(url()->current(), 'personas') ? 'active' : '' }}" aria-current="page"
                         href="/lista-personas">Ver listado</a>
                     <a class="nav-link {{ strpos(url()->current(), 'grafica') ? 'active' : '' }}"
-                        href="/grafica">Estadísticas</a>
-                    <!-- <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
-                        href="/reportes">Reportes</a> -->
+                        href="/grafica">Gráficas</a>
+                    <a class="nav-link {{ strpos(url()->current(), 'reportes') ? 'active' : '' }}"
+                        href="/reportes">Reportes</a>
                     <a class="nav-link {{ strpos(url()->current(), 'citas') ? 'active' : '' }}" href="/citas">Control de
                         citas</a>
                     @if (auth()->user()->id == 1)

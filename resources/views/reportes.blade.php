@@ -1,179 +1,76 @@
 @extends('layouts.nav')
 @section('content')
-    <div class="contenedor-grid">
-        <div class="container">
-            <h3 class="mb-4">Reportes de empleados</h3>
-            <div class="selects-attribute my-4">
-                <div class="row">
-                    <h6 class="my-3">Atributos que saldrán en el reporte (max. 8):</h6>
-                    <div class="col col-lg-2">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox"checked value="nombre">
-                            <label class="form-check-label" for="inlineCheckbox1">Nombre</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" checked value="cedula">
-                            <label class="form-check-label" for="inlineCheckbox2">Cédula</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="fecha_nacimiento">
-                            <label class="form-check-label" for="inlineCheckbox1">Fecha de nacimiento</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="sexo">
-                            <label class="form-check-label" for="inlineCheckbox2">Sexo</label>
-                        </div>
-                    </div>
-                    <div class="col col-lg-2">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="correo">
-                            <label class="form-check-label" for="inlineCheckbox1">Correo</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="telefono">
-                            <label class="form-check-label" for="inlineCheckbox2">Télefono</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="direccion">
-                            <label class="form-check-label" for="inlineCheckbox1">Dirección</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="peso">
-                            <label class="form-check-label" for="inlineCheckbox2">Peso</label>
-                        </div>
-                    </div>
-                    <div class="col col-lg-2">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="talla_camisa">
-                            <label class="form-check-label" for="inlineCheckbox1">Talla de camisa</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="talla_pantalon">
-                            <label class="form-check-label" for="inlineCheckbox2">Talla de pantalón</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="talla_zapato">
-                            <label class="form-check-label" for="inlineCheckbox1">Talla de zapato</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="estudiante">
-                            <label class="form-check-label" for="inlineCheckbox2">Estudiante</label>
-                        </div>
-                    </div>
-                    <div class="col col-lg-2">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="patologia">
-                            <label class="form-check-label" for="inlineCheckbox1">Patologia</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="centro_electoral">
-                            <label class="form-check-label" for="inlineCheckbox2">Centro electoral</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="tipo">
-                            <label class="form-check-label" for="inlineCheckbox1">Tipo de contrato</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="cargo">
-                            <label class="form-check-label" for="inlineCheckbox2">Cargo</label>
-                        </div>
-                    </div>
-                    <div class="col col-lg-2">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="fecha_ingreso">
-                            <label class="form-check-label" for="inlineCheckbox2">Fecha de ingreso</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="area">
-                            <label class="form-check-label" for="inlineCheckbox2">Área</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="codigo">
-                            <label class="form-check-label" for="inlineCheckbox2">Código de carnet de la patria</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="serial">
-                            <label class="form-check-label" for="inlineCheckbox2">Serial de carnet de la patria</label>
-                        </div>
-                    </div>
-                </div>
+
+<div class="contenedor">
+    <h4>Generar reporte</h4>
+    <div class="card-section mb-3">
+        <form action="/pdf" target="_blank" class="row g-2 align-items-end reporteForm">
+            <div class="col-auto">
+                <label for="inicio" class="form-label small mb-0">Inicio</label>
+                <input class="form-control form-control-sm" type="date" name="inicio" required>
             </div>
-            <div class="ver-hijos">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" value="hijos">
-                    <label class="form-check-label" for="inlineCheckbox2">Ver información de hijos (solo se mostrarán los
-                        empleados con hijos)</label>
-                </div>
+            <div class="col-auto">
+                <label for="fin" class="form-label small mb-0">Fin</label>
+                <input class="form-control form-control-sm" type="date" name="fin" required>
             </div>
-            <div class="col">
-                <form action="/pdf" target="_blank" class="reporteForm">
-                    <input type="hidden" name="tipo" value="0">
-                    <input type="submit" class="btn btn-primary mt-3" value="Generar PDF general">
-                </form>
+            <div class="col-auto">
+                <label for="filtro-sexo" class="form-label small mb-0">Sexo</label>
+                <select class="form-select form-select-sm" name="sexo" id="filtro-sexo">
+                    <option value="">Todos</option>
+                    <option value="1">Masculino</option>
+                    <option value="0">Femenino</option>
+                </select>
             </div>
-            <div class="row my-4">
-                <div class="col">
-                    <form action="/pdf" target="_blank" class="reporteForm">
-                        <label class="form-label">Empleados por centro de votación:</label>
-                        <select class="form-select" name="centro">
-                            @foreach ($centros as $centro)
-                                <option value="{{ $centro->id }}">{!! $centro->nombre_centro !!}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" name="tipo" value="1">
-                        <input type="submit" class="btn btn-primary mt-3" value="Generar PDF">
-                    </form>
-                </div>
-                <div class="col">
-                    <form action="/pdf" target="_blank" class="reporteForm">
-                        <label class="form-label">Empleados por sexo:</label>
-                        <select class="form-select" name="sexo">
-                            <option value="Femenino">Femenino</option>
-                            <option value="Masculino">Masculino</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                        <input type="hidden" name="tipo" value="2">
-                        <input type="submit" class="btn btn-primary mt-3" value="Generar PDF">
-                    </form>
-                </div>
+            <div class="col-auto">
+                <label for="filtro-estado" class="form-label small mb-0">Estado</label>
+                <select class="form-select form-select-sm" name="estado" id="filtro-estado">
+                    <option value="">Todos</option>
+                    @foreach($estados as $estado)
+                    <option value="{!!$estado->id_estado!!}">{!!$estado->estado!!}</option>
+                    @endforeach
+                </select>
             </div>
-            <div class="row my-4">
-                <div class="col">
-                    <form action="/pdf" target="_blank" class="reporteForm">
-                        <label class="form-label">Empleados por contrato:</label>
-                        <select class="form-select" name="tipo_empleado">
-                            <option value="1">Trabajador fijo</option>
-                            <option value="0">Contratado</option>
-                            <option value="2">Pasante</option>
-                            <option value="3">Jubilado</option>
-                        </select>
-                        <input type="hidden" name="tipo" value="3">
-                        <input type="submit" class="btn btn-primary mt-3" value="Generar PDF">
-                    </form>
-                </div>
-                <div class="col">
-                    <form action="/pdf" target="_blank" class="reporteForm">
-                        <label class="form-label">Empleados por fecha de ingreso:</label>
-                        <input type="date" name="fecha_ingreso" id="" class="form-control" required>
-                        <input type="hidden" name="tipo" value="4">
-                        <input type="submit" class="btn btn-primary mt-3" value="Generar PDF">
-                    </form>
-                </div>
+            <div class="col-auto">
+                <label for="filtro-municipio" class="form-label small mb-0">Municipio</label>
+                <select class="form-select form-select-sm" name="municipio" id="filtro-municipio">
+                    <option value="">Todos</option>
+                </select>
             </div>
-            <div class="row my-4">
-                <div class="col">
-                    <form action="/pdf" target="_blank" class="reporteForm">
-                        <label class="form-label">Empleados por área:</label>
-                        <select class="form-select" name="area">
-                            @foreach ($areas as $area)
-                                <option value="{{ $area->id }}">{!! $area->oficina !!}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" name="tipo" value="5">
-                        <input type="submit" class="btn btn-primary mt-3" value="Generar PDF">
-                    </form>
-                </div>
+            <div class="col-auto">
+                <label for="filtro-parroquia" class="form-label small mb-0">Parroquia</label>
+                <select class="form-select form-select-sm" name="parroquia" id="filtro-parroquia">
+                    <option value="">Todas</option>
+                </select>
             </div>
-        </div>
+            <div class="col-auto">
+                <label for="filtro-asunto" class="form-label small mb-0">Asunto</label>
+                <select class="form-select form-select-sm" name="asunto" id="filtro-asunto">
+                    <option value="">Todos</option>
+                    @foreach($asuntos as $asunto)
+                    <option value="{!!$asunto->id!!}">{!!$asunto->opciones!!}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="filtro-comunidad" class="form-label small mb-0">Comuna / Circuito Comunal</label>
+                <select class="form-select form-select-sm" name="comunidad" id="filtro-comunidad">
+                    <option value="">Todas</option>
+                    <option value="comuna">Comuna</option>
+                    <option value="circuito">Circuito Comunal</option>
+                    <option value="sin_especificar">Sin especificar</option>
+                </select>
+            </div>
+            <div class="col-12 d-flex flex-wrap gap-2 mt-3">
+                <button type="submit" name="scope" value="general" class="btn btn-primary btn-sm">Ver estadísticas
+                    generales</button>
+                <button type="submit" name="scope" value="mis_estadisticas"
+                    class="btn btn-outline-primary btn-sm">Ver mis estadísticas</button>
+                <button type="submit" name="scope" value="excel" class="btn btn-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+                        <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 1 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                    </svg> Descargar Excel</button>
+            </div>
+        </form>
     </div>
+</div>
 @endsection

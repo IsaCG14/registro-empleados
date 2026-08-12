@@ -133,9 +133,8 @@ span, span:not(:where table) {
     border: 1px solid #e9ecef;
 }
 
-.card-section h4 {
+.card-section h5 {
     color: #1a1a2e;
-    font-weight: 600;
     margin-bottom: 1.25rem;
     padding-bottom: 0.75rem;
     border-bottom: 2px solid #f0f2f5;

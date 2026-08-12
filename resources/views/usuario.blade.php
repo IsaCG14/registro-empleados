@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="contenedor">
-        <h3>Usuarios</h3>
+        <h4>Usuarios</h4>
         <div class="btn-group w-50">
             <button data-bs-toggle="modal" data-bs-target="#modal-usuario" class="btn btn-sm btn-success my-3">Nuevo
                 usuario</button>

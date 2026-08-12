@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="contenedor">
-        <h4 class="my-3">Control de citas</h4>
+        <h4>Control de citas</h4>
         <div class="row w-auto my-3">
             <div class="col row">
                 <div class="col-6 d-flex align-items-center">

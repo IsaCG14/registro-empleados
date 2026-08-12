@@ -102,6 +102,10 @@
     <img src="{{ public_path('img/headerpdf.png') }}" width="100%">
 
     <h2>{{ $title }}</h2>
+    @if(!empty($filtros))
+        <p style="font-size: 11px; color: #666;"><strong>Filtros aplicados:</strong>
+            {{ implode(' · ', $filtros) }}</p>
+    @endif
 
     <table class="table">
         <thead>
@@ -146,9 +150,44 @@
         <div class="stat-card">
             <div class="card-inner">Femeninos<br><span class="stat-value">{{ $femenino }}</span></div>
         </div>
+        @if(isset($sin_sexo) && $sin_sexo > 0)
+            <div class="stat-card">
+                <div class="card-inner">Sin especificar<br><span class="stat-value">{{ $sin_sexo }}</span></div>
+            </div>
+        @endif
     </div>
 
-    <h3>Resumen de Proveniencia</h3>
+    <h4>Asuntos atendidos</h4>
+    <table class="table" style="width: 80%; margin: 0 auto;">
+    <thead>
+        <tr>
+            <th>Asunto / Patria</th>
+            <th>Cantidad</th>
+            <th>Proporción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{-- Recorremos el array asociativo usando clave => valor --}}
+        @foreach ($asuntos as $nombreAsunto => $cantidad)
+            <tr>
+                {{-- Nombre del asunto (la clave del array) --}}
+                <td>{{ $nombreAsunto }}</td>
+                
+                {{-- Cantidad total acumulada --}}
+                <td>{{ $cantidad }}</td>
+                
+                {{-- Barra de proporción --}}
+                <td>
+                    <div style="background: #eee; width: 300px; height: 10px; border-radius: 5px;">
+                        <div style="background: #00889f; width: {{ $total > 0 ? ($cantidad / $total) * 100 : 0 }}%; height: 100%; border-radius: 5px;">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+    <h4>Provenientes de Comunas o Circuito Comunales</h4>
     <table class="table" style="width: 80%; margin: 0 auto;">
         <thead>
             <tr>
@@ -164,7 +203,7 @@
                 <td>
                     <div style="background: #eee; width: 300px; height: 10px; border-radius: 5px;">
                         <div
-                            style="background: #00889f; width: {{ $total > 0 ? ($comunas / $total) * 100 : 0 }}%; height: 100%; border-radius: 5px;">
+                            style="background: #00529fff; width: {{ $total > 0 ? ($comunas / $total) * 100 : 0 }}%; height: 100%; border-radius: 5px;">
                         </div>
                     </div>
                 </td>

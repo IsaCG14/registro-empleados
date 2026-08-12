@@ -15,8 +15,8 @@ return new class extends Migration
             $table->integer('cedula');
             $table->unsignedBigInteger('id_parroquia');
             $table->foreign('id_parroquia')->references('id_parroquia')->on('parroquias');
-            $table->string('correo', 255);
-            $table->string('telefono', 100);
+            $table->string('correo', 255)->nullable();
+            $table->string('telefono', 100)->nullable();
         });
     }
 

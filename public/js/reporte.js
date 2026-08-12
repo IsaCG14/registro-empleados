@@ -1,3 +1,58 @@
+//Filtros en cascada (Estado -> Municipio -> Parroquia) del módulo de reportes
+const filtro_estado = $("#filtro-estado")
+const filtro_municipio = $("#filtro-municipio")
+const filtro_parroquia = $("#filtro-parroquia")
+
+function cargarFiltroMunicipios(id) {
+    filtro_parroquia.html("<option value=''>Todas</option>");
+    if (!id) {
+        filtro_municipio.html("<option value=''>Todos</option>");
+        return;
+    }
+    $.ajax({
+        url: '/obtener-municipios/' + id,
+        type: 'GET',
+        success: function (data) {
+            let html = "<option value=''>Todos</option>";
+            data.forEach(element => {
+                html += "<option value='" + element.id_municipio + "'>" + element.municipio + "</option>";
+            });
+            filtro_municipio.html(html);
+        },
+        error: function (xhr, status, error) {
+            console.log(error)
+        }
+    })
+}
+
+function cargarFiltroParroquias(id) {
+    if (!id) {
+        filtro_parroquia.html("<option value=''>Todas</option>");
+        return;
+    }
+    $.ajax({
+        url: '/obtener-parroquias/' + id,
+        type: 'GET',
+        success: function (data) {
+            let html = "<option value=''>Todas</option>";
+            data.forEach(element => {
+                html += "<option value='" + element.id_parroquia + "'>" + element.parroquia + "</option>";
+            });
+            filtro_parroquia.html(html);
+        },
+        error: function (xhr, status, error) {
+            console.log(error)
+        }
+    })
+}
+
+filtro_estado.on("change", function () {
+    cargarFiltroMunicipios(filtro_estado.val())
+})
+filtro_municipio.on("change", function () {
+    cargarFiltroParroquias(filtro_municipio.val())
+})
+
 //Descargar pdf individual (una grafica por hoja A4)
 $(".generarPdf").on("click", function() {
     var canvas = $(this).parent().find("canvas").attr("id")

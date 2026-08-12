@@ -13,6 +13,8 @@ use App\Http\Controllers\Persona;
 use App\Models\Usuario;
 use App\Models\User;
 use App\Models\Cita;
+use App\Models\Estado;
+use App\Models\Patria;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +63,9 @@ Route::get("/error", function () {
 Route::get("/grafica", [AtendidosController::class, "obtener_graficas"])->name("grafica")->middleware('auth');
 
 Route::get("/reportes", function () {
-    return view("reportes");
+    $estados = Estado::all();
+    $asuntos = Patria::all();
+    return view("reportes", compact('estados', 'asuntos'));
 })->name("reportes")->middleware('auth');
 
 Route::get("/calendario", function () {
@@ -88,6 +92,7 @@ Route::get("usuarios/{state?}", function($state = 0){
 Route::get("cambiar-estado/{id}", [UsuarioController::class, "changeStatus"]);
 
 Route::get('/pdf', [PDFController::class, "getPDF"]);
+Route::get('/getExcel', [PDFController::class, "getExcel"]);
 
 Route::get("/offline", function () {
     return view("vendor.silviolleite.resources.offline");
