@@ -5,31 +5,36 @@
     <meta charset="utf-8">
     <title>Reporte de Atención</title>
     <style>
-        /* Configuración de los márgenes de página para el PDF */
+        /* Configuración general de la página con espacio superior e inferior */
         @page {
-            margin: 20px 20px 80px 20px;
+            margin: 120px 20px 80px 20px;
+            /* Deja espacio arriba y abajo para el header y footer */
+        }
+
+        /* Definición del Encabezado repetitivo */
+        header {
+            position: fixed;
+            top: -100px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            text-align: center;
+        }
+
+        /* Definición del Pie de página repetitivo */
+        footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            text-align: center;
         }
 
         body {
             font-family: 'Helvetica', sans-serif;
             color: #333;
             line-height: 1.4;
-            margin-bottom: 70px;
-        }
-
-        h2 {
-            color: #3f3f3fff;
-            border-bottom: 2px solid #00889f;
-            padding-bottom: 5px;
-        }
-
-        footer {
-            position: fixed;
-            bottom: -40px;
-            left: 0px;
-            right: 0px;
-            height: 60px;
-            text-align: center;
         }
 
         /* Tabla */
@@ -99,12 +104,18 @@
 </head>
 
 <body>
-    <img src="{{ public_path('img/headerpdf.png') }}" width="100%">
+    <header>
+        <img src="{{ public_path('img/headerpdf.png') }}" width="90%">
+    </header>
+    <footer>
+        <img src="{{ public_path('img/footerpdf.png') }}" width="90%">
+    </footer>
 
     <h2>{{ $title }}</h2>
     @if(!empty($filtros))
-        <p style="font-size: 11px; color: #666;"><strong>Filtros aplicados:</strong>
-            {{ implode(' · ', $filtros) }}</p>
+    <p style="font-size: 11px; color: #666;"><strong>Filtros aplicados:</strong>
+        {{ implode(' · ', $filtros) }}
+    </p>
     @endif
 
     <table class="table">
@@ -121,20 +132,20 @@
         </thead>
         <tbody>
             @foreach ($datos as $cita)
-                <tr>
-                    <td>{!! $cita->personas->cedula !!}</td>
-                    <td>{!! $cita->personas->nombre !!}</td>
-                    <td>{!! $cita->personas->telefono !!}</td>
-                    <td>
-                        @forelse ($cita->asuntos as $asunto)
-                            {{ $asunto->patria->opciones }}{{ !$loop->last ? ', ' : '' }}
-                        @empty N/A @endforelse
-                    </td>
-                    <td>{!! date('d/m/Y', strtotime($cita->fecha_atencion)) !!}</td>
-                    <td>{!! $cita->personas->parroquia->parroquia !!}
-                        ({!! $cita->personas->parroquia->municipio->estado->estado !!})</td>
-                    <td>{!! $cita->usuarios->name !!}</td>
-                </tr>
+            <tr>
+                <td>{!! $cita->personas->cedula !!}</td>
+                <td>{!! $cita->personas->nombre !!}</td>
+                <td>{!! $cita->personas->telefono !!}</td>
+                <td>
+                    @forelse ($cita->asuntos as $asunto)
+                    {{ $asunto->patria->opciones }}{{ !$loop->last ? ', ' : '' }}
+                    @empty N/A @endforelse
+                </td>
+                <td>{!! date('d/m/Y', strtotime($cita->fecha_atencion)) !!}</td>
+                <td>{!! $cita->personas->parroquia->parroquia !!}
+                    ({!! $cita->personas->parroquia->municipio->estado->estado !!})</td>
+                <td>{!! $cita->usuarios->name !!}</td>
+            </tr>
             @endforeach
         </tbody>
     </table>
@@ -151,31 +162,31 @@
             <div class="card-inner">Femeninos<br><span class="stat-value">{{ $femenino }}</span></div>
         </div>
         @if(isset($sin_sexo) && $sin_sexo > 0)
-            <div class="stat-card">
-                <div class="card-inner">Sin especificar<br><span class="stat-value">{{ $sin_sexo }}</span></div>
-            </div>
+        <div class="stat-card">
+            <div class="card-inner">Sin especificar<br><span class="stat-value">{{ $sin_sexo }}</span></div>
+        </div>
         @endif
     </div>
 
     <h4>Asuntos atendidos</h4>
     <table class="table" style="width: 80%; margin: 0 auto;">
-    <thead>
-        <tr>
-            <th>Asunto / Patria</th>
-            <th>Cantidad</th>
-            <th>Proporción</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{-- Recorremos el array asociativo usando clave => valor --}}
-        @foreach ($asuntos as $nombreAsunto => $cantidad)
+        <thead>
+            <tr>
+                <th>Asunto / Patria</th>
+                <th>Cantidad</th>
+                <th>Proporción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{-- Recorremos el array asociativo usando clave => valor --}}
+            @foreach ($asuntos as $nombreAsunto => $cantidad)
             <tr>
                 {{-- Nombre del asunto (la clave del array) --}}
                 <td>{{ $nombreAsunto }}</td>
-                
+
                 {{-- Cantidad total acumulada --}}
                 <td>{{ $cantidad }}</td>
-                
+
                 {{-- Barra de proporción --}}
                 <td>
                     <div style="background: #eee; width: 300px; height: 10px; border-radius: 5px;">
@@ -184,9 +195,9 @@
                     </div>
                 </td>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+            @endforeach
+        </tbody>
+    </table>
     <h4>Provenientes de Comunas o Circuito Comunales</h4>
     <table class="table" style="width: 80%; margin: 0 auto;">
         <thead>
@@ -232,9 +243,6 @@
             </tr>
         </tbody>
     </table>
-    <footer>
-        <img src="{{ public_path('img/footerpdf.png') }}" width="100%">
-    </footer>
 </body>
 
 </html>

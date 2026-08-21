@@ -1,8 +1,7 @@
 @extends('layouts.nav')
 @section('content')
-<div class="container">
     <div class="contenedor">
-        <h3>Actualizar Asunto</h3>
+        <h4>Actualizar Asunto</h4>
         <img src="img/header.png" class="mb-4" width="90%" alt="">
         <form class="needs-validation" action="{{route('update', ['id' => $cita->id])}}" method="POST" novalidate>
             @csrf
@@ -202,5 +201,4 @@
         @endforeach
         @endif
     </div>
-</div>
 @endsection

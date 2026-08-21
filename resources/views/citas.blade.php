@@ -128,7 +128,7 @@
             </tbody>
         </table>
         <div class="mt-2">
-            {{ $citas->appends(['inicio' => $inicio, 'fin' => $fin])->links() }}
+            {{ $citas->appends(['inicio' => $inicio, 'fin' => $fin])->links('pagination::bootstrap-5') }}
         </div>
     </div>
     </div>

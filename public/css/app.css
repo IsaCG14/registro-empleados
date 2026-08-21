@@ -4,6 +4,22 @@
     box-sizing: border-box;
 }
 
+/* Oculta por defecto todos los elementos de página numéricos que superen cierto límite */
+.pagination .page-item {
+    display: none; 
+}
+
+/* Muestra siempre los botones de Anterior, Siguiente y la página activa, junto con los más cercanos */
+.pagination .page-item:first-child,
+.pagination .page-item:last-child,
+.pagination .page-item.active,
+.pagination .page-item.active + .page-item,
+.pagination .page-item:has(+ .page-item.active),
+.pagination .page-item:nth-child(2),
+.pagination .page-item:nth-last-child(2) {
+    display: block !important;
+}
+
 body {
     /* background-image: url("/img/fondo.jpg"); */
     background-attachment: fixed;

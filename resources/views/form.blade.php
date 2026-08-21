@@ -154,7 +154,7 @@
                     <div class="col">
                         <div class="col-lg-12 mb-3">
                             <label for="fecha_cita" class="form-label">Fecha de atención<span>*</span>:</label>
-                            <input type="date" class="form-control" value="{{ old('fecha_cita') }}" name="fecha_cita"
+                            <input type="date" class="form-control" value="{{ old('fecha_cita') ? old('fecha_cita') : date('Y-m-d') }}" name="fecha_cita"
                                 id="fecha_cita" required>
                             <div class="invalid-feedback">
                                 Ingrese la fecha en que se atendió a la persona.

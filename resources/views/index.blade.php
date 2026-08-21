@@ -110,7 +110,7 @@
             </div>
 
             <div class="mt-2">
-                {{ $atendidos->links() }}
+                {{ $atendidos->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>
